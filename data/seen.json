@@ -1,1 +1,520 @@
-{"featured":[{"title":"OpenAI GPT–6 Astra breaks Enigma message that has resisted solution since 2005","url":"https://www.cryptocellar.org/bgac/the-mvueh-break.html","source":"Hacker News","date":"2026-09-23"},{"title":"OpenAI is well positioned to fast-follow Jev","url":"https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/","source":"Hacker News","date":"2026-09-23"},{"title":"What California is learning from solar panels built over irrigation canals","url":"https://www.kqed.org/science/2002033/heres-what-california-is-learning-from-solar-panels-built-over-irrigation-canals","source":"Hacker News","date":"2026-09-23"},{"title":"SF October 14th: A Birds of a Feather Session on Agentic Engineering","url":"https://simonwillison.net/2026/Sep/23/bof-agentic-engineering/","source":"Simon Willison's Blog","date":"2026-09-23"},{"title":"OpenAI wants to consult elite mathematicians about how to not fumble again","url":"https://www.theverge.com/ai-artificial-intelligence/999167/openai-elite-mathematicians-panel","source":"The Verge","date":"2026-09-23"},{"title":"SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving","url":"https://arxiv.org/abs/2609.26777v1","source":"arXiv cs.AI","date":"2026-09-23"},{"title":"The Grand Unifying Architecture of Frontend","url":"https://dev.to/playfulprogramming/the-grand-unifying-architecture-of-frontend-bhk","source":"Dev.to","date":"2026-09-23"},{"title":"A Spectral Theory of Grokking: Weight Decay induces Feature Learning","url":"https://arxiv.org/abs/2609.26679v1","source":"arXiv cs.LG","date":"2026-09-23"},{"title":"MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction with Dense-Reward Reinforcement Learning","url":"https://arxiv.org/abs/2609.26667v1","source":"arXiv cs.LG","date":"2026-09-23"},{"title":"Why the Best Software Advice Is the Hardest to Follow","url":"https://dev.to/remojansen/why-the-best-software-advice-is-the-hardest-to-follow-4kg8","source":"Dev.to","date":"2026-09-23"},{"title":"What Nobody Is Using in Your Google Cloud Projects, and What It Costs","url":"https://dev.to/gde/what-nobody-is-using-in-your-google-cloud-projects-and-what-it-costs-1k0","source":"Dev.to","date":"2026-09-23"},{"title":"Google Opens Preorders for Its $899 Gemini-Enhanced 'Googlebook' Laptops","url":"https://tech.slashdot.org/story/26/09/22/031256/google-opens-preorders-for-its-899-gemini-enhanced-googlebook-laptops?utm_source=rss1.0mainlinkanon&utm_medium=feed","source":"Slashdot","date":"2026-09-23"},{"title":"dlab Open Source Week: Frontier AI on Your Own Hardware","url":"https://timdettmers.com/2026/09/21/dlab-open-source-week/","source":"TLDR Tech","date":"2026-09-23"},{"title":"Xiaomi open-sources MiMo-V2.6 Pro and Flash models","url":"https://www.testingcatalog.com/xiaomi-open-sources-mimo-v2-6-pro-and-flash-models/","source":"TLDR AI","date":"2026-09-23"},{"title":"The current balance of power in open models","url":"https://www.interconnects.ai/p/the-current-balance-of-power-in-open","source":"TLDR AI","date":"2026-09-23"},{"title":"Bringing Devin Cloud to your terminal","url":"https://devin.ai/blog/devin-cloud-in-your-terminal","source":"TLDR AI","date":"2026-09-23"},{"title":"MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement","url":"https://www.alphaxiv.org/abs/2609.mimo-scaling-reinforcement-learning","source":"TLDR AI","date":"2026-09-23"},{"title":"Jev's Architecture Unmasked","url":"https://archerhume.com/posts/jevs-architecture-unmasked","source":"TLDR Dev (Web Dev)","date":"2026-09-23"},{"title":"I Don't Like LLMs","url":"https://martinfowler.com/articles/2026-dont-like-llms.html","source":"TLDR Dev (Web Dev)","date":"2026-09-23"},{"title":"Open Data: A Dataset Hub for LLM Serving Research (Website)","url":"https://data.agentic-system.org/","source":"TLDR Dev (Web Dev)","date":"2026-09-23"},{"title":"Cloudflare Python Workers are now generally available","url":"https://simonwillison.net/2026/Sep/21/cloudflare-python-worker/","source":"Simon Willison's Blog","date":"2026-09-23"}]}
+{
+  "featured": [
+    {
+      "title": "OpenAI GPT\u20136 Astra breaks Enigma message that has resisted solution since 2005",
+      "url": "https://www.cryptocellar.org/bgac/the-mvueh-break.html",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "OpenAI is well positioned to fast-follow Jev",
+      "url": "https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "What California is learning from solar panels built over irrigation canals",
+      "url": "https://www.kqed.org/science/2002033/heres-what-california-is-learning-from-solar-panels-built-over-irrigation-canals",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "SF October 14th: A Birds of a Feather Session on Agentic Engineering",
+      "url": "https://simonwillison.net/2026/Sep/23/bof-agentic-engineering/",
+      "source": "Simon Willison's Blog",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "OpenAI wants to consult elite mathematicians about how to not fumble again",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/999167/openai-elite-mathematicians-panel",
+      "source": "The Verge",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving",
+      "url": "https://arxiv.org/abs/2609.26777v1",
+      "source": "arXiv cs.AI",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The Grand Unifying Architecture of Frontend",
+      "url": "https://dev.to/playfulprogramming/the-grand-unifying-architecture-of-frontend-bhk",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "A Spectral Theory of Grokking: Weight Decay induces Feature Learning",
+      "url": "https://arxiv.org/abs/2609.26679v1",
+      "source": "arXiv cs.LG",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction with Dense-Reward Reinforcement Learning",
+      "url": "https://arxiv.org/abs/2609.26667v1",
+      "source": "arXiv cs.LG",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Why the Best Software Advice Is the Hardest to Follow",
+      "url": "https://dev.to/remojansen/why-the-best-software-advice-is-the-hardest-to-follow-4kg8",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "What Nobody Is Using in Your Google Cloud Projects, and What It Costs",
+      "url": "https://dev.to/gde/what-nobody-is-using-in-your-google-cloud-projects-and-what-it-costs-1k0",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Google Opens Preorders for Its $899 Gemini-Enhanced 'Googlebook' Laptops",
+      "url": "https://tech.slashdot.org/story/26/09/22/031256/google-opens-preorders-for-its-899-gemini-enhanced-googlebook-laptops?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+      "source": "Slashdot",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "dlab Open Source Week: Frontier AI on Your Own Hardware",
+      "url": "https://timdettmers.com/2026/09/21/dlab-open-source-week/",
+      "source": "TLDR Tech",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Xiaomi open-sources MiMo-V2.6 Pro and Flash models",
+      "url": "https://www.testingcatalog.com/xiaomi-open-sources-mimo-v2-6-pro-and-flash-models/",
+      "source": "TLDR AI",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The current balance of power in open models",
+      "url": "https://www.interconnects.ai/p/the-current-balance-of-power-in-open",
+      "source": "TLDR AI",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Bringing Devin Cloud to your terminal",
+      "url": "https://devin.ai/blog/devin-cloud-in-your-terminal",
+      "source": "TLDR AI",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement",
+      "url": "https://www.alphaxiv.org/abs/2609.mimo-scaling-reinforcement-learning",
+      "source": "TLDR AI",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Jev's Architecture Unmasked",
+      "url": "https://archerhume.com/posts/jevs-architecture-unmasked",
+      "source": "TLDR Dev (Web Dev)",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "I Don't Like LLMs",
+      "url": "https://martinfowler.com/articles/2026-dont-like-llms.html",
+      "source": "TLDR Dev (Web Dev)",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Open Data: A Dataset Hub for LLM Serving Research (Website)",
+      "url": "https://data.agentic-system.org/",
+      "source": "TLDR Dev (Web Dev)",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Cloudflare Python Workers are now generally available",
+      "url": "https://simonwillison.net/2026/Sep/21/cloudflare-python-worker/",
+      "source": "Simon Willison's Blog",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Claude Opus 5.5",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Pentagon says overreliance on AI contributed to missile strike on Iran school",
+      "url": "https://www.bloomberg.com/graphics/2026-iran-school-attack/",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Microsoft killed FoxPro in 2007. Anyway, here's FoxPro revived",
+      "url": "https://foxscript.org/",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Jev in 25 Lines of Python",
+      "url": "https://www.nobodywho.ai/posts/jev-in-25-lines/",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Claude Opus 5.5 Intelligence, Performance and Price Analysis (Max)",
+      "url": "https://artificialanalysis.ai/models/claude-opus-5-5",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "SAML: A fractal of bad design",
+      "url": "https://blog.trailofbits.com/2026/09/21/saml-a-fractal-of-bad-design/",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Grammarly will send unhinged messages to all your users if you try to cancel",
+      "url": "https://www.reddit.com/r/sysadmin/comments/1wjdpgx/psa_grammarly_will_send_unhinged_messages_to_all/",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "WordPress: Unauthenticated path traversal leading to conditional RCE",
+      "url": "https://github.com/WordPress/wordpress-develop/security/advisories/GHSA-7hp8-65ch-5whp",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "We Solved the How to Code Problem. We Still Haven't Solved \"What to Build.\"",
+      "url": "https://dev.to/harsh2644/we-solved-the-how-to-code-problem-we-still-havent-solved-what-to-build-5e3g",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Stop building side projects. Nobody cares \u2014 and here's the uncomfortable math.",
+      "url": "https://dev.to/infoinlet1/stop-building-side-projects-nobody-cares-and-heres-the-uncomfortable-math-1eoc",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Something About Coding Stopped Feeling Good \u2014 and It Took Me a While to Figure Out What",
+      "url": "https://dev.to/james_anderson_h/something-about-coding-stopped-feeling-good-and-it-took-me-a-while-to-figure-out-what-2op2",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "I Turned DEV.to Into a Walkable 3D Library \u2014 Debugging It Has Been a Nightmare",
+      "url": "https://dev.to/mikachu/i-turned-devto-into-a-walkable-3d-library-debugging-it-has-been-a-nightmare-4lkd",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Stop Writing JavaScript To Fix `100vh` On Mobile",
+      "url": "https://dev.to/parsajiravand/stop-writing-javascript-to-fix-100vh-on-mobile-42bk",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Native Drag and Drop Meets Cross-Device Continuity",
+      "url": "https://dev.to/codenameone/native-drag-and-drop-meets-cross-device-continuity-36nd",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Apple links landmarks on its Maps app to Hidden Histories podcast episodes",
+      "url": "https://www.engadget.com/2266233/apple-links-landmarks-on-its-maps-app-to-hidden-histories-podcast-episodes/",
+      "source": "Engadget",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "A Startup Wants to Power Data Centers With \u2018Supercritical\u2019 Carbon Dioxide",
+      "url": "https://www.wired.com/story/startup-power-data-centers-supercritical-co2/",
+      "source": "Wired",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "NTFS-3G Update Brings Many Security Fixes",
+      "url": "https://www.phoronix.com/news/NTFS-3G-2026.9.18",
+      "source": "Phoronix",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The GitHub wiki is an anti-pattern",
+      "url": "https://michaelheap.com/github-wiki-is-an-antipattern/",
+      "source": "Lobsters",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Linux 7.3 Reverting Logitech Bolt Receiver HID++ After Too Many Bugs Encountered",
+      "url": "https://www.phoronix.com/news/Linux-Reverting-Logitech-Bolt",
+      "source": "Phoronix",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The pros and cons of using a password manager over an authenticator app",
+      "url": "https://www.engadget.com/2264763/using-password-manager-instead-of-authenticator-app-pros-cons/",
+      "source": "Engadget",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Cities across US oppose Trump FCC plan to preempt local broadband rules",
+      "url": "https://arstechnica.com/tech-policy/2026/09/cities-across-us-oppose-trump-fcc-plan-to-preempt-local-broadband-rules/",
+      "source": "Ars Technica",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Apple could take on Whoop with a new fitness tracker, report says",
+      "url": "https://techcrunch.com/2026/09/22/apple-could-take-on-whoop-with-a-new-fitness-tracker-report-says/",
+      "source": "TechCrunch",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "GitHub Actions leaking secrets when Miri output is cached",
+      "url": "https://blog.rust-lang.org/2026/09/21/github-actions-leaking-secrets-when-miri-output-is-cached/",
+      "source": "Lobsters",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Trump\u2019s sneaky plan to gut Endangered Species Act draws from 1995 Scalia dissent",
+      "url": "https://arstechnica.com/tech-policy/2026/09/trumps-sneaky-plan-to-gut-endangered-species-act-draws-from-1995-scalia-dissent/",
+      "source": "Ars Technica",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Bug blindness",
+      "url": "https://danluu.com/bug-blind/",
+      "source": "TLDR Tech",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Unreal Agent",
+      "url": "https://unreallabs.ai/blog/unreal-agent/",
+      "source": "Hacker News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "We All Have a \"Serious Work\" AI and a \"Just Vibing\" AI. When Did That Happen?",
+      "url": "https://dev.to/dj29/we-all-have-a-serious-work-ai-and-a-just-vibing-ai-when-did-that-happen-5fl2",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The swarm that kept coming back",
+      "url": "https://dev.to/hiper2d/the-swarm-that-kept-coming-back-7ie",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "PNG admits when it is damaged and JPEG does not",
+      "url": "https://dev.to/remdore/i-flipped-one-bit-in-an-image-file-png-died-jpeg-lied-35b3",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The missing layer in AI tooling: sharing what your assistant already knows",
+      "url": "https://dev.to/uri_shmueli_a403e7acc04a8/the-missing-layer-in-ai-tooling-sharing-what-your-assistant-already-knows-1nch",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "UK competition watchdog wants to give Android and Chrome users more search engine choices",
+      "url": "https://www.engadget.com/2266226/uk-competition-watchdog-wants-to-give-android-and-chrome-users-more-search-engine-choices/",
+      "source": "Engadget",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Windows 11 Copilot app is getting its own browser, but not everyone's happy",
+      "url": "https://www.techradar.com/computing/windows/copilot-is-a-scourge-that-i-avoid-at-all-opportunities-microsoft-is-giving-the-copilot-app-its-own-browser-but-windows-11-users-remain-largely-unimpressed",
+      "source": "TechRadar",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Kate Tolo Says Her Quest to Be \u2018the Female Bryan Johnson\u2019 Is \u2018for Women\u2019",
+      "url": "https://www.wired.com/story/kate-tolo-says-her-quest-to-be-the-female-bryan-johnson-is-for-women/",
+      "source": "Wired",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The Organization Fighting Ebola Has Never Been More Worried",
+      "url": "https://www.wired.com/story/organization-fighting-ebola-never-more-worried/",
+      "source": "Wired",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Article: Modular Edge Computing at Multi-Tenant SaaS Scale on Cloudflare Workers",
+      "url": "https://www.infoq.com/articles/modular-edge-computing/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
+      "source": "InfoQ",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Qualcomm Posts Open-Source GPU Driver Patches For Adreno 850 One Day After Announcement",
+      "url": "https://www.phoronix.com/news/Qualcomm-Adreno-850-Open-Source",
+      "source": "Phoronix",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "What does anti-aliasing actually do to your PC games?",
+      "url": "https://www.engadget.com/2264367/what-anti-aliasing-does-pc-games/",
+      "source": "Engadget",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Your Terraform Monolith Isn't Too Big. It's Tightly Coupled.",
+      "url": "https://dzone.com/articles/terraform-state-coupling",
+      "source": "DZone",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The Hidden Production Risks of Third-Party SDKs",
+      "url": "https://dzone.com/articles/third-party-sdk-risks",
+      "source": "DZone",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Waymo\u2019s latest expansion strategy: teenagers",
+      "url": "https://techcrunch.com/2026/09/22/waymos-latest-expansion-strategy-teenagers/",
+      "source": "TechCrunch",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Review: Resident Evil might just be the best gaming adaptation yet",
+      "url": "https://arstechnica.com/culture/2026/09/review-resident-evil-is-the-fresh-take-this-flagging-franchise-really-needed/",
+      "source": "Ars Technica",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Variable Refresh Rate \"VRR\" Target Limiter Proposed For Linux Graphics Drivers",
+      "url": "https://www.phoronix.com/news/VRR-Target-Rate-Limiter-uAPI",
+      "source": "Phoronix",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "33 broken builds, one agent on each disposable computer. The hard part was deciding what counts as fixed.",
+      "url": "https://dev.to/lolocoding/33-broken-builds-one-agent-on-each-disposable-computer-the-hard-part-was-deciding-what-counts-as-3ipj",
+      "source": "Dev.to",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "How GRPO Trains Small Language Models with Verifiable Rewards",
+      "url": "https://towardsdatascience.com/how-grpo-trains-small-language-models-with-verifiable-rewards/",
+      "source": "Towards Data Science",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Google will pay off its new \u20ac403M GDPR fine in just 55 hours, warns Proton",
+      "url": "https://www.techradar.com/vpn/vpn-privacy-security/google-will-pay-off-its-new-eur403m-gdpr-fine-in-just-55-hours-warns-proton",
+      "source": "TechRadar",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "The Download: India\u2019s smart glasses menace and AI\u2019s trillion-dollar gamble",
+      "url": "https://www.technologyreview.com/2026/09/23/1144966/the-download-india-smart-glasses-ai-trillion-dollar-gamble/",
+      "source": "MIT Technology Review",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "High-Performance Data Processing with Polars: A KDnuggets Cheat Sheet",
+      "url": "https://www.kdnuggets.com/high-performance-data-processing-with-polars-a-cheat-sheet",
+      "source": "KDnuggets",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Stolen passwords are exposing America\u2019s water providers to hackers",
+      "url": "https://techcrunch.com/2026/09/22/stolen-passwords-are-exposing-americas-water-providers-to-hackers/",
+      "source": "TechCrunch",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Architecting for &lt;1s Latency: Managing Eventual Consistency in Distributed Search Platforms",
+      "url": "https://dzone.com/articles/eventual-consistency-search",
+      "source": "DZone",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Serious editors are a commitment (at least for me)",
+      "url": "https://utcc.utoronto.ca/~cks/space/blog/tech/EditorsAreACommitment",
+      "source": "Lobsters",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Linux 7.3 Adding Logitech G502 X Lightspeed USB Support, ELECOM M-XT4DRBK",
+      "url": "https://www.phoronix.com/news/Linux-7.3-HID-G502X-USB",
+      "source": "Phoronix",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "How to Port a Jekyll Blog Theme to Python: Lessons From Actually Doing It",
+      "url": "https://www.freecodecamp.org/news/how-to-build-a-reading-focused-blog-with-python-markdown-and-github-pages-for-free/",
+      "source": "freeCodeCamp News",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Bitcoin Surges to $86,455, an 8-Month High, After America's SEC Announces Tokenized Stock Experiment",
+      "url": "https://slashdot.org/story/26/09/23/0744202/bitcoin-surges-to-86455-an-8-month-high-after-americas-sec-announces-tokenized-stock-experiment?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+      "source": "Slashdot",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Xiaomi\u2019s new 18 Pro phones improve on Samsung\u2019s privacy display",
+      "url": "https://www.theverge.com/tech/999253/xiaomi-18-pro-max-privacy-display-launch-china",
+      "source": "The Verge",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Eight Sleep\u2019s new cooling hub is small enough to hide under your bed",
+      "url": "https://www.theverge.com/tech/999018/eight-sleep-pod-6-intelligent-sleep-system-sensors-health-tracking",
+      "source": "The Verge",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Cloudflare adds Vary support to Cache Rules",
+      "url": "https://blog.cloudflare.com/vary-support/",
+      "source": "TLDR Dev (Web Dev)",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "What Full-Stack AI Engineering Means in Real Projects",
+      "url": "https://dzone.com/articles/full-stack-ai-engineering",
+      "source": "DZone",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Ema raises $77M as AI starts eating into enterprise software and services",
+      "url": "https://techcrunch.com/2026/09/23/ema-raises-77m-as-ai-starts-eating-into-enterprise-software-and-services/",
+      "source": "TechCrunch",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Anthropic made Opus 5.5 cheaper. Then it broke four things your agent depends on.",
+      "url": "https://thenewstack.io/claude-opus-agent-migration/",
+      "source": "The New Stack",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "DJI Osmo 360 II review: A little more video power, a lot more repairability",
+      "url": "https://www.engadget.com/2260043/dji-osmo-360-ii-review/",
+      "source": "Engadget",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Small undersea volcanoes may unleash outsized tsunamis",
+      "url": "https://arstechnica.com/science/2026/09/small-undersea-volcanoes-may-unleash-outsized-tsunamis/",
+      "source": "Ars Technica",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Alzheimer&#x27;s Is No Longer an Untreatable Disease, Major Report Concludes. Here&#x27;s Why",
+      "url": "https://www.sciencealert.com/alzheimers-is-no-longer-an-untreatable-disease-major-report-concludes-heres-why",
+      "source": "TLDR Tech",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "Automatic depth-based local center clustering via $\u03b2$-integrated local depth and adaptive grouping",
+      "url": "https://arxiv.org/abs/2609.26748v1",
+      "source": "arXiv cs.LG",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "TraceVIC: Causal Reasoning over Code Evolution for Identifying Vulnerability-Inducing Commits",
+      "url": "https://arxiv.org/abs/2609.26711v1",
+      "source": "arXiv cs.AI",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "When are bosonic Gaussian states classical to learn?",
+      "url": "https://arxiv.org/abs/2609.26705v1",
+      "source": "arXiv cs.LG",
+      "date": "2026-09-23"
+    }
+  ]
+}
