@@ -16,27 +16,27 @@ arbitrary folder — which is exactly why this repo publishes from
 Your digest will be live at `https://<username>.github.io/<repo>/` once
 the first commit touching `docs/` lands.
 
-## 3. Two settings needed for the routine's branch → main handoff
+## 3. Enable auto-merge (needed for the routine's branch → main handoff)
 
 A Claude Code routine pushes its commit to a `claude/`-prefixed branch
 instead of `main` whenever a direct push to `main` isn't accepted — which
-happens whenever `main` has any branch protection at all.
-`.github/workflows/auto-merge-routine.yml` (already in this repo) reacts
-to that: it opens a PR from the branch and enables auto-merge on it. Two
-repo settings gate this, and both default to **off**:
+happens whenever `main` has any branch protection at all. When that
+happens, the routine opens its own PR (see `CLAUDE.md` step 10) — it can,
+because it's authenticated as your real GitHub account through the
+routine's GitHub proxy, unlike GitHub Actions' own token, which GitHub
+deliberately blocks from creating PRs by default.
+`.github/workflows/auto-merge-routine.yml` then just merges that PR once
+CI passes. Only one setting is needed for the merge step to work:
 
-- **Settings → General → Pull Requests → check "Allow auto-merge"** —
-  without this, `gh pr merge --auto` in the workflow fails outright.
-- **Settings → Actions → General → Workflow permissions → check "Allow
-  GitHub Actions to create and approve pull requests"** — without this,
-  the workflow's `gh pr create` step fails with a permissions error
-  before it even reaches the merge step. This is the one that's easy to
-  miss, since GitHub doesn't mention it anywhere in the Pull Requests
-  settings — it's a separate Actions-specific gate.
+**Settings → General → Pull Requests → check "Allow auto-merge".**
 
-If `auto-merge-routine.yml` shows red in the **Actions** tab with the
-"Open a PR for this branch" step failing, this second setting is almost
-certainly why.
+Without it, `gh pr merge --auto` in the workflow fails and the PR sits
+open until merged by hand.
+
+(Earlier versions of this workflow had the *workflow* open the PR, which
+also needed Settings → Actions → General → "Allow GitHub Actions to
+create and approve pull requests" — a separate, easy-to-miss gate. Moving
+PR creation to the routine itself avoids needing that setting at all.)
 
 ## 4. Connect the repo to Claude Code
 
@@ -125,11 +125,13 @@ successes and the article count.
 Then check where the commit landed:
 - **Directly on `main`** — check the Pages URL; it should already be live.
 - **On a `claude/…` branch instead** — check the repo's **Pull requests**
-  tab. `auto-merge-routine.yml` should have opened one within a minute or
-  two of the push, with auto-merge already enabled on it (visible as
-  "Auto-merge enabled" in the PR). It merges itself once `ci.yml` passes
-  — typically well under a minute — and the branch is deleted after.
-  Check the Pages URL once it merges.
+  tab. The routine should have opened one itself as its last action (see
+  `CLAUDE.md` step 10), and `auto-merge-routine.yml` should show up in
+  its checks within a few seconds of that, enabling auto-merge (visible
+  as "Auto-merge enabled" in the PR). It merges itself once `ci.yml`
+  passes — typically well under a minute — and the branch is deleted
+  after. Check the Pages URL once it merges. If no PR appeared at all,
+  re-read the run's transcript for a `gh pr create` error near the end.
 
 A few sources are marked `"verify_url": true` in `config/sources.json` —
 watch the first run's source-failure log for those in particular; if any

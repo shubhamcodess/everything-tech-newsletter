@@ -166,13 +166,21 @@ corners on the summaries is not.
 10. Commit `docs/index.html`, `docs/archive/` (everything changed by step
     7), and `data/seen.json` — not `data/raw_latest.json` (gitignored,
     regenerated every run). Commit message: `digest: YYYY-MM-DD`. Push to
-    `main`. If that push is rejected and you land on a `claude/`-prefixed
-    branch instead, that's fine — do nothing further about it.
-    `.github/workflows/auto-merge-routine.yml` opens a PR from that branch
-    and merges it automatically once CI passes; don't open the PR
-    yourself, don't try to force the push, don't wait around for the
-    merge. Either way, GitHub Pages redeploys automatically once the
-    commit reaches `main`.
+    `main`.
+    - If that push succeeds directly, you're done — GitHub Pages
+      redeploys automatically once the commit reaches `main`.
+    - If it's rejected and you land on a `claude/`-prefixed branch
+      instead (expected whenever `main` has any branch protection), open
+      the PR yourself: `git branch --show-current` to get the branch
+      name, then `gh pr create --base main --head <branch> --title
+      "digest: YYYY-MM-DD" --body "Automated daily digest."`. You can do
+      this — you're authenticated as the real GitHub account through the
+      routine's GitHub proxy, unlike GitHub Actions' own token, which is
+      deliberately blocked from creating PRs unless a repo setting most
+      repos leave off is enabled. `.github/workflows/auto-merge-routine.yml`
+      then merges that PR automatically once CI passes — don't try to
+      merge it yourself, don't wait around for the merge, don't retry the
+      push to `main`.
 
 11. Final summary, one short line: sources ok/failed, articles fetched,
     articles featured. Nothing else.

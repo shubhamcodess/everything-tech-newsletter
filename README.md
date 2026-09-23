@@ -61,7 +61,7 @@ billed per run. This isn't that.
 | 🗂️ **Self-pruning archive** | Every day's digest before it's overwritten is snapshotted to `docs/archive/`, capped at the last 7 — old snapshots delete themselves, nothing to clean up by hand |
 | 🛡️ **CI that catches breakage early** | Every push validates config and smoke-tests all 47 fetchers, so a bad edit gets caught before the next scheduled run does |
 | 🚀 **Deploy is just a push** | GitHub Pages redeploys `docs/` automatically on every push to `main` — no GitHub Action, no build step, the routine just commits |
-| 🔀 **Self-merging when it can't push to `main`** | If the routine lands on a `claude/…` branch instead (a protected `main`, most likely), [`auto-merge-routine.yml`](.github/workflows/auto-merge-routine.yml) opens a PR and merges it once CI passes — no manual click required |
+| 🔀 **Self-merging when it can't push to `main`** | If the routine lands on a `claude/…` branch instead (a protected `main`, most likely), it opens its own PR — it's authenticated as a real account, unlike GitHub Actions' own token — and [`auto-merge-routine.yml`](.github/workflows/auto-merge-routine.yml) merges it once CI passes, no manual click required |
 | 🎨 **Self-contained styling** | One template, one `<style>` block, no build step — the whole site is a single static HTML file |
 
 ## How it works
@@ -146,7 +146,7 @@ push. The next scheduled run picks it up.
 ├── SETUP.md                        # one-time setup: repo, Pages, routine
 ├── .github/workflows/
 │   ├── ci.yml                      # validates config + smoke-tests fetchers
-│   └── auto-merge-routine.yml      # PRs + merges the routine's claude/* branch into main
+│   └── auto-merge-routine.yml      # merges the routine's own claude/* PRs once CI passes
 ├── config/
 │   ├── interests.json              # topic whitelist
 │   ├── settings.json               # digest size, lookback windows

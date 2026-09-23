@@ -1,45 +1,35 @@
-name: Auto-merge routine branches
+name: Auto-merge routine PRs
 
-# Claude Code routines push their commits to a claude/-prefixed branch
-# rather than main whenever a direct push to main isn't accepted (a
-# protected main, or just the routine's default safe behavior) -- see
-# CLAUDE.md step 10. This picks that branch up, opens a PR against main,
-# and merges it automatically once required checks (ci.yml) pass, so the
-# daily digest reaches main -- and GitHub Pages -- without a manual click.
+# The Claude Code routine opens its own PR when it can't push straight to
+# main (see CLAUDE.md step 10) -- it authenticates as the real GitHub
+# account through the routine's GitHub proxy, so it can create PRs even
+# though GitHub Actions' own token normally can't (that needs a repo
+# setting most repos leave off, and previously made this workflow fail at
+# the PR-creation step). This workflow's only job now is to merge that PR
+# automatically once CI passes, which only needs "Allow auto-merge"
+# enabled under Settings -> General -> Pull Requests -- no Actions
+# PR-creation permission required at all.
 
 on:
-  push:
-    branches:
-      - "claude/**"
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main]
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  open-and-merge:
+  auto-merge:
+    # Only PRs from the routine's own branches -- never auto-merge a PR
+    # opened by anyone/anything else against this filter.
+    if: startsWith(github.head_ref, 'claude/')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Open a PR for this branch (or reuse an existing one)
-        id: pr
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          branch="${GITHUB_REF#refs/heads/}"
-          number=$(gh pr list --head "$branch" --base main --state open --json number --jq '.[0].number')
-          if [ -z "$number" ]; then
-            gh pr create \
-              --head "$branch" \
-              --base main \
-              --title "digest: $(date +%F) (routine run on $branch)" \
-              --body "Automated PR from a Claude Code routine run. Merges automatically once CI passes -- see .github/workflows/auto-merge-routine.yml."
-            number=$(gh pr list --head "$branch" --base main --state open --json number --jq '.[0].number')
-          fi
-          echo "number=$number" >> "$GITHUB_OUTPUT"
-
       - name: Enable auto-merge
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge ${{ steps.pr.outputs.number }} --squash --auto --delete-branch
+        run: |
+          gh pr merge "${{ github.event.pull_request.number }}" \
+            --squash --auto --delete-branch \
+            --repo "${{ github.repository }}"
