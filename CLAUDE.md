@@ -74,8 +74,13 @@ prose explanation beyond the final summary in step 11.
 10. Commit `docs/index.html`, `docs/archive/` (everything changed by step
     7), and `data/seen.json` — not `data/raw_latest.json` (gitignored,
     regenerated every run). Commit message: `digest: YYYY-MM-DD`. Push to
-    `main`. Pushing is enough — GitHub Pages redeploys automatically from
-    `/docs` on `main`, no further action needed.
+    `main`. If that push is rejected and you land on a `claude/`-prefixed
+    branch instead, that's fine — do nothing further about it.
+    `.github/workflows/auto-merge-routine.yml` opens a PR from that branch
+    and merges it automatically once CI passes; don't open the PR
+    yourself, don't try to force the push, don't wait around for the
+    merge. Either way, GitHub Pages redeploys automatically once the
+    commit reaches `main`.
 
 11. Final summary, one short line: sources ok/failed, articles fetched,
     articles featured. Nothing else.

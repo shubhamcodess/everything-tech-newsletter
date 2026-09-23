@@ -16,12 +16,25 @@ arbitrary folder — which is exactly why this repo publishes from
 Your digest will be live at `https://<username>.github.io/<repo>/` once
 the first commit touching `docs/` lands.
 
-## 3. Connect the repo to Claude Code
+## 3. Enable auto-merge (needed for the routine's branch → main handoff)
+
+In the repo: **Settings → General → Pull Requests → check "Allow
+auto-merge".**
+
+Why this is needed: a Claude Code routine pushes its commit to a
+`claude/`-prefixed branch instead of `main` whenever a direct push to
+`main` isn't accepted — which happens whenever `main` has any branch
+protection at all. `.github/workflows/auto-merge-routine.yml` (already in
+this repo) reacts to that: it opens a PR from the branch and calls
+`gh pr merge --auto`, which requires this repo setting to be on. Without
+it, that command fails and the PR sits open until merged by hand.
+
+## 4. Connect the repo to Claude Code
 
 At [claude.ai/code](https://claude.ai/code), make sure GitHub access is
 connected (routines need this to clone/push).
 
-## 4. Create the routine
+## 5. Create the routine
 
 At [claude.ai/code/routines/new](https://claude.ai/code/routines/new):
 
@@ -93,14 +106,21 @@ lobste.rs
 tldr.tech
 ```
 
-## 5. First run
+## 6. First run
 
 Open the routine and click **Run now**. Open the run's session to watch it
 work; confirm at the end that `docs/index.html`, `docs/archive/`, and
-`data/seen.json` were committed and pushed, and that the run summary
-reports source successes and the article count. Then check the Pages URL
-updated — GitHub Pages redeploys automatically on the push, no separate
-step to watch.
+`data/seen.json` were committed, and that the run summary reports source
+successes and the article count.
+
+Then check where the commit landed:
+- **Directly on `main`** — check the Pages URL; it should already be live.
+- **On a `claude/…` branch instead** — check the repo's **Pull requests**
+  tab. `auto-merge-routine.yml` should have opened one within a minute or
+  two of the push, with auto-merge already enabled on it (visible as
+  "Auto-merge enabled" in the PR). It merges itself once `ci.yml` passes
+  — typically well under a minute — and the branch is deleted after.
+  Check the Pages URL once it merges.
 
 A few sources are marked `"verify_url": true` in `config/sources.json` —
 watch the first run's source-failure log for those in particular; if any
@@ -122,3 +142,7 @@ itself and note it in the summary.
 - **Archive**: past digests live at `docs/archive/`, capped at the last 7
   days automatically (`CLAUDE.md` step 7 prunes the oldest once there are
   more than 7) — nothing to maintain by hand.
+- **Branch → main handoff**: if the routine ever lands on a `claude/…`
+  branch instead of `main` (see step 6), that's expected, not an error —
+  `auto-merge-routine.yml` handles it every time without you touching
+  anything, as long as "Allow auto-merge" (step 3) stays enabled.
