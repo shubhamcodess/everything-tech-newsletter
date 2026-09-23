@@ -109,7 +109,17 @@ Rules, every story, no exceptions:
 3. Self-check before moving on: could this exact sentence be pasted
    under a different headline with zero changes? If yes, it's filler —
    rewrite it with something unique to this story.
-4. 1–3 sentences, plain language, no marketing tone.
+4. Length is not the goal, coverage is — there is no sentence cap.
+   Include everything a reader needs to actually understand the story
+   without clicking through: the core action, concrete details (numbers,
+   names, dates, technical specifics), why it matters, and any notable
+   next steps or open questions the article raises. A short story that's
+   genuinely simple can be one tight sentence; a story with real
+   substance can run a full paragraph if that's what it takes to cover
+   it properly. Never cut real substance just to hit a length target,
+   and never pad a simple story with restated filler to look thorough —
+   match the length to how much there actually is to say.
+5. Plain language, no marketing tone, regardless of length.
 
 Good version of the same story used in the bad example above:
 
