@@ -57,15 +57,37 @@ billed per run. This isn't that.
 
 ## How it works
 
-```mermaid
-flowchart LR
-    A["47 sources\nRSS · APIs · HTML scrapes"] -->|scripts/fetch_all.py| B["data/raw_latest.json\n(normalized articles)"]
-    B --> C{"Claude Code routine\n(reads CLAUDE.md)"}
-    C -->|"filter: config/interests.json + fetch_lookback_hours"| D["on-topic articles"]
-    D -->|"cluster same-story coverage"| E["unique story clusters"]
-    E -->|"drop dupes vs. data/seen.json,\njudge + rank, diversity cap"| F["top 25 clusters"]
-    F -->|write, using templates/digest.html.template| G["docs/index.html"]
-    G -->|git commit + push| H[("GitHub Pages")]
+```
+┌──────────────────────────────────────────────────────┐
+│                      47 sources                      │
+│              RSS · APIs · HTML scrapes               │
+└──────────────────────────────────────────────────────┘
+                            │  scripts/fetch_all.py
+                            ▼
+┌──────────────────────────────────────────────────────┐
+│                 data/raw_latest.json                 │
+│           (normalized, unjudged articles)            │
+└──────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌──────────────────────────────────────────────────────┐
+│        Claude Code routine  (reads CLAUDE.md)        │
+│                                                      │
+│  1. filter   -> config/interests.json                │
+│  2. cluster  -> same-story coverage                  │
+│  3. dedupe   -> data/seen.json                       │
+│  4. rank     -> judgment + diversity cap             │
+└──────────────────────────────────────────────────────┘
+                            │  writes, using templates/digest.html.template
+                            ▼
+┌──────────────────────────────────────────────────────┐
+│                   docs/index.html                    │
+└──────────────────────────────────────────────────────┘
+                            │  git commit + push
+                            ▼
+┌──────────────────────────────────────────────────────┐
+│                 GitHub Pages  (live)                 │
+└──────────────────────────────────────────────────────┘
 ```
 
 Two things never touch each other in this pipeline: the **fetch** step
