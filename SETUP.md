@@ -16,18 +16,27 @@ arbitrary folder — which is exactly why this repo publishes from
 Your digest will be live at `https://<username>.github.io/<repo>/` once
 the first commit touching `docs/` lands.
 
-## 3. Enable auto-merge (needed for the routine's branch → main handoff)
+## 3. Two settings needed for the routine's branch → main handoff
 
-In the repo: **Settings → General → Pull Requests → check "Allow
-auto-merge".**
+A Claude Code routine pushes its commit to a `claude/`-prefixed branch
+instead of `main` whenever a direct push to `main` isn't accepted — which
+happens whenever `main` has any branch protection at all.
+`.github/workflows/auto-merge-routine.yml` (already in this repo) reacts
+to that: it opens a PR from the branch and enables auto-merge on it. Two
+repo settings gate this, and both default to **off**:
 
-Why this is needed: a Claude Code routine pushes its commit to a
-`claude/`-prefixed branch instead of `main` whenever a direct push to
-`main` isn't accepted — which happens whenever `main` has any branch
-protection at all. `.github/workflows/auto-merge-routine.yml` (already in
-this repo) reacts to that: it opens a PR from the branch and calls
-`gh pr merge --auto`, which requires this repo setting to be on. Without
-it, that command fails and the PR sits open until merged by hand.
+- **Settings → General → Pull Requests → check "Allow auto-merge"** —
+  without this, `gh pr merge --auto` in the workflow fails outright.
+- **Settings → Actions → General → Workflow permissions → check "Allow
+  GitHub Actions to create and approve pull requests"** — without this,
+  the workflow's `gh pr create` step fails with a permissions error
+  before it even reaches the merge step. This is the one that's easy to
+  miss, since GitHub doesn't mention it anywhere in the Pull Requests
+  settings — it's a separate Actions-specific gate.
+
+If `auto-merge-routine.yml` shows red in the **Actions** tab with the
+"Open a PR for this branch" step failing, this second setting is almost
+certainly why.
 
 ## 4. Connect the repo to Claude Code
 

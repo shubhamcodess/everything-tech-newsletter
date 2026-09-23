@@ -76,52 +76,79 @@ prose explanation beyond the final summary in step 11.
 ## Writing digest summaries
 
 This is the part readers actually judge the digest on — a story with a
-lazy summary is worse than no story at all. A real example from a past
-run, to never repeat:
+lazy summary is worse than no story at all. Real examples from past runs,
+to never repeat:
 
 > "OpenAI GPT-6 Astra breaks Enigma message that has resisted solution
 > since 2005. An important update for the tech industry."
 
-Two failures stacked on top of each other: the first sentence just
-restates the title word-for-word, and the second is generic filler that
-could be glued onto literally any story unchanged. Do neither.
+Restates the title, then closes on filler that could be glued onto any
+story unchanged.
 
-**Before writing each summary, check `data/raw_latest.json` for that
-article's `summary` field** — if it has real content (most RSS sources
-do), pull the specific fact from there, don't invent one. If it's empty
-(common for Hacker News link posts and GitHub Trending, which have no
-article text at all), the title itself is all you have — read it closely
-for the specific noun/number/mechanism already in it, and build the
-sentence around that, rather than writing something generic that ignores
-it.
+> "Long-term conversational memory in multi-party settings requires more
+> than retrieving relevant content from long-term conversations: it must
+> distinguish who said what... these issues reveal two core bottlenecks:
+> message attributi" *(cut off mid-word)*
+
+This is the academic abstract from `data/raw_latest.json`'s `summary`
+field, pasted in directly and truncated wherever the raw text happened to
+run out. Not written by anyone, not simplified, not even readable prose
+at the cut point.
+
+> "&lt;p&gt;&lt;strong&gt;Release:&lt;/strong&gt; &lt;a
+> href=&quot;...&quot;&gt;llm 0.36&lt;/a&gt;&lt;/p&gt;..."
+
+Raw HTML source, escaped entities and all, dumped straight into the page.
+
+> "https://github.com/unrealagent/unreal-agent"
+
+A bare URL standing in for a summary. Not a sentence at all.
+
+**The one rule underneath all of these: every summary is prose you write
+yourself, from scratch, every time — never text lifted from
+`data/raw_latest.json`'s `summary` field, an RSS description, an abstract,
+or anything else, whether verbatim, truncated, or lightly reworded.**
+That field exists so you have facts to draw from, not text to copy. Read
+it, understand what it says, then write your own sentence(s) explaining
+it in plain language — the way you'd actually describe the story to
+someone, not the way the source phrased it. If what you're about to write
+contains any HTML tag, an HTML entity like `&lt;` or `&amp;`, a raw URL,
+or trails off mid-sentence, stop — you copied something, delete it and
+write real prose instead. If a source has no summary at all (common for
+Hacker News link posts and GitHub Trending), the title is all you have —
+read it closely for the specific noun/number/mechanism already in it and
+write around that; still never leave a URL or the bare title standing in
+for a sentence.
 
 Rules, every story, no exceptions:
-1. Never open by restating the title as a sentence. If you're tempted to
+1. Every word is your own. Paraphrase, don't copy — see above.
+2. Never open by restating the title as a sentence. If you're tempted to
    write "X does Y" where X and Y are just copied from the title, stop —
    add or lead with a specific fact instead (a number, a name, a
    consequence, a comparison).
-2. Never close on a sentence that isn't specific to this exact story.
+3. Never close on a sentence that isn't specific to this exact story.
    Banned phrases and close paraphrases of them — if what you wrote
    contains one, delete it and write something real: "important update",
    "significant development", "growing trend", "worth noting", "shows
    how", "highlights the", "underscores", "in the tech industry", "in
    the world of [X]", "continues to evolve".
-3. Self-check before moving on: could this exact sentence be pasted
+4. Self-check before moving on: could this exact sentence be pasted
    under a different headline with zero changes? If yes, it's filler —
    rewrite it with something unique to this story.
-4. Length is not the goal, coverage is — there is no sentence cap.
+5. Length is not the goal, coverage is — there is no sentence cap.
    Include everything a reader needs to actually understand the story
    without clicking through: the core action, concrete details (numbers,
    names, dates, technical specifics), why it matters, and any notable
    next steps or open questions the article raises. A short story that's
    genuinely simple can be one tight sentence; a story with real
    substance can run a full paragraph if that's what it takes to cover
-   it properly. Never cut real substance just to hit a length target,
-   and never pad a simple story with restated filler to look thorough —
-   match the length to how much there actually is to say.
-5. Plain language, no marketing tone, regardless of length.
+   it properly — as long as every sentence in it is still your own
+   paraphrase, per rule 1, not more of the source text copied at length.
+   Never cut real substance just to hit a length target, and never pad a
+   simple story with restated filler to look thorough.
+6. Plain language, no marketing tone, regardless of length.
 
-Good version of the same story used in the bad example above:
+Good version of the Enigma story used in the first bad example above:
 
 > A cryptography puzzle from 2005 that nobody had cracked finally fell to
 > GPT-6 Astra — notable less as a novelty and more as a data point on how
