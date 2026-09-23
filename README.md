@@ -52,7 +52,9 @@ billed per run. This isn't that.
 | 🎯 **Topic boundary you control** | [`config/interests.json`](config/interests.json) is a plain list of topics — edit it any time, no code change, no redeploy |
 | 🔁 **Doesn't repeat itself** | [`data/seen.json`](data/seen.json) tracks recently-featured stories so the same news doesn't resurface for a week |
 | 📖 **25 stories, 10 up front** | The rest sit behind a load-more button — no pagination, no reload, just a bit of vanilla JS |
+| 🗂️ **Self-pruning archive** | Every day's digest before it's overwritten is snapshotted to `dist/archive/`, capped at the last 7 — old snapshots delete themselves, nothing to clean up by hand |
 | 🛡️ **CI that catches breakage early** | Every push validates config and smoke-tests all 47 fetchers, so a bad edit gets caught before the next scheduled run does |
+| 🚀 **Deploy is just a push** | `dist/` is published by GitHub Actions ([`deploy.yml`](.github/workflows/deploy.yml)) on every change — the routine never touches Pages settings, it just commits |
 | 🎨 **Self-contained styling** | One template, one `<style>` block, no build step — the whole site is a single static HTML file |
 
 ## How it works
@@ -77,13 +79,19 @@ billed per run. This isn't that.
 │  2. cluster  -> same-story coverage                  │
 │  3. dedupe   -> data/seen.json                       │
 │  4. rank     -> judgment + diversity cap             │
+│  5. archive  -> dist/archive/ (7-day cap)            │
 └──────────────────────────────────────────────────────┘
                             │  writes, using templates/digest.html.template
                             ▼
 ┌──────────────────────────────────────────────────────┐
-│                   docs/index.html                    │
+│                   dist/index.html                    │
 └──────────────────────────────────────────────────────┘
                             │  git commit + push
+                            ▼
+┌──────────────────────────────────────────────────────┐
+│             GitHub Actions  (deploy.yml)             │
+└──────────────────────────────────────────────────────┘
+                            │
                             ▼
 ┌──────────────────────────────────────────────────────┐
 │                 GitHub Pages  (live)                 │
@@ -124,6 +132,7 @@ push. The next scheduled run picks it up.
 | [`config/settings.json`](config/settings.json) | Digest size, lookback windows, timezone. | `"articles_per_digest": 25` |
 | [`config/sources.json`](config/sources.json) | The source registry — add, remove, or disable a source. RSS sources need only a `feed_url`. | `{"type": "rss", "feed_url": "..."}` |
 | [`templates/digest.html.template`](templates/digest.html.template) | The page's visual design — theme, layout, load-more behavior. | — |
+| [`templates/archive.html.template`](templates/archive.html.template) | The past-digests listing page. | — |
 | [`CLAUDE.md`](CLAUDE.md) | The agent's actual pipeline instructions, step by step. | — |
 
 ## Project structure
@@ -133,7 +142,9 @@ push. The next scheduled run picks it up.
 ├── CLAUDE.md                       # the agent's pipeline, step by step
 ├── ROUTINE_PROMPT.md               # what's pasted into the routine's prompt box
 ├── SETUP.md                        # one-time setup: repo, Pages, routine
-├── .github/workflows/ci.yml        # validates config + smoke-tests fetchers
+├── .github/workflows/
+│   ├── ci.yml                      # validates config + smoke-tests fetchers
+│   └── deploy.yml                  # publishes dist/ to GitHub Pages
 ├── config/
 │   ├── interests.json              # topic whitelist
 │   ├── settings.json               # digest size, lookback windows
@@ -148,16 +159,20 @@ push. The next scheduled run picks it up.
 │   ├── fetch_github_trending.py    # GitHub Trending (HTML scrape)
 │   └── fetch_tldr.py               # TLDR editions (HTML scrape)
 ├── templates/
-│   └── digest.html.template        # the page's structure + styling
+│   ├── digest.html.template        # the digest's structure + styling
+│   └── archive.html.template       # the archive listing page
 ├── data/
 │   └── seen.json                   # memory of recently-featured stories
-└── docs/
-    └── index.html                  # the published digest (GitHub Pages source)
+└── dist/                           # GitHub Pages source (Actions-deployed)
+    ├── index.html                  # today's digest
+    └── archive/
+        ├── index.html              # past-digests list, capped at 7 days
+        └── YYYY-MM-DD.html         # one snapshot per archived day
 ```
 
 ## Setup
 
-1. Enable GitHub Pages: **Settings → Pages → Deploy from a branch → `main`, `/docs`**
+1. Enable GitHub Pages: **Settings → Pages → Source: GitHub Actions** — no branch/folder to pick, `deploy.yml` handles it
 2. Create a [Claude Code Routine](https://code.claude.com/docs/en/routines) pointed at this repo, on a daily schedule
 3. Set the routine's environment network access to **Custom** with the domain allowlist in [`SETUP.md`](SETUP.md) — none of these sources are in the default trusted list
 4. Paste [`ROUTINE_PROMPT.md`](ROUTINE_PROMPT.md) as the routine's prompt

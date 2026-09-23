@@ -1,10 +1,12 @@
 # Tech Newsletter — routine instructions
 
-Generates a daily digest at `docs/index.html`, served by GitHub Pages.
-Runs unattended as a scheduled Claude Code routine. Follow the steps below
-in order, exactly — don't explore the repo beyond what each step names,
-don't touch files not listed, don't add prose explanation beyond the final
-summary in step 10.
+Generates a daily digest at `dist/index.html`, deployed to GitHub Pages by
+`.github/workflows/deploy.yml` whenever `dist/` changes on `main` — you
+never touch Pages settings or that workflow, just push to `dist/` like any
+other file. Runs unattended as a scheduled Claude Code routine. Follow the
+steps below in order, exactly — don't explore the repo beyond what each
+step names, don't touch files not listed, don't add prose explanation
+beyond the final summary in step 11.
 
 ## Steps
 
@@ -37,7 +39,22 @@ summary in step 10.
      10-article one), unless fewer than `articles_per_digest` clusters
      remain in total after the drops above.
 
-7. Write `docs/index.html`. Copy `templates/digest.html.template`'s
+7. Archive the outgoing digest, before it gets overwritten:
+   - If `dist/index.html` already contains a real digest (its
+     `<div class="date">` holds an actual date, not empty), read that
+     date and convert it to `YYYY-MM-DD`.
+   - Copy `dist/index.html` unchanged to `dist/archive/<that-date>.html`.
+   - In `dist/archive/index.html`, prepend one entry to the
+     `<ul class="archive-list">`:
+     `<li><a href="<date>.html"><date, spelled out></a></li>`. Remove the
+     `<p class="empty-note">` line the first time you add an entry.
+   - Cap at 7: if the list now has more than 7 `<li>` entries, delete the
+     oldest one(s) and their corresponding `dist/archive/<date>.html`
+     file(s), so the archive never grows past a week.
+   - Skip this whole step on the very first run (no prior digest exists
+     yet to archive).
+
+8. Write `dist/index.html`. Copy `templates/digest.html.template`'s
    structure and `<style>`/`<script>` exactly — the dark neon theme,
    header brand block, footer block, and load-more mechanism are fixed,
    byte-for-byte, on every run. Only the date and the story blocks change.
@@ -50,21 +67,24 @@ summary in step 10.
    is `class="story"` and the load-more button should not be rendered at
    all (the template shows how to omit it).
 
-8. Update `data/seen.json`: append today's picks (title, url, source,
+9. Update `data/seen.json`: append today's picks (title, url, source,
    date), then remove entries older than `dedup_lookback_days`.
 
-9. Commit `docs/index.html` and `data/seen.json` only — not
-   `data/raw_latest.json` (gitignored, regenerated every run). Commit
-   message: `digest: YYYY-MM-DD`. Push to `main`.
+10. Commit `dist/index.html`, `dist/archive/` (everything changed by step
+    7), and `data/seen.json` — not `data/raw_latest.json` (gitignored,
+    regenerated every run). Commit message: `digest: YYYY-MM-DD`. Push to
+    `main`. Pushing is enough — `.github/workflows/deploy.yml` handles
+    publishing automatically once `dist/` lands on `main`.
 
-10. Final summary, one short line: sources ok/failed, articles fetched,
+11. Final summary, one short line: sources ok/failed, articles fetched,
     articles featured. Nothing else.
 
 ## Scope
 
 Only ever read/write: `config/*.json`, `scripts/*.py`, `data/seen.json`,
-`data/raw_latest.json`, `docs/index.html`. Nothing else in the repo should
-change on a normal run.
+`data/raw_latest.json`, `dist/index.html`, `dist/archive/*.html`. Never
+touch `.github/workflows/*.yml` or GitHub Pages settings — deployment is
+already fully automated and isn't this routine's job.
 
 ## If a source breaks
 
@@ -72,5 +92,5 @@ Check `errors` in `data/raw_latest.json`. One quick fix attempt only — a
 stale `feed_url` in `config/sources.json`, or an obvious bug in
 `scripts/fetch_github_trending.py` / `scripts/fetch_tldr.py` (the two HTML
 scrapers, most likely to break if a site's markup changes). If the cause
-isn't obvious immediately, skip it and mention it in the step 10 summary —
+isn't obvious immediately, skip it and mention it in the step 11 summary —
 don't spend the run debugging it.

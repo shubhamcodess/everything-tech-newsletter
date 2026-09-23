@@ -4,13 +4,21 @@
 
 Done — [shubhamcodess/everything-tech-newsletter](https://github.com/shubhamcodess/everything-tech-newsletter).
 
-## 2. Enable GitHub Pages
+## 2. Enable GitHub Pages (Actions-based, not "deploy from branch")
 
-In the repo: **Settings → Pages → Build and deployment → Source: Deploy from
-a branch → Branch: `main`, folder: `/docs` → Save.**
+In the repo: **Settings → Pages → Build and deployment → Source: GitHub
+Actions.** That's it — no branch/folder picker to set, because
+`.github/workflows/deploy.yml` (already in this repo) handles publishing.
+It triggers automatically whenever `dist/` changes on `main`, uploads
+`dist/` as the Pages artifact, and deploys it. Nothing to configure beyond
+this one dropdown.
 
-Your digest will be live at `https://<username>.github.io/<repo>/` once the
-first commit lands.
+Your digest will be live at `https://<username>.github.io/<repo>/` once
+`deploy.yml` runs for the first time — either after the first commit that
+touches `dist/`, or by running it manually once from the repo's
+**Actions → Deploy Pages → Run workflow** (it supports
+`workflow_dispatch`, so you don't have to wait for the routine's first run
+just to confirm the site loads).
 
 ## 3. Connect the repo to Claude Code
 
@@ -92,9 +100,11 @@ tldr.tech
 ## 5. First run
 
 Open the routine and click **Run now**. Open the run's session to watch it
-work; confirm at the end that `docs/index.html` and `data/seen.json` were
-committed and pushed, and that the run summary reports source successes and
-the article count. Then check the Pages URL updated.
+work; confirm at the end that `dist/index.html`, `dist/archive/`, and
+`data/seen.json` were committed and pushed, and that the run summary
+reports source successes and the article count. Then check the repo's
+**Actions** tab — pushing to `dist/` should have kicked off the **Deploy
+Pages** workflow — and once it's green, check the Pages URL updated.
 
 A few sources are marked `"verify_url": true` in `config/sources.json` —
 watch the first run's source-failure log for those in particular; if any
@@ -111,5 +121,8 @@ itself and note it in the summary.
   an entry with `"type": "rss"` and a `feed_url` — no new code needed.
 - **Change the visual design**: once you have a specific style in mind,
   replace `templates/digest.html.template` (and mention it in `CLAUDE.md`'s
-  step 7 if the structure changes) — the pipeline logic doesn't need to
+  step 8 if the structure changes) — the pipeline logic doesn't need to
   change.
+- **Archive**: past digests live at `dist/archive/`, capped at the last 7
+  days automatically (`CLAUDE.md` step 7 prunes the oldest once there are
+  more than 7) — nothing to maintain by hand.

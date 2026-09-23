@@ -1,0 +1,38 @@
+name: Deploy Pages
+
+# Publishes dist/ to GitHub Pages via Actions (not "deploy from branch").
+# Fires whenever dist/ changes on main -- normally that's the daily
+# routine's commit, but this also lets a manual push or workflow_dispatch
+# republish without waiting for the next scheduled run.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dist/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deployment at a time; never cancel one that's already live-updating.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
