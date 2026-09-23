@@ -1,5 +1,5 @@
 <!--
-  Structure/style for dist/index.html. Dark blue GitHub-ish neubrutalist
+  Structure/style for docs/index.html. Dark blue GitHub-ish neubrutalist
   theme: squarish corners, two-tone hard box-shadows, neon accents, mono
   font throughout. Keep this semantic shape (header, date, story cards with
   a tag + title + meta + summary) when the routine composes into it each

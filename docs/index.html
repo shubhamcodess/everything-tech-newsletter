@@ -1,21 +1,16 @@
 <!--
-  Structure/style for docs/archive/index.html -- the past-digests list.
-  Same design tokens, header, and footer as digest.html.template (kept as a
-  literal copy here, not shared, since this project has no build step).
-
-  How the routine maintains this, each run, per CLAUDE.md:
-  1. Before overwriting docs/index.html, copy its CURRENT (about-to-be-
-     replaced) content to docs/archive/<its own date, as YYYY-MM-DD>.html.
-  2. Prepend one <li> here linking to that file.
-  3. Cap at 7 entries: delete the oldest archived .html file(s) and drop
-     their <li> once there are more than 7, so this never grows unbounded.
+  Placeholder -- this is the live default until the routine's first real
+  run overwrites it per CLAUDE.md. Deliberately not the curated demo
+  (see docs/sample-output.html for that): the first thing visitors and the
+  owner should see here is genuine AI-generated output, not a hand-picked
+  preview standing in for it.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EverythingTech — Archive</title>
+<title>EverythingTech</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -23,14 +18,12 @@
   :root {
     --bg: #090d14;
     --panel: #0f1622;
-    --panel-2: #131b29;
     --border: #26334a;
     --text: #d7e1f0;
     --muted: #7e8ba3;
     --cyan: #39f6e2;
     --pink: #ff3ec8;
     --green: #4dff9e;
-    --blue: #4d8dff;
     --shadow-dark: rgba(0, 0, 0, 0.55);
   }
   * { box-sizing: border-box; }
@@ -54,54 +47,28 @@
     margin-bottom: 36px;
     box-shadow: 5px 5px 0 var(--cyan), 10px 10px 0 var(--shadow-dark);
   }
-  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-  .header-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
   .chip-icon { flex-shrink: 0; shape-rendering: crispEdges; filter: drop-shadow(0 0 4px var(--cyan)); animation: chip-pulse 2.4s ease-in-out infinite; }
   .chip-icon .pin { fill: var(--pink); }
   .chip-icon .body { fill: var(--cyan); }
   .chip-icon .core { fill: var(--green); animation: core-flicker 1.6s steps(2) infinite; }
   @keyframes chip-pulse { 0%, 100% { filter: drop-shadow(0 0 3px var(--cyan)); } 50% { filter: drop-shadow(0 0 9px var(--pink)); } }
   @keyframes core-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-  header h1 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.01em; color: var(--text); text-shadow: 0 0 14px rgba(57, 246, 226, 0.35); white-space: nowrap; }
+  header h1 { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.01em; text-shadow: 0 0 14px rgba(57, 246, 226, 0.35); }
   header h1 .cursor { color: var(--pink); animation: blink 1s steps(1) infinite; }
   @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
   header .tagline { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; margin-top: 2px; }
-  header .date { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; }
-  .header-links { display: flex; align-items: center; gap: 10px; }
-  .header-links .sep { color: var(--border); }
-  .repo-link {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
-    color: var(--muted); text-decoration: none; transition: color 0.12s ease;
-  }
-  .repo-link:hover { color: var(--cyan); }
-  .repo-link svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
 
-  h2.page-title { font-size: 1.1rem; margin: 0 0 18px; color: var(--text); }
-
-  .archive-list { list-style: none; padding: 0; margin: 0; }
-  .archive-list li {
+  .pending {
     background: var(--panel);
     border: 2px solid var(--border);
     border-radius: 3px;
-    margin-bottom: 14px;
-    box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
   }
-  .archive-list li:hover {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--cyan), 2px 2px 0 var(--shadow-dark);
-    border-color: var(--cyan);
-  }
-  .archive-list a {
-    display: block;
-    padding: 14px 18px;
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 700;
-  }
-  .archive-list a:hover { color: var(--cyan); }
-  .empty-note { color: var(--muted); font-size: 0.85rem; }
+  .pending .prompt { color: var(--cyan); }
+  .pending p { color: var(--muted); font-size: 0.9rem; margin: 10px 0 0; }
 
   footer { text-align: center; color: var(--muted); font-size: 0.78rem; margin-top: 40px; letter-spacing: 0.04em; }
   footer .signoff { font-size: 0.95rem; color: var(--text); margin-bottom: 14px; }
@@ -140,24 +107,12 @@
       <div class="tagline">all at once.</div>
     </div>
   </div>
-  <div class="header-meta">
-    <div class="date">ARCHIVE &middot; LAST 7 DAYS</div>
-    <div class="header-links">
-      <a class="repo-link" href="../index.html">&#8592; today</a>
-    </div>
-  </div>
 </header>
 
-<h2 class="page-title">Past digests</h2>
-
-<!--
-  Newest first. Prepend one entry per run, remove the oldest once there
-  are more than 7:
-  <li><a href="2026-09-24.html">September 24, 2026</a></li>
--->
-<ul class="archive-list">
-</ul>
-<p class="empty-note"><!-- shown only while the list above is empty; remove this line once the first entry is prepended --> No past digests yet &mdash; check back after tomorrow's run.</p>
+<div class="pending">
+  <div><span class="prompt">$</span> awaiting first run&hellip;</div>
+  <p>Nothing generated yet. This page fills in once the daily routine runs for the first time.</p>
+</div>
 
 <footer>
   <div class="signoff"><span class="prompt">$</span> curated_by <span class="me">Shubham Prakash</span></div>

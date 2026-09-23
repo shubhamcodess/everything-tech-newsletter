@@ -1,12 +1,12 @@
 # Tech Newsletter — routine instructions
 
-Generates a daily digest at `dist/index.html`, deployed to GitHub Pages by
-`.github/workflows/deploy.yml` whenever `dist/` changes on `main` — you
-never touch Pages settings or that workflow, just push to `dist/` like any
-other file. Runs unattended as a scheduled Claude Code routine. Follow the
-steps below in order, exactly — don't explore the repo beyond what each
-step names, don't touch files not listed, don't add prose explanation
-beyond the final summary in step 11.
+Generates a daily digest at `docs/index.html`. GitHub Pages is configured
+to deploy from the `main` branch's `/docs` folder directly — no build
+step, no GitHub Action, no separate deploy trigger. Pushing to `docs/` is
+the entire publish step. Runs unattended as a scheduled Claude Code
+routine. Follow the steps below in order, exactly — don't explore the
+repo beyond what each step names, don't touch files not listed, don't add
+prose explanation beyond the final summary in step 11.
 
 ## Steps
 
@@ -40,21 +40,22 @@ beyond the final summary in step 11.
      remain in total after the drops above.
 
 7. Archive the outgoing digest, before it gets overwritten:
-   - If `dist/index.html` already contains a real digest (its
-     `<div class="date">` holds an actual date, not empty), read that
-     date and convert it to `YYYY-MM-DD`.
-   - Copy `dist/index.html` unchanged to `dist/archive/<that-date>.html`.
-   - In `dist/archive/index.html`, prepend one entry to the
+   - Check whether `docs/index.html` currently contains any
+     `<div class="story">` elements. If it doesn't — this is the
+     placeholder (first run ever), or a run failed midway last time —
+     skip the rest of this step entirely, nothing to archive.
+   - Otherwise, read the date from its `<div class="date">` and convert
+     it to `YYYY-MM-DD`.
+   - Copy `docs/index.html` unchanged to `docs/archive/<that-date>.html`.
+   - In `docs/archive/index.html`, prepend one entry to the
      `<ul class="archive-list">`:
      `<li><a href="<date>.html"><date, spelled out></a></li>`. Remove the
      `<p class="empty-note">` line the first time you add an entry.
    - Cap at 7: if the list now has more than 7 `<li>` entries, delete the
-     oldest one(s) and their corresponding `dist/archive/<date>.html`
+     oldest one(s) and their corresponding `docs/archive/<date>.html`
      file(s), so the archive never grows past a week.
-   - Skip this whole step on the very first run (no prior digest exists
-     yet to archive).
 
-8. Write `dist/index.html`. Copy `templates/digest.html.template`'s
+8. Write `docs/index.html`. Copy `templates/digest.html.template`'s
    structure and `<style>`/`<script>` exactly — the dark neon theme,
    header brand block, footer block, and load-more mechanism are fixed,
    byte-for-byte, on every run. Only the date and the story blocks change.
@@ -70,11 +71,11 @@ beyond the final summary in step 11.
 9. Update `data/seen.json`: append today's picks (title, url, source,
    date), then remove entries older than `dedup_lookback_days`.
 
-10. Commit `dist/index.html`, `dist/archive/` (everything changed by step
+10. Commit `docs/index.html`, `docs/archive/` (everything changed by step
     7), and `data/seen.json` — not `data/raw_latest.json` (gitignored,
     regenerated every run). Commit message: `digest: YYYY-MM-DD`. Push to
-    `main`. Pushing is enough — `.github/workflows/deploy.yml` handles
-    publishing automatically once `dist/` lands on `main`.
+    `main`. Pushing is enough — GitHub Pages redeploys automatically from
+    `/docs` on `main`, no further action needed.
 
 11. Final summary, one short line: sources ok/failed, articles fetched,
     articles featured. Nothing else.
@@ -82,9 +83,8 @@ beyond the final summary in step 11.
 ## Scope
 
 Only ever read/write: `config/*.json`, `scripts/*.py`, `data/seen.json`,
-`data/raw_latest.json`, `dist/index.html`, `dist/archive/*.html`. Never
-touch `.github/workflows/*.yml` or GitHub Pages settings — deployment is
-already fully automated and isn't this routine's job.
+`data/raw_latest.json`, `docs/index.html`, `docs/archive/*.html`. Never
+touch `.github/workflows/*.yml` or GitHub Pages settings.
 
 ## If a source breaks
 

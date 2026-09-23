@@ -17,6 +17,12 @@ required.
 
 </div>
 
+> The live site shows a placeholder until the routine's first real run —
+> `docs/index.html` is deliberately not seeded with fake content. The
+> banner above and [`docs/sample-output.html`](https://shubhamcodess.github.io/everything-tech-newsletter/sample-output.html)
+> show what real output looks like, assembled by hand from genuine fetched
+> data to verify the design before the pipeline was wired up.
+
 ---
 
 ## What this actually is
@@ -52,9 +58,9 @@ billed per run. This isn't that.
 | 🎯 **Topic boundary you control** | [`config/interests.json`](config/interests.json) is a plain list of topics — edit it any time, no code change, no redeploy |
 | 🔁 **Doesn't repeat itself** | [`data/seen.json`](data/seen.json) tracks recently-featured stories so the same news doesn't resurface for a week |
 | 📖 **25 stories, 10 up front** | The rest sit behind a load-more button — no pagination, no reload, just a bit of vanilla JS |
-| 🗂️ **Self-pruning archive** | Every day's digest before it's overwritten is snapshotted to `dist/archive/`, capped at the last 7 — old snapshots delete themselves, nothing to clean up by hand |
+| 🗂️ **Self-pruning archive** | Every day's digest before it's overwritten is snapshotted to `docs/archive/`, capped at the last 7 — old snapshots delete themselves, nothing to clean up by hand |
 | 🛡️ **CI that catches breakage early** | Every push validates config and smoke-tests all 47 fetchers, so a bad edit gets caught before the next scheduled run does |
-| 🚀 **Deploy is just a push** | `dist/` is published by GitHub Actions ([`deploy.yml`](.github/workflows/deploy.yml)) on every change — the routine never touches Pages settings, it just commits |
+| 🚀 **Deploy is just a push** | GitHub Pages redeploys `docs/` automatically on every push to `main` — no GitHub Action, no build step, the routine just commits |
 | 🎨 **Self-contained styling** | One template, one `<style>` block, no build step — the whole site is a single static HTML file |
 
 ## How it works
@@ -79,22 +85,17 @@ billed per run. This isn't that.
 │  2. cluster  -> same-story coverage                  │
 │  3. dedupe   -> data/seen.json                       │
 │  4. rank     -> judgment + diversity cap             │
-│  5. archive  -> dist/archive/ (7-day cap)            │
+│  5. archive  -> docs/archive/ (7-day cap)            │
 └──────────────────────────────────────────────────────┘
                             │  writes, using templates/digest.html.template
                             ▼
 ┌──────────────────────────────────────────────────────┐
-│                   dist/index.html                    │
+│                   docs/index.html                    │
 └──────────────────────────────────────────────────────┘
                             │  git commit + push
                             ▼
 ┌──────────────────────────────────────────────────────┐
-│             GitHub Actions  (deploy.yml)             │
-└──────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌──────────────────────────────────────────────────────┐
-│                 GitHub Pages  (live)                 │
+│          GitHub Pages  (auto-deploys /docs)          │
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -142,9 +143,7 @@ push. The next scheduled run picks it up.
 ├── CLAUDE.md                       # the agent's pipeline, step by step
 ├── ROUTINE_PROMPT.md               # what's pasted into the routine's prompt box
 ├── SETUP.md                        # one-time setup: repo, Pages, routine
-├── .github/workflows/
-│   ├── ci.yml                      # validates config + smoke-tests fetchers
-│   └── deploy.yml                  # publishes dist/ to GitHub Pages
+├── .github/workflows/ci.yml        # validates config + smoke-tests fetchers
 ├── config/
 │   ├── interests.json              # topic whitelist
 │   ├── settings.json               # digest size, lookback windows
@@ -163,7 +162,7 @@ push. The next scheduled run picks it up.
 │   └── archive.html.template       # the archive listing page
 ├── data/
 │   └── seen.json                   # memory of recently-featured stories
-└── dist/                           # GitHub Pages source (Actions-deployed)
+└── docs/                           # GitHub Pages source (branch deploy)
     ├── index.html                  # today's digest
     └── archive/
         ├── index.html              # past-digests list, capped at 7 days
@@ -172,7 +171,7 @@ push. The next scheduled run picks it up.
 
 ## Setup
 
-1. Enable GitHub Pages: **Settings → Pages → Source: GitHub Actions** — no branch/folder to pick, `deploy.yml` handles it
+1. Enable GitHub Pages: **Settings → Pages → Deploy from a branch → `main`, `/docs`** (GitHub's branch-based Pages deploy only supports root or `/docs`, which is why the site publishes from there)
 2. Create a [Claude Code Routine](https://code.claude.com/docs/en/routines) pointed at this repo, on a daily schedule
 3. Set the routine's environment network access to **Custom** with the domain allowlist in [`SETUP.md`](SETUP.md) — none of these sources are in the default trusted list
 4. Paste [`ROUTINE_PROMPT.md`](ROUTINE_PROMPT.md) as the routine's prompt
