@@ -106,6 +106,66 @@
   }
   .social-btn:hover { color: var(--pink); border-color: var(--pink); transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark); }
   .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+  .ai-badge { position: fixed; bottom: 20px; right: 20px; z-index: 50; }
+  .ai-badge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 12px;
+    color: var(--cyan);
+    font-family: inherit;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .ai-badge-btn .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: core-flicker 1.6s steps(2) infinite;
+  }
+  .ai-badge:hover .ai-badge-btn,
+  .ai-badge-btn:focus {
+    color: var(--pink);
+    border-color: var(--pink);
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark);
+    outline: none;
+  }
+  .ai-popover {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    width: 230px;
+    background: var(--panel);
+    border: 2px solid var(--cyan);
+    border-radius: 3px;
+    padding: 14px 16px;
+    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
+    font-size: 0.76rem;
+    line-height: 1.5;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .ai-popover .prompt { color: var(--pink); }
+  .ai-popover strong { color: var(--cyan); }
+  .ai-badge:hover .ai-popover,
+  .ai-badge:focus-within .ai-popover {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 </style>
 </head>
 <body>
@@ -159,5 +219,21 @@
   </div>
   <div class="tagline">tech-newsletter &middot; generated daily</div>
 </footer>
+
+<!--
+  Fixed content, same as the header brand and footer -- do not regenerate.
+  Pure CSS hover/focus popover, no JS: focusing or hovering .ai-badge
+  reveals .ai-popover via :hover/:focus-within, works for tap too since
+  the button is a real focusable element.
+-->
+<div class="ai-badge">
+  <button class="ai-badge-btn" type="button">
+    <span class="dot"></span> ai-curated
+  </button>
+  <div class="ai-popover">
+    <span class="prompt">$</span> how_this_works<br>
+    47+ sources fetched daily. <strong>Claude</strong> reads, dedupes &amp; ranks every story on its own judgment &mdash; no formula, no human editor. Rebuilt fresh each morning.
+  </div>
+</div>
 </body>
 </html>

@@ -57,11 +57,15 @@ prose explanation beyond the final summary in step 11.
 
 8. Write `docs/index.html`. Copy `templates/digest.html.template`'s
    structure and `<style>`/`<script>` exactly — the dark neon theme,
-   header brand block, footer block, and load-more mechanism are fixed,
-   byte-for-byte, on every run. Only the date and the story blocks change.
-   One `<div class="story">` per pick, ranked order, each with a short
-   1–3 sentence original summary (write it yourself — don't copy the
-   source's own blurb). The first 10 stories get `class="story"`; the
+   header brand block, footer block, AI-curated popover, and load-more
+   mechanism are fixed, byte-for-byte, on every run. Only the date and
+   the story blocks change. One `<div class="story">` per pick, ranked
+   order, each with a short 1–3 sentence original summary (write it
+   yourself — don't copy the source's own blurb). Every story headline's
+   `<a href="ARTICLE_URL">` must include `target="_blank"
+   rel="noopener noreferrer"` — it opens the original source in a new
+   tab, not internal links like the archive or repo link, which stay
+   same-tab. The first 10 stories get `class="story"`; the
    11th onward get `class="story story-more"` (hidden by default, revealed
    by the template's load-more button) — see the template's comment for
    the exact markup. If `articles_per_digest` is 10 or fewer, every story
