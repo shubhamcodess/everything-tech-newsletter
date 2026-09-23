@@ -142,8 +142,6 @@
     margin-bottom: 10px;
     box-shadow: 2px 2px 0 var(--shadow-dark);
   }
-  /* Rotate tag colors per topic if you want visual variety -- e.g.
-     .tag.ai { background: var(--pink); } .tag.infra { background: var(--blue); } */
 
   .story h2 {
     font-size: 1.05rem;
@@ -256,13 +254,76 @@
     box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark);
   }
   .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+  .ai-badge { position: fixed; bottom: 20px; right: 20px; z-index: 50; }
+  .ai-badge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    padding: 8px 12px;
+    color: var(--cyan);
+    font-family: inherit;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .ai-badge-btn .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: core-flicker 1.6s steps(2) infinite;
+  }
+  .ai-badge:hover .ai-badge-btn,
+  .ai-badge-btn:focus {
+    color: var(--pink);
+    border-color: var(--pink);
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark);
+    outline: none;
+  }
+  .ai-popover {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    width: 230px;
+    background: var(--panel);
+    border: 2px solid var(--cyan);
+    border-radius: 3px;
+    padding: 14px 16px;
+    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
+    font-size: 0.76rem;
+    line-height: 1.5;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .ai-popover .prompt { color: var(--pink); }
+  .ai-popover strong { color: var(--cyan); }
+  .ai-badge:hover .ai-popover,
+  .ai-badge:focus-within .ai-popover {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  @media (max-width: 480px) {
+    header { padding: 14px 16px; }
+    header h1 { font-size: 1.05rem; }
+    .header-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .header-links { gap: 8px; }
+  }
 </style>
 </head>
 <body>
-<!--
-  Brand block is fixed content, same as the footer -- do not regenerate the
-  name/tagline/icon, only the date changes here day to day.
--->
 <header>
   <div class="brand">
     <svg class="chip-icon" viewBox="0 0 8 8" width="40" height="40" aria-hidden="true">
@@ -283,7 +344,7 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="date">September 23, 2026</div>
+    <div class="date">September 24, 2026</div>
     <div class="header-links">
       <a class="repo-link" href="archive/index.html">archive</a>
       <span class="sep">&middot;</span>
@@ -296,154 +357,181 @@
 </header>
 
 <div class="story">
-    <span class="tag">AI</span>
-    <h2><a href="https://www.cryptocellar.org/bgac/the-mvueh-break.html">OpenAI GPT–6 Astra breaks Enigma message that has resisted solution since 2005</a></h2>
-    <div class="meta"><span class="src">Hacker News</span></div>
-    <p>OpenAI GPT–6 Astra breaks Enigma message that has resisted solution since 2005. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">AI</span>
+  <h2><a href="https://openai.com/index/better-prompt-caching-for-gpt-6" target="_blank" rel="noopener noreferrer">Better prompt caching for GPT-6</a></h2>
+  <div class="meta"><span class="src">OpenAI Blog</span></div>
+  <p>GPT-6 improves prompt caching with higher hit rates, explicit breakpoints, and new diagnostic tools — letting developers cache large prompts once and reuse them across requests, cutting both latency and API costs.</p>
+</div>
 
 <div class="story">
-    <span class="tag">AI</span>
-    <h2><a href="https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/">OpenAI is well positioned to fast-follow Jev</a></h2>
-    <div class="meta"><span class="src">Hacker News</span></div>
-    <p>OpenAI is well positioned to fast-follow Jev. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">AI</span>
+  <h2><a href="https://www.bloomberg.com/graphics/2026-iran-school-attack/" target="_blank" rel="noopener noreferrer">Pentagon says overreliance on AI contributed to missile strike on Iran school</a></h2>
+  <div class="meta"><span class="src">Bloomberg</span> &middot; Hacker News</div>
+  <p>A U.S. military airstrike on an Iranian school earlier this year occurred in part because operators over-relied on AI systems rather than applying human judgment — a rare public acknowledgment of how automated decision-making can compound errors in wartime.</p>
+</div>
 
 <div class="story">
-    <span class="tag">Tech</span>
-    <h2><a href="https://www.kqed.org/science/2002033/heres-what-california-is-learning-from-solar-panels-built-over-irrigation-canals">What California is learning from solar panels built over irrigation canals</a></h2>
-    <div class="meta"><span class="src">Hacker News</span></div>
-    <p>What California is learning from solar panels built over irrigation canals. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Security</span>
+  <h2><a href="https://www.wired.com/story/metas-muse-ai-agent-zero-day/" target="_blank" rel="noopener noreferrer">Meta's Muse AI Agent Rolled Out With a Serious Security Flaw</a></h2>
+  <div class="meta"><span class="src">Wired</span> &middot; Ars Technica</div>
+  <p>Meta released its Muse AI assistant with a zero-day vulnerability that could let attackers do "whatever they wanted" on a victim's Mac before the company rushed a fix — a stark reminder that agentic AI systems with broad capabilities carry proportionally larger security risks.</p>
+</div>
 
 <div class="story">
-    <span class="tag">Tech</span>
-    <h2><a href="https://simonwillison.net/2026/Sep/23/bof-agentic-engineering/">SF October 14th: A Birds of a Feather Session on Agentic Engineering</a></h2>
-    <div class="meta"><span class="src">Simon Willison's Blog</span></div>
-    <p>SF October 14th: A Birds of a Feather Session on Agentic Engineering. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Cloud</span>
+  <h2><a href="https://aws.amazon.com/blogs/aws/introducing-amazon-cloudwatch-omni-ai-powered-observability-for-generative-ai-and-agentic-workloads/" target="_blank" rel="noopener noreferrer">Introducing Amazon CloudWatch Omni: AI-powered observability</a></h2>
+  <div class="meta"><span class="src">AWS News Blog</span></div>
+  <p>CloudWatch Omni brings AI-powered observability purpose-built for generative AI and agentic workloads, letting teams trace, evaluate, and experiment with AI agents across any framework — addressing the specific debugging and monitoring needs that traditional observability tools miss.</p>
+</div>
 
 <div class="story">
-    <span class="tag">AI</span>
-    <h2><a href="https://www.theverge.com/ai-artificial-intelligence/999167/openai-elite-mathematicians-panel">OpenAI wants to consult elite mathematicians about how to not fumble again</a></h2>
-    <div class="meta"><span class="src">The Verge</span></div>
-    <p>OpenAI wants to consult elite mathematicians about how to not fumble again. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">AI</span>
+  <h2><a href="https://towardsdatascience.com/how-grpo-trains-small-language-models-with-verifiable-rewards/" target="_blank" rel="noopener noreferrer">How GRPO Trains Small Language Models with Verifiable Rewards</a></h2>
+  <div class="meta"><span class="src">Towards Data Science</span></div>
+  <p>A new training approach using verifiable rewards lets smaller language models reach frontier performance without requiring the massive compute of larger models — making it practical for teams without access to billions of parameters.</p>
+</div>
 
 <div class="story">
-    <span class="tag">Tech</span>
-    <h2><a href="https://arxiv.org/abs/2609.26777v1">SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving</a></h2>
-    <div class="meta"><span class="src">arXiv cs.AI</span></div>
-    <p>SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Cloud</span>
+  <h2><a href="https://kubernetes.io/blog/2026/09/21/kubernetes-v1-37-pvc-last-used-time/" target="_blank" rel="noopener noreferrer">Kubernetes v1.37: Hardening Container Storage</a></h2>
+  <div class="meta"><span class="src">Kubernetes Blog</span></div>
+  <p>Kubernetes 1.37 ships hardened container storage with EmptyDir permission modes and bind mount options, giving application teams and security engineers better control over what permissions containers have on mounted filesystems.</p>
+</div>
 
 <div class="story">
-    <span class="tag">Tech</span>
-    <h2><a href="https://dev.to/playfulprogramming/the-grand-unifying-architecture-of-frontend-bhk">The Grand Unifying Architecture of Frontend</a></h2>
-    <div class="meta"><span class="src">Dev.to</span></div>
-    <p>The Grand Unifying Architecture of Frontend. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">OSS</span>
+  <h2><a href="https://www.infoq.com/news/2026/09/andrew-kelley-zig-no-ai/" target="_blank" rel="noopener noreferrer">Andrew Kelley Interview: Why He Built Zig, Banned AI Contributions, and Moved Zig off GitHub</a></h2>
+  <div class="meta"><span class="src">InfoQ</span></div>
+  <p>The creator of Zig discusses his motivations for building a new language, the deliberate decision to ban AI-generated contributions to the project, and why Zig moved away from GitHub — shedding light on the tension between open-source community values and corporate incentives.</p>
+</div>
 
 <div class="story">
-    <span class="tag">Tech</span>
-    <h2><a href="https://arxiv.org/abs/2609.26679v1">A Spectral Theory of Grokking: Weight Decay induces Feature Learning</a></h2>
-    <div class="meta"><span class="src">arXiv cs.LG</span></div>
-    <p>A Spectral Theory of Grokking: Weight Decay induces Feature Learning. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">AI</span>
+  <h2><a href="https://arxiv.org/abs/2609.26777v1" target="_blank" rel="noopener noreferrer">SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving</a></h2>
+  <div class="meta"><span class="src">arXiv cs.AI</span></div>
+  <p>A new benchmark for evaluating AI agents on production inference tasks—requiring them to coordinate changes across serving stacks—reveals how quickly agents drop in performance when real-world constraints enter the picture.</p>
+</div>
 
 <div class="story">
-    <span class="tag">Tech</span>
-    <h2><a href="https://arxiv.org/abs/2609.26667v1">MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction with Dense-Reward Reinforcement Learning</a></h2>
-    <div class="meta"><span class="src">arXiv cs.LG</span></div>
-    <p>MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction with Dense-Reward Reinforcement L... A significant development in the tech ecosystem.</p>
-  </div>
+  <span class="tag">Security</span>
+  <h2><a href="https://www.freecodecamp.org/news/why-you-should-never-embed-your-gemini-api-key-in-client-code-and-how-firebase-ai-logic-fixes-it/" target="_blank" rel="noopener noreferrer">Why You Should Never Embed Your Gemini API Key in Client Code</a></h2>
+  <div class="meta"><span class="src">freeCodeCamp News</span></div>
+  <p>Embedding API keys in browser-side JavaScript exposes them to scraping and abuse, but Firebase AI Logic provides a server-side alternative—letting client code call your backend which then securely proxies to Gemini.</p>
+</div>
 
 <div class="story">
-    <span class="tag">Tech</span>
-    <h2><a href="https://dev.to/remojansen/why-the-best-software-advice-is-the-hardest-to-follow-4kg8">Why the Best Software Advice Is the Hardest to Follow</a></h2>
-    <div class="meta"><span class="src">Dev.to</span></div>
-    <p>Why the Best Software Advice Is the Hardest to Follow. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Security</span>
+  <h2><a href="https://venturebeat.com/security/china-linked-hackers-backdoored-executives-laptops-via-usb-exploiting-a-fix-companies-had-but-werent-using" target="_blank" rel="noopener noreferrer">Microsoft Helps Take Down Massive Automated, AI-Powered Phishing-as-a-Service Platform</a></h2>
+  <div class="meta"><span class="src">Slashdot</span></div>
+  <p>Microsoft coordinated a takedown of a large-scale AI-powered phishing operation offering customized lures, inbox analysis to identify high-value targets, and fully automated campaigns — showing how criminal syndicates are weaponizing the same AI capabilities that enterprises use.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">Infrastructure</span>
-    <h2><a href="https://dev.to/gde/what-nobody-is-using-in-your-google-cloud-projects-and-what-it-costs-1k0">What Nobody Is Using in Your Google Cloud Projects, and What It Costs</a></h2>
-    <div class="meta"><span class="src">Dev.to</span></div>
-    <p>What Nobody Is Using in Your Google Cloud Projects, and What It Costs. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Dev</span>
+  <h2><a href="https://dev.to/parsajiravand/stop-writing-javascript-to-fix-100vh-on-mobile-42bk" target="_blank" rel="noopener noreferrer">Stop Writing JavaScript To Fix 100vh On Mobile</a></h2>
+  <div class="meta"><span class="src">Dev.to</span></div>
+  <p>New CSS units like `dvh` (dynamic viewport height) and `svh` (small viewport height) finally solve the long-standing mobile problem where `100vh` includes the browser chrome, cutting off content — eliminating the need for JavaScript workarounds.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">Open Source</span>
-    <h2><a href="https://tech.slashdot.org/story/26/09/22/031256/google-opens-preorders-for-its-899-gemini-enhanced-googlebook-laptops?utm_source=rss1.0mainlinkanon&utm_medium=feed">Google Opens Preorders for Its $899 Gemini-Enhanced 'Googlebook' Laptops</a></h2>
-    <div class="meta"><span class="src">Slashdot</span></div>
-    <p>Google Opens Preorders for Its $899 Gemini-Enhanced 'Googlebook' Laptops. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Architecture</span>
+  <h2><a href="https://dzone.com/articles/terraform-state-coupling" target="_blank" rel="noopener noreferrer">Your Terraform Monolith Isn't Too Big. It's Tightly Coupled.</a></h2>
+  <div class="meta"><span class="src">DZone</span></div>
+  <p>A massive Terraform state file isn't the core problem—tight coupling between modules is what breaks deployments. Small changes cascade across the state because modules are hardwired to depend on each other, not because size alone causes issues.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">AI</span>
-    <h2><a href="https://timdettmers.com/2026/09/21/dlab-open-source-week/">dlab Open Source Week: Frontier AI on Your Own Hardware</a></h2>
-    <div class="meta"><span class="src">TLDR Tech</span></div>
-    <p>dlab Open Source Week: Frontier AI on Your Own Hardware. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">AI</span>
+  <h2><a href="https://towardsdatascience.com/break-your-own-rag-pipeline-before-users-do/" target="_blank" rel="noopener noreferrer">Break Your Own RAG Pipeline Before Users Do</a></h2>
+  <div class="meta"><span class="src">Towards Data Science</span></div>
+  <p>Testing RAG systems requires building adversarial test sets specifically designed to find retrieval failures—not just checking whether the model answers correctly on evaluation data, which often misses the failure modes users encounter.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">Open Source</span>
-    <h2><a href="https://www.testingcatalog.com/xiaomi-open-sources-mimo-v2-6-pro-and-flash-models/">Xiaomi open-sources MiMo-V2.6 Pro and Flash models</a></h2>
-    <div class="meta"><span class="src">TLDR AI</span></div>
-    <p>Xiaomi open-sources MiMo-V2.6 Pro and Flash models. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Dev</span>
+  <h2><a href="https://simonwillison.net/2026/Sep/22/llm/" target="_blank" rel="noopener noreferrer">llm 0.36</a></h2>
+  <div class="meta"><span class="src">Simon Willison's Blog</span></div>
+  <p>The llm CLI tool releases version 0.36 with support for GPT-6 Sol, Luna, and other new models, plus new commands for working with local language models — simplifying how developers test and prototype with the latest frontier models.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">Open Source</span>
-    <h2><a href="https://www.interconnects.ai/p/the-current-balance-of-power-in-open">The current balance of power in open models</a></h2>
-    <div class="meta"><span class="src">TLDR AI</span></div>
-    <p>The current balance of power in open models. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">OSS</span>
+  <h2><a href="https://www.phoronix.com/news/NTFS-3G-2026.9.18" target="_blank" rel="noopener noreferrer">NTFS-3G Update Brings Many Security Fixes</a></h2>
+  <div class="meta"><span class="src">Phoronix</span></div>
+  <p>NTFS-3G 2026.9.18, the FUSE-based driver enabling Linux read/write access to NTFS filesystems, received multiple security patches improving stability and system integration.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">Infrastructure</span>
-    <h2><a href="https://devin.ai/blog/devin-cloud-in-your-terminal">Bringing Devin Cloud to your terminal</a></h2>
-    <div class="meta"><span class="src">TLDR AI</span></div>
-    <p>Bringing Devin Cloud to your terminal. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Cloud</span>
+  <h2><a href="https://www.infoq.com/news/2026/09/cloudflare-dns-cache/" target="_blank" rel="noopener noreferrer">Cloudflare Cuts 100 TB of Memory from 1.1.1.1 DNS Cache</a></h2>
+  <div class="meta"><span class="src">InfoQ</span></div>
+  <p>Cloudflare redesigned its DNS cache's in-memory representation, eliminating 100TB of overhead while keeping full performance and hit rates—showing how rethinking data structures can sometimes beat throwing more hardware at a problem.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">Tech</span>
-    <h2><a href="https://www.alphaxiv.org/abs/2609.mimo-scaling-reinforcement-learning">MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement</a></h2>
-    <div class="meta"><span class="src">TLDR AI</span></div>
-    <p>MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Architecture</span>
+  <h2><a href="https://www.canva.dev/blog/engineering/worker-backpressure-part-1-how-we-taught-our-queue-workers-to-slow-down/" target="_blank" rel="noopener noreferrer">Worker Backpressure: Teaching Queue Workers to Slow Down</a></h2>
+  <div class="meta"><span class="src">TLDR Dev (Web Dev)</span> &middot; Canva</div>
+  <p>Canva's queue library now lets workers dynamically adjust their concurrency based on local success and failure signals — adapting to system load without needing a central coordinator or extra network calls.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">Tech</span>
-    <h2><a href="https://archerhume.com/posts/jevs-architecture-unmasked">Jev's Architecture Unmasked</a></h2>
-    <div class="meta"><span class="src">TLDR Dev (Web Dev)</span></div>
-    <p>Jev's Architecture Unmasked. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">AI</span>
+  <h2><a href="https://politics.slashdot.org/story/26/09/22/2258253/trump-denounces-attempts-to-control-ai-wants-it-renamed-super-intelligence-in-us-documents" target="_blank" rel="noopener noreferrer">Trump Denounces Attempts to Control AI</a></h2>
+  <div class="meta"><span class="src">Slashdot</span></div>
+  <p>Former President Trump addressed the United Nations, expressing opposition to any regulation or control of AI development and suggesting the term "artificial intelligence" be replaced with "super intelligence" in official documents.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">AI</span>
-    <h2><a href="https://martinfowler.com/articles/2026-dont-like-llms.html">I Don't Like LLMs</a></h2>
-    <div class="meta"><span class="src">TLDR Dev (Web Dev)</span></div>
-    <p>I Don't Like LLMs. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">Dev</span>
+  <h2><a href="https://developer.nvidia.com/blog/how-to-evaluate-ai-agents-from-tool-calls-to-task-completion/" target="_blank" rel="noopener noreferrer">How to Evaluate AI Agents: From Tool Calls to Task Completion</a></h2>
+  <div class="meta"><span class="src">TLDR Dev (Web Dev)</span> &middot; NVIDIA</div>
+  <p>Evaluating AI agents requires more than checking individual tool calls—step-level scoring pinpoints where agents fail mid-task, while end-to-end scoring verifies the final state actually changed correctly.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">AI</span>
-    <h2><a href="https://data.agentic-system.org/">Open Data: A Dataset Hub for LLM Serving Research (Website)</a></h2>
-    <div class="meta"><span class="src">TLDR Dev (Web Dev)</span></div>
-    <p>Open Data: A Dataset Hub for LLM Serving Research (Website). An important update for the tech industry.</p>
-  </div>
+  <span class="tag">AI</span>
+  <h2><a href="https://www.zdnet.com/innovation/workera-study-ai-skills-upskilling-2026/" target="_blank" rel="noopener noreferrer">Nearly 70% of workers use AI regularly now – but many get no time to upskill</a></h2>
+  <div class="meta"><span class="src">ZDNet</span></div>
+  <p>A Workera report finds that 70% of workers now use AI on the job, but businesses and employees are misaligned on training priorities—many companies haven't invested in upskilling programs despite high AI adoption.</p>
+</div>
 
 <div class="story story-more">
-    <span class="tag">AI</span>
-    <h2><a href="https://simonwillison.net/2026/Sep/21/cloudflare-python-worker/">Cloudflare Python Workers are now generally available</a></h2>
-    <div class="meta"><span class="src">Simon Willison's Blog</span></div>
-    <p>Cloudflare Python Workers are now generally available. An important update for the tech industry.</p>
-  </div>
+  <span class="tag">OSS</span>
+  <h2><a href="https://www.phoronix.com/news/Qualcomm-Adreno-850-Open-Source" target="_blank" rel="noopener noreferrer">Qualcomm Posts Open-Source GPU Driver Patches For Adreno 850 One Day After Announcement</a></h2>
+  <div class="meta"><span class="src">Phoronix</span></div>
+  <p>Qualcomm released open-source GPU driver support for the Adreno 850 just a day after announcing the processor—unusual speed for mobile hardware, signaling a shift toward transparency in mobile GPU development.</p>
+</div>
 
+<div class="story story-more">
+  <span class="tag">AI</span>
+  <h2><a href="https://openai.com/index/grab-openai-ai-skills-southeast-asia" target="_blank" rel="noopener noreferrer">Grab and OpenAI bring practical AI skills to Southeast Asia</a></h2>
+  <div class="meta"><span class="src">OpenAI Blog</span></div>
+  <p>OpenAI and ride-hailing platform Grab launched GO Forward with AI, training 30,000 entrepreneurs and workers across Southeast Asia on practical AI skills—a regional effort to democratize access to frontier model knowledge.</p>
+</div>
 
-<button id="load-more" class="load-more-btn" type="button">load more <span class="count">(+11)</span></button>
+<div class="story story-more">
+  <span class="tag">Security</span>
+  <h2><a href="https://www.technologyreview.com/2026/09/23/1144953/smart-glasses-havoc-india/" target="_blank" rel="noopener noreferrer">Smart glasses are already causing havoc in India</a></h2>
+  <div class="meta"><span class="src">MIT Technology Review</span></div>
+  <p>Smart glasses are accelerating privacy violations in India, with footage recorded at protests spreading on social media before subjects even realize they were filmed — raising urgent questions about consent and technology deployment in societies without strong privacy frameworks.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag">Dev</span>
+  <h2><a href="https://www.kdnuggets.com/high-performance-data-processing-with-polars-a-cheat-sheet" target="_blank" rel="noopener noreferrer">High-Performance Data Processing with Polars: A KDnuggets Cheat Sheet</a></h2>
+  <div class="meta"><span class="src">KDnuggets</span></div>
+  <p>Polars, a Rust-based DataFrame library built on Apache Arrow, achieves dramatic speed improvements by organizing computation as expressions that the query engine can optimize—outpacing pandas and proving that language choice matters for data workloads.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag">Security</span>
+  <h2><a href="https://www.technologyreview.com/2026/09/22/1144890/roundtables-the-deadly-failures-of-the-virtual-border-wall/" target="_blank" rel="noopener noreferrer">Roundtables: The Deadly Failures of The Virtual Border Wall</a></h2>
+  <div class="meta"><span class="src">MIT Technology Review</span></div>
+  <p>The U.S. spent billions over 25 years on automated surveillance towers along its southern border, promising to detect crossers and save lives—but repeated failures show that AI-driven surveillance without human oversight produces neither security nor accountability.</p>
+</div>
+
+<button id="load-more" class="load-more-btn" type="button">load more <span class="count">(+15)</span></button>
 <script>
 (function () {
   var btn = document.getElementById('load-more');
@@ -457,10 +545,6 @@
 })();
 </script>
 
-<!--
-  This footer block is fixed content -- do not regenerate or drop it on any
-  run, only the stories above change day to day.
--->
 <footer>
   <div class="signoff"><span class="prompt">$</span> curated_by <span class="me">Shubham Prakash</span></div>
   <div class="socials">
@@ -471,7 +555,17 @@
       <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
     </a>
   </div>
-  <div class="tagline">tech-newsletter · generated daily</div>
+  <div class="tagline">tech-newsletter &middot; generated daily</div>
 </footer>
+
+<div class="ai-badge">
+  <button class="ai-badge-btn" type="button">
+    <span class="dot"></span> how it works
+  </button>
+  <div class="ai-popover">
+    <span class="prompt">$</span> how_this_works<br>
+    47+ sources fetched daily. <strong>Claude</strong> reads, dedupes &amp; ranks every story on its own judgment &mdash; no formula, no human editor. Rebuilt fresh each morning.
+  </div>
+</div>
 </body>
 </html>
