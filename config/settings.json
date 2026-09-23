@@ -1,0 +1,7 @@
+{
+  "articles_per_digest": 10,
+  "max_items_per_source": 15,
+  "fetch_lookback_hours": 48,
+  "dedup_lookback_days": 7,
+  "timezone": "Asia/Kolkata"
+}

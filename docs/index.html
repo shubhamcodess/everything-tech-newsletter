@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EverythingTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #090d14;
+    --panel: #0f1622;
+    --border: #26334a;
+    --text: #d7e1f0;
+    --muted: #7e8ba3;
+    --cyan: #39f6e2;
+    --pink: #ff3ec8;
+    --green: #4dff9e;
+    --blue: #4d8dff;
+    --yellow: #f0e14d;
+    --shadow-dark: rgba(0, 0, 0, 0.55);
+  }
+  * { box-sizing: border-box; }
+  body {
+    background:
+      radial-gradient(circle at 15% 0%, rgba(77, 141, 255, 0.08), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(255, 62, 200, 0.06), transparent 40%),
+      var(--bg);
+    color: var(--text);
+    font-family: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 20px 100px;
+    line-height: 1.55;
+  }
+  header {
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    padding: 16px 20px;
+    margin-bottom: 36px;
+    box-shadow: 5px 5px 0 var(--cyan), 10px 10px 0 var(--shadow-dark);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .chip-icon { flex-shrink: 0; shape-rendering: crispEdges; filter: drop-shadow(0 0 4px var(--cyan)); animation: chip-pulse 2.4s ease-in-out infinite; }
+  .chip-icon .pin { fill: var(--pink); }
+  .chip-icon .body { fill: var(--cyan); }
+  .chip-icon .core { fill: var(--green); animation: core-flicker 1.6s steps(2) infinite; }
+  @keyframes chip-pulse {
+    0%, 100% { filter: drop-shadow(0 0 3px var(--cyan)); }
+    50% { filter: drop-shadow(0 0 9px var(--pink)); }
+  }
+  @keyframes core-flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    text-shadow: 0 0 14px rgba(57, 246, 226, 0.35);
+    white-space: nowrap;
+  }
+  header h1 .cursor {
+    color: var(--pink);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  header .tagline {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  header .date {
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .repo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.12s ease;
+  }
+  .repo-link:hover { color: var(--cyan); }
+  .repo-link svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+  .story {
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    padding: 20px;
+    margin-bottom: 28px;
+    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .story:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--cyan), 4px 4px 0 var(--shadow-dark);
+    border-color: var(--cyan);
+  }
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 2px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 0 var(--shadow-dark);
+  }
+  .tag.ai { background: var(--cyan); }
+  .tag.security { background: var(--pink); }
+  .tag.devtools { background: var(--green); }
+  .tag.infra { background: var(--blue); }
+  .tag.opensource { background: var(--yellow); }
+  .tag.lang { background: var(--cyan); }
+  .tag.startups { background: var(--green); }
+  .tag.legal { background: var(--pink); }
+  .tag.eng { background: var(--blue); }
+  .story h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+    line-height: 1.4;
+  }
+  .story h2 a {
+    color: var(--text);
+    text-decoration: none;
+    background-image: linear-gradient(var(--cyan), var(--cyan));
+    background-size: 0% 2px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 0.15s ease, color 0.15s ease;
+  }
+  .story h2 a:hover { color: var(--cyan); background-size: 100% 2px; }
+  .story .meta { color: var(--muted); font-size: 0.78rem; margin-bottom: 10px; }
+  .story .meta .src { color: var(--blue); font-weight: 700; }
+  .story p { margin: 0; color: var(--text); font-size: 0.92rem; opacity: 0.92; }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-top: 40px;
+    letter-spacing: 0.04em;
+  }
+  footer .signoff {
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  footer .signoff .prompt { color: var(--pink); font-weight: 700; }
+  footer .signoff .me { color: var(--cyan); font-weight: 700; }
+  .socials {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    color: var(--cyan);
+    box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  }
+  .social-btn:hover {
+    color: var(--pink);
+    border-color: var(--pink);
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark);
+  }
+  .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg class="chip-icon" viewBox="0 0 8 8" width="40" height="40" aria-hidden="true">
+      <rect class="pin" x="2" y="0" width="1" height="2"/>
+      <rect class="pin" x="5" y="0" width="1" height="2"/>
+      <rect class="pin" x="2" y="6" width="1" height="2"/>
+      <rect class="pin" x="5" y="6" width="1" height="2"/>
+      <rect class="pin" x="0" y="2" width="2" height="1"/>
+      <rect class="pin" x="0" y="5" width="2" height="1"/>
+      <rect class="pin" x="6" y="2" width="2" height="1"/>
+      <rect class="pin" x="6" y="5" width="2" height="1"/>
+      <rect class="body" x="2" y="2" width="4" height="4"/>
+      <rect class="core" x="3" y="3" width="2" height="2"/>
+    </svg>
+    <div>
+      <h1>EverythingTech<span class="cursor">_</span></h1>
+      <div class="tagline">all at once.</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="date">September 23, 2026</div>
+    <!-- TODO: point href at this repo's GitHub URL once it exists -->
+    <a class="repo-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="This repo on GitHub">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span>this repo</span>
+    </a>
+  </div>
+</header>
+
+<div class="story">
+  <span class="tag ai">AI</span>
+  <h2><a href="https://techcrunch.com/2026/09/23/anthropic-releases-opus-5-5-with-lower-prices-and-fable-level-performance/">Anthropic and OpenAI both ship new flagship models, hours apart</a></h2>
+  <div class="meta"><span class="src">TechCrunch</span> &middot; also covered by Ars Technica, VentureBeat, ZDNet, The New Stack, Simon Willison, Hacker News</div>
+  <p>Anthropic pushed out Claude Opus 5.5 at a 20% price cut, and OpenAI answered with GPT&#8209;6 Sol and Luna the same day &mdash; both leaning on the same pitch: near-frontier performance for meaningfully less money. Worth watching less for either model individually and more for what it says about where the price war is heading next.</p>
+</div>
+
+<div class="story">
+  <span class="tag security">SECURITY</span>
+  <h2><a href="https://techcrunch.com/2026/09/23/hacking-group-shinyhunters-claims-it-breached-the-fbi-stole-agents-and-applicants-data/">ShinyHunters says it breached the FBI, stole employee and applicant data</a></h2>
+  <div class="meta"><span class="src">TechCrunch</span> &middot; also covered by Hacker News, Slashdot</div>
+  <p>The extortion group claims it pulled personnel and applicant records straight out of federal systems. Unverified in full, but the group has a track record of delivering on these claims, which makes this one worth tracking rather than dismissing.</p>
+</div>
+
+<div class="story">
+  <span class="tag devtools">DEV TOOLS</span>
+  <h2><a href="https://thenewstack.io/aws-open-sources-an-ai-agent-it-says-is-45-cheaper-than-claude-code-and-codex/">AWS open-sources a coding agent it claims is 45% cheaper than Claude Code and Codex</a></h2>
+  <div class="meta"><span class="src">The New Stack</span></div>
+  <p>A direct shot at the two leading coding-agent products, and notable that it's open source rather than another closed offering. The cost claim is AWS's own framing &mdash; the real test is whether it holds up once people run it against real repos.</p>
+</div>
+
+<div class="story">
+  <span class="tag infra">CLOUD/INFRA</span>
+  <h2><a href="https://kubernetes.io/blog/2026/09/23/kubernetes-v1-37-tracking-pvc-last-used/">Kubernetes v1.37 lands, with rootless Kubelet reaching beta</a></h2>
+  <div class="meta"><span class="src">Kubernetes Blog</span> &middot; also covered by InfoQ</div>
+  <p>Alongside rootless Kubelet, this release graduates Memory QoS and Native Histograms to beta and introduces node lifecycle conditions &mdash; a solid, unglamorous release that's mostly about tightening security defaults and observability rather than headline features.</p>
+</div>
+
+<div class="story">
+  <span class="tag opensource">OPEN SOURCE</span>
+  <h2><a href="https://developers.slashdot.org/story/26/09/23/as-kde-turns-30-contributors-and-commits-are-going-strong">As KDE turns 30, contributors and commit activity are still climbing</a></h2>
+  <div class="meta"><span class="src">Slashdot</span></div>
+  <p>Three decades in and one of the original desktop-Linux projects is reportedly still growing its contributor base, not just coasting on legacy users. A nice reminder that not every open-source story this year is about AI tooling.</p>
+</div>
+
+<div class="story">
+  <span class="tag lang">LANGUAGES</span>
+  <h2><a href="https://www.infoq.com/news/2026/09/bun-rewrites-zig-to-rust/">Bun rewrote 535,000 lines of Zig into Rust in four months</a></h2>
+  <div class="meta"><span class="src">InfoQ</span></div>
+  <p>Bun's team says the migration eliminated a long list of memory leaks that had dogged the runtime. A rare public account of a large-scale language migration on a project people actually depend on daily, with real before/after specifics rather than just an announcement.</p>
+</div>
+
+<div class="story">
+  <span class="tag startups">STARTUPS</span>
+  <h2><a href="https://techcrunch.com/2026/09/23/snorkel-ai-triples-valuation-to-3-5b-as-demand-for-ai-training-data-booms/">Snorkel AI triples its valuation to $3.5B on AI training-data demand</a></h2>
+  <div class="meta"><span class="src">TechCrunch</span></div>
+  <p>A concrete data point on where investor money is actually flowing right now: not another model shop, but the data-labeling and curation layer underneath them &mdash; a sign that supply constraints there are becoming a real bottleneck worth funding around.</p>
+</div>
+
+<div class="story">
+  <span class="tag devtools">DEV TOOLS</span>
+  <h2><a href="https://thenewstack.io/one-of-the-most-significant-steps-in-our-26-year-history-jetbrains-goes-big-on-agentic/">JetBrains calls its new agentic coding push "one of the most significant steps" in 26 years</a></h2>
+  <div class="meta"><span class="src">The New Stack</span></div>
+  <p>Notable more for who's saying it than what's in it &mdash; JetBrains has historically been the deliberate, IDE-first counterweight to the move-fast agent tooling crowd, so this framing is a signal about where the whole IDE category thinks it's headed.</p>
+</div>
+
+<div class="story">
+  <span class="tag legal">AI GOVERNANCE</span>
+  <h2><a href="https://yro.slashdot.org/story/26/09/23/lawsuit-says-anthropic-openai-spacexai-and-google-made-illegal-agreement-on-ai-slowdown">Lawsuit alleges Anthropic, OpenAI, SpaceXAI, and Google coordinated an AI slowdown</a></h2>
+  <div class="meta"><span class="src">Slashdot</span></div>
+  <p>An antitrust-flavored claim that the major labs informally agreed to throttle release pace &mdash; which reads a little oddly against the same four companies racing to ship models within hours of each other today. Early-stage and unproven, but the allegation itself is a notable escalation in how AI-lab conduct is being challenged.</p>
+</div>
+
+<div class="story">
+  <span class="tag eng">ENGINEERING</span>
+  <h2><a href="https://github.blog/2026-09-23-migrating-the-github-copilot-runtime-to-rust-using-copilot/">GitHub migrated the Copilot runtime to Rust &mdash; using Copilot to help do it</a></h2>
+  <div class="meta"><span class="src">GitHub Blog</span></div>
+  <p>A concrete, specific account of a production migration rather than a marketing post: what broke, what the agent handled well versus what still needed a human, and what the resulting runtime actually gained in return.</p>
+</div>
+
+<footer>
+  <div class="signoff"><span class="prompt">$</span> curated_by <span class="me">Shubham Prakash</span></div>
+  <div class="socials">
+    <a class="social-btn" href="https://github.com/shubhamcodess" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+    <a class="social-btn" href="https://www.linkedin.com/in/shubham-prakash-dev/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+    </a>
+  </div>
+  <div class="tagline">tech-newsletter &middot; generated daily</div>
+</footer>
+</body>
+</html>

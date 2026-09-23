@@ -1,0 +1,57 @@
+{
+  "sources": [
+    { "id": "hn", "name": "Hacker News", "type": "hn", "tags": "front_page", "category": "community", "trust": "high", "max_items": 30, "enabled": true },
+    { "id": "hn_show", "name": "Hacker News (Show HN)", "type": "hn", "tags": "show_hn", "category": "community", "trust": "high", "max_items": 15, "enabled": true },
+
+    { "id": "reddit_technology", "name": "Reddit r/technology", "type": "reddit", "subreddit": "technology", "listing": "top", "timeframe": "day", "category": "community", "trust": "medium", "max_items": 20, "enabled": true, "note": "reddit.com's public .json endpoints returned 403 from a plain script locally as of 2026-09-23; may behave differently from the routine's cloud IP -- if it stays blocked after a few runs, set enabled:false, HN already covers similar community signal" },
+    { "id": "reddit_programming", "name": "Reddit r/programming", "type": "reddit", "subreddit": "programming", "listing": "top", "timeframe": "day", "category": "community", "trust": "medium", "max_items": 20, "enabled": true, "note": "see reddit_technology note" },
+    { "id": "reddit_machinelearning", "name": "Reddit r/MachineLearning", "type": "reddit", "subreddit": "MachineLearning", "listing": "top", "timeframe": "day", "category": "ai", "trust": "medium", "max_items": 20, "enabled": true, "note": "see reddit_technology note" },
+
+    { "id": "arxiv_cs_ai", "name": "arXiv cs.AI", "type": "arxiv", "category": "cs.AI", "trust": "high", "max_items": 15, "enabled": true },
+    { "id": "arxiv_cs_lg", "name": "arXiv cs.LG", "type": "arxiv", "category": "cs.LG", "trust": "high", "max_items": 15, "enabled": true },
+
+    { "id": "devto", "name": "Dev.to", "type": "devto", "category": "engineering", "trust": "medium", "max_items": 20, "enabled": true },
+
+    { "id": "github_trending", "name": "GitHub Trending", "type": "github_trending", "since": "daily", "category": "engineering", "trust": "medium", "max_items": 15, "enabled": true },
+
+    { "id": "techcrunch", "name": "TechCrunch", "type": "rss", "feed_url": "https://techcrunch.com/feed/", "category": "industry", "trust": "medium", "max_items": 20, "enabled": true },
+    { "id": "theverge", "name": "The Verge", "type": "rss", "feed_url": "https://www.theverge.com/rss/index.xml", "category": "industry", "trust": "medium", "max_items": 20, "enabled": true },
+    { "id": "arstechnica", "name": "Ars Technica", "type": "rss", "feed_url": "https://feeds.arstechnica.com/arstechnica/index", "category": "engineering", "trust": "high", "max_items": 15, "enabled": true },
+    { "id": "venturebeat", "name": "VentureBeat", "type": "rss", "feed_url": "https://feeds.feedburner.com/venturebeat/SZYF", "category": "industry", "trust": "low", "max_items": 15, "enabled": true, "verify_url": true, "note": "venturebeat.com/feed/ is behind a bot-check page; this legacy Feedburner mirror works but may lag behind the live site" },
+    { "id": "engadget", "name": "Engadget", "type": "rss", "feed_url": "https://www.engadget.com/rss.xml", "category": "consumer_tech", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "zdnet", "name": "ZDNet", "type": "rss", "feed_url": "https://www.zdnet.com/news/rss.xml", "category": "industry", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "wired", "name": "Wired", "type": "rss", "feed_url": "https://www.wired.com/feed/rss", "category": "industry", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "techradar", "name": "TechRadar", "type": "rss", "feed_url": "https://www.techradar.com/rss", "category": "consumer_tech", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "slashdot", "name": "Slashdot", "type": "rss", "feed_url": "http://rss.slashdot.org/Slashdot/slashdotMain", "category": "community", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "thenewstack", "name": "The New Stack", "type": "rss", "feed_url": "https://thenewstack.io/feed/", "category": "engineering", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "dzone", "name": "DZone", "type": "rss", "feed_url": "https://feeds.dzone.com/home", "category": "engineering", "trust": "low", "max_items": 15, "enabled": true },
+    { "id": "phoronix", "name": "Phoronix", "type": "rss", "feed_url": "https://www.phoronix.com/rss.php", "category": "engineering", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "infoq", "name": "InfoQ", "type": "rss", "feed_url": "https://feed.infoq.com/", "category": "engineering", "trust": "high", "max_items": 15, "enabled": true },
+    { "id": "mit_tech_review", "name": "MIT Technology Review", "type": "rss", "feed_url": "https://www.technologyreview.com/feed/", "category": "analysis", "trust": "high", "max_items": 15, "enabled": true },
+    { "id": "smashing_magazine", "name": "Smashing Magazine", "type": "rss", "feed_url": "https://www.smashingmagazine.com/feed/", "category": "engineering", "trust": "medium", "max_items": 10, "enabled": true },
+    { "id": "freecodecamp", "name": "freeCodeCamp News", "type": "rss", "feed_url": "https://www.freecodecamp.org/news/rss/", "category": "engineering", "trust": "medium", "max_items": 15, "enabled": true },
+    { "id": "changelog", "name": "Changelog", "type": "rss", "feed_url": "https://changelog.com/feed", "category": "engineering", "trust": "medium", "max_items": 10, "enabled": true },
+    { "id": "stackoverflow_blog", "name": "Stack Overflow Blog", "type": "rss", "feed_url": "https://stackoverflow.blog/feed/", "category": "engineering", "trust": "medium", "max_items": 10, "enabled": true },
+    { "id": "github_blog", "name": "GitHub Blog", "type": "rss", "feed_url": "https://github.blog/feed/", "category": "engineering", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "mozilla_hacks", "name": "Mozilla Hacks", "type": "rss", "feed_url": "https://hacks.mozilla.org/feed/", "category": "engineering", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "aws_news", "name": "AWS News Blog", "type": "rss", "feed_url": "https://aws.amazon.com/blogs/aws/feed/", "category": "infra", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "kubernetes_blog", "name": "Kubernetes Blog", "type": "rss", "feed_url": "https://kubernetes.io/feed.xml", "category": "infra", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "google_dev_blog", "name": "Google Developers Blog", "type": "rss", "feed_url": "https://developers.googleblog.com/feeds/posts/default", "category": "engineering", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "microsoft_research", "name": "Microsoft Research Blog", "type": "rss", "feed_url": "https://www.microsoft.com/en-us/research/feed/", "category": "ai", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "nvidia_blog", "name": "NVIDIA Blog", "type": "rss", "feed_url": "https://blogs.nvidia.com/feed/", "category": "ai", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "openai_blog", "name": "OpenAI Blog", "type": "rss", "feed_url": "https://openai.com/blog/rss.xml", "category": "ai", "trust": "high", "max_items": 10, "enabled": true, "verify_url": true },
+    { "id": "anthropic_news", "name": "Anthropic News", "type": "rss", "feed_url": "https://www.anthropic.com/rss.xml", "category": "ai", "trust": "high", "max_items": 10, "enabled": false, "verify_url": true, "note": "no public RSS feed found as of 2026-09-23 (site returns HTML, no <link rss> tag); re-check periodically and re-enable if one appears" },
+    { "id": "deepmind_blog", "name": "Google DeepMind Blog", "type": "rss", "feed_url": "https://deepmind.google/blog/rss.xml", "category": "ai", "trust": "high", "max_items": 10, "enabled": true, "verify_url": true },
+    { "id": "meta_ai_blog", "name": "Meta AI Blog", "type": "rss", "feed_url": "https://ai.meta.com/blog/rss/", "category": "ai", "trust": "high", "max_items": 10, "enabled": false, "verify_url": true, "note": "ai.meta.com is JS-rendered with no discoverable RSS feed as of 2026-09-23; re-check periodically and re-enable if one appears" },
+    { "id": "yc_blog", "name": "Y Combinator Blog", "type": "rss", "feed_url": "https://www.ycombinator.com/blog/rss", "category": "startups", "trust": "high", "max_items": 10, "enabled": true, "verify_url": true },
+    { "id": "simon_willison", "name": "Simon Willison's Blog", "type": "rss", "feed_url": "https://simonwillison.net/atom/everything/", "category": "ai", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "kdnuggets", "name": "KDnuggets", "type": "rss", "feed_url": "https://www.kdnuggets.com/feed", "category": "ai", "trust": "medium", "max_items": 10, "enabled": true },
+    { "id": "towards_data_science", "name": "Towards Data Science", "type": "rss", "feed_url": "https://towardsdatascience.com/feed", "category": "ai", "trust": "medium", "max_items": 10, "enabled": true },
+    { "id": "bair_blog", "name": "BAIR (Berkeley AI Research)", "type": "rss", "feed_url": "https://bair.berkeley.edu/blog/feed.xml", "category": "ai", "trust": "high", "max_items": 10, "enabled": true },
+    { "id": "lobsters", "name": "Lobsters", "type": "rss", "feed_url": "https://lobste.rs/rss", "category": "community", "trust": "high", "max_items": 15, "enabled": true },
+
+    { "id": "tldr_tech", "name": "TLDR Tech", "type": "tldr", "edition": "tech", "category": "industry", "trust": "high", "max_items": 15, "enabled": true, "note": "no official API/RSS; scrapes TLDR's server-rendered dated issue page" },
+    { "id": "tldr_ai", "name": "TLDR AI", "type": "tldr", "edition": "ai", "category": "ai", "trust": "high", "max_items": 15, "enabled": true, "note": "see tldr_tech note" },
+    { "id": "tldr_dev", "name": "TLDR Dev (Web Dev)", "type": "tldr", "edition": "dev", "category": "engineering", "trust": "high", "max_items": 15, "enabled": true, "note": "see tldr_tech note" }
+  ]
+}

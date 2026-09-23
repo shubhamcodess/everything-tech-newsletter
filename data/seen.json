@@ -1,0 +1,14 @@
+{
+  "featured": [
+    { "title": "Anthropic and OpenAI both ship new flagship models, hours apart", "url": "https://techcrunch.com/2026/09/23/anthropic-releases-opus-5-5-with-lower-prices-and-fable-level-performance/", "source": "TechCrunch", "date": "2026-09-23" },
+    { "title": "ShinyHunters says it breached the FBI, stole employee and applicant data", "url": "https://techcrunch.com/2026/09/23/hacking-group-shinyhunters-claims-it-breached-the-fbi-stole-agents-and-applicants-data/", "source": "TechCrunch", "date": "2026-09-23" },
+    { "title": "AWS open-sources a coding agent it claims is 45% cheaper than Claude Code and Codex", "url": "https://thenewstack.io/aws-open-sources-an-ai-agent-it-says-is-45-cheaper-than-claude-code-and-codex/", "source": "The New Stack", "date": "2026-09-23" },
+    { "title": "Kubernetes v1.37 lands, with rootless Kubelet reaching beta", "url": "https://kubernetes.io/blog/2026/09/23/kubernetes-v1-37-tracking-pvc-last-used/", "source": "Kubernetes Blog", "date": "2026-09-23" },
+    { "title": "As KDE turns 30, contributors and commit activity are still climbing", "url": "https://developers.slashdot.org/story/26/09/23/as-kde-turns-30-contributors-and-commits-are-going-strong", "source": "Slashdot", "date": "2026-09-23" },
+    { "title": "Bun rewrote 535,000 lines of Zig into Rust in four months", "url": "https://www.infoq.com/news/2026/09/bun-rewrites-zig-to-rust/", "source": "InfoQ", "date": "2026-09-23" },
+    { "title": "Snorkel AI triples its valuation to $3.5B on AI training-data demand", "url": "https://techcrunch.com/2026/09/23/snorkel-ai-triples-valuation-to-3-5b-as-demand-for-ai-training-data-booms/", "source": "TechCrunch", "date": "2026-09-23" },
+    { "title": "JetBrains calls its new agentic coding push \"one of the most significant steps\" in 26 years", "url": "https://thenewstack.io/one-of-the-most-significant-steps-in-our-26-year-history-jetbrains-goes-big-on-agentic/", "source": "The New Stack", "date": "2026-09-23" },
+    { "title": "Lawsuit alleges Anthropic, OpenAI, SpaceXAI, and Google coordinated an AI slowdown", "url": "https://yro.slashdot.org/story/26/09/23/lawsuit-says-anthropic-openai-spacexai-and-google-made-illegal-agreement-on-ai-slowdown", "source": "Slashdot", "date": "2026-09-23" },
+    { "title": "GitHub migrated the Copilot runtime to Rust — using Copilot to help do it", "url": "https://github.blog/2026-09-23-migrating-the-github-copilot-runtime-to-rust-using-copilot/", "source": "GitHub Blog", "date": "2026-09-23" }
+  ]
+}
