@@ -32,16 +32,23 @@ summary in step 10.
    - Drop ads, coupon/promo posts, game hints/puzzles outright — not news.
    - Rank what's left by importance and substance (a real development beats
      a minor update; a specific, concrete story beats a vague one).
-   - Diversity cap: at most 2 selected clusters per interest topic, unless
-     fewer than `articles_per_digest` clusters remain in total after the
-     drops above.
+   - Diversity cap: at most `ceil(articles_per_digest / 5)` selected
+     clusters per interest topic (5 for a 25-article digest, 2 for a
+     10-article one), unless fewer than `articles_per_digest` clusters
+     remain in total after the drops above.
 
 7. Write `docs/index.html`. Copy `templates/digest.html.template`'s
-   structure and `<style>` block exactly — the dark neon theme, header
-   brand block, and footer block are fixed, byte-for-byte, on every run.
-   Only the date and the story blocks change. One `<div class="story">`
-   per pick, ranked order, each with a short 1–3 sentence original summary
-   (write it yourself — don't copy the source's own blurb).
+   structure and `<style>`/`<script>` exactly — the dark neon theme,
+   header brand block, footer block, and load-more mechanism are fixed,
+   byte-for-byte, on every run. Only the date and the story blocks change.
+   One `<div class="story">` per pick, ranked order, each with a short
+   1–3 sentence original summary (write it yourself — don't copy the
+   source's own blurb). The first 10 stories get `class="story"`; the
+   11th onward get `class="story story-more"` (hidden by default, revealed
+   by the template's load-more button) — see the template's comment for
+   the exact markup. If `articles_per_digest` is 10 or fewer, every story
+   is `class="story"` and the load-more button should not be rendered at
+   all (the template shows how to omit it).
 
 8. Update `data/seen.json`: append today's picks (title, url, source,
    date), then remove entries older than `dedup_lookback_days`.

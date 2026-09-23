@@ -154,6 +154,38 @@
   .story .meta { color: var(--muted); font-size: 0.78rem; margin-bottom: 10px; }
   .story .meta .src { color: var(--blue); font-weight: 700; }
   .story p { margin: 0; color: var(--text); font-size: 0.92rem; opacity: 0.92; }
+  .story-more { display: none; }
+  .story-more.revealed { display: block; animation: reveal 0.25s ease; }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .load-more-btn {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cyan);
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    padding: 14px;
+    margin-bottom: 28px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .load-more-btn:hover {
+    color: var(--pink);
+    border-color: var(--pink);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--pink), 4px 4px 0 var(--shadow-dark);
+  }
+  .load-more-btn .count { color: var(--muted); font-weight: 400; }
+  .load-more-btn:hover .count { color: inherit; }
   footer {
     text-align: center;
     color: var(--muted);
@@ -294,6 +326,125 @@
   <div class="meta"><span class="src">GitHub Blog</span></div>
   <p>A concrete, specific account of a production migration rather than a marketing post: what broke, what the agent handled well versus what still needed a human, and what the resulting runtime actually gained in return.</p>
 </div>
+
+<div class="story story-more">
+  <span class="tag security">SECURITY</span>
+  <h2><a href="https://github.com/WordPress/wordpress-develop/security/advisories/GHSA-7hp8-65ch-5whp">WordPress patches an unauthenticated path traversal that could lead to RCE</a></h2>
+  <div class="meta"><span class="src">Hacker News</span></div>
+  <p>A concrete, specific advisory rather than a vague "security issue" post &mdash; worth a look if you run WordPress or maintain plugins that touch the filesystem.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag opensource">OPEN SOURCE</span>
+  <h2><a href="https://justine.lol/redbean/index.html">Redbean: a single-file, cross-platform web server that's also a zip archive</a></h2>
+  <div class="meta"><span class="src">Hacker News (Show HN)</span></div>
+  <p>A genuinely clever piece of systems engineering &mdash; one executable that's simultaneously a valid ZIP file, runs unmodified on six OSes, and serves your site with no runtime dependencies.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag ai">AI</span>
+  <h2><a href="https://arxiv.org/abs/2609.26704v1">Learning search policies instead of just sampling more from LLMs</a></h2>
+  <div class="meta"><span class="src">arXiv cs.AI</span></div>
+  <p>Argues that brute-force "sample N times and pick the best" scaling is hitting diminishing returns, and that learning where to search next is the more efficient path forward for reasoning models.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag infra">CLOUD/INFRA</span>
+  <h2><a href="https://dev.to/alexgeorgiev17/postgresql-19s-data-checksums-can-now-be-switched-on-without-stopping-the-server-fn">PostgreSQL 19 can now enable data checksums without a restart</a></h2>
+  <div class="meta"><span class="src">Dev.to</span></div>
+  <p>A small-sounding change that removes a real piece of operational friction &mdash; checksums have historically meant planning downtime, and that requirement is now gone.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag security">SECURITY</span>
+  <h2><a href="https://github.com/mvt-project/mvt">MVT: an open-source toolkit for detecting spyware on phones</a></h2>
+  <div class="meta"><span class="src">GitHub Trending</span></div>
+  <p>Trending again amid the week's hacking headlines &mdash; Mobile Verification Toolkit is the same forensic tool researchers use to find Pegasus-style spyware on iOS and Android devices.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag startups">STARTUPS</span>
+  <h2><a href="https://techcrunch.com/2026/09/22/a16z-is-challenging-silicon-valleys-love-for-drop-outs-by-launching-a-school/">a16z is launching a school, pushing back on Silicon Valley's drop-out mythology</a></h2>
+  <div class="meta"><span class="src">TechCrunch</span></div>
+  <p>An odd-fit move for a firm that's funded plenty of drop-out founders &mdash; worth watching whether this is a genuine bet on formal training or mostly a talent-pipeline and branding play.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag security">SECURITY</span>
+  <h2><a href="https://arstechnica.com/security/2026/09/microsoft-disrupts-ai-assisted-platform-that-compromised-12000/">Microsoft disrupts an AI-assisted phishing platform that compromised 12,000 accounts</a></h2>
+  <div class="meta"><span class="src">Ars Technica</span></div>
+  <p>Notable less for the takedown itself and more for what it signals: AI-assisted phishing-as-a-service is now common enough to warrant a coordinated platform-level response.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag ai">AI</span>
+  <h2><a href="https://venturebeat.com/security/googles-gemini-3-8-flash-is-built-for-agents-while-its-cyber-twin-hunts-vulnerabilities">Google ships Gemini 3.8 Flash for agents, plus a "Cyber" variant tuned to hunt vulnerabilities</a></h2>
+  <div class="meta"><span class="src">VentureBeat</span> &middot; also covered by Google DeepMind Blog</div>
+  <p>Pairing an agent-oriented model with a security-specialized sibling is a notable framing choice &mdash; it treats offensive/defensive security tooling as a first-class model use case, not an afterthought.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag devtools">DEV TOOLS</span>
+  <h2><a href="https://thenewstack.io/grok-build-vs-claude-code-memory/">Grok Build vs. Claude Code: testing which one actually remembers more</a></h2>
+  <div class="meta"><span class="src">The New Stack</span></div>
+  <p>A hands-on comparison rather than a spec-sheet one &mdash; useful if you're choosing a coding agent based on how well it holds context across a long session, not just benchmark scores.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag eng">ENGINEERING</span>
+  <h2><a href="https://dzone.com/articles/mcp-production-guide">"MCP is the USB-C of AI" &mdash; what that comparison actually gets right and wrong</a></h2>
+  <div class="meta"><span class="src">DZone</span></div>
+  <p>A more grounded architecture take than most MCP hype pieces &mdash; focused on where the USB-C analogy holds (a common connector) and where it breaks down (USB-C didn't need a trust and auth model).</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag opensource">OPEN SOURCE</span>
+  <h2><a href="https://www.phoronix.com/news/Omarchy-Alibaba-3M">Alibaba puts $3M into Omarchy to help build an "ideal" agentic OS</a></h2>
+  <div class="meta"><span class="src">Phoronix</span></div>
+  <p>A concrete funding commitment rather than a partnership press release &mdash; worth watching whether "agentic OS" ends up meaning something architecturally real or just a new label on existing Linux tooling.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag eng">ENGINEERING</span>
+  <h2><a href="https://www.infoq.com/news/2026/09/cloudflare-adlc-agents/">Cloudflare pitches an "Agent Development Lifecycle" to replace the traditional SDLC</a></h2>
+  <div class="meta"><span class="src">InfoQ</span></div>
+  <p>A concrete attempt to formalize how teams should build, test, and ship AI agents as their own discipline, rather than force-fitting agent development into existing software lifecycle processes.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag legal">AI GOVERNANCE</span>
+  <h2><a href="https://smashingmagazine.com/2026/08/eu-guidelines-ai-labelling/">The EU publishes new guidelines on labeling AI-generated content</a></h2>
+  <div class="meta"><span class="src">Smashing Magazine</span></div>
+  <p>Practical rather than abstract &mdash; concrete guidance for teams shipping AI-generated content into EU markets, ahead of enforcement rather than reacting to it.</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag eng">ENGINEERING</span>
+  <h2><a href="https://www.freecodecamp.org/news/migrate-legacy-monolith-incrementally/">How to migrate a legacy monolith incrementally, without a big-bang rewrite</a></h2>
+  <div class="meta"><span class="src">freeCodeCamp News</span></div>
+  <p>A practical walkthrough of the strangler-fig approach with real trade-offs discussed, aimed at the much more common situation of "we can't stop shipping features to do this."</p>
+</div>
+
+<div class="story story-more">
+  <span class="tag lang">LANGUAGES</span>
+  <h2><a href="https://hacks.mozilla.org/2026/02/making-webassembly-a-first-class-language-on-the-web/">Why WebAssembly is still treated as a second-class citizen on the web</a></h2>
+  <div class="meta"><span class="src">Mozilla Hacks</span></div>
+  <p>A grounded look at the actual gaps &mdash; DOM access, garbage collection interop, tooling maturity &mdash; rather than the usual "Wasm will replace JavaScript" framing.</p>
+</div>
+
+<button id="load-more" class="load-more-btn" type="button">load more <span class="count">(+15)</span></button>
+<script>
+(function () {
+  var btn = document.getElementById('load-more');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('.story-more').forEach(function (el) {
+      el.classList.add('revealed');
+    });
+    btn.remove();
+  });
+})();
+</script>
 
 <footer>
   <div class="signoff"><span class="prompt">$</span> curated_by <span class="me">Shubham Prakash</span></div>

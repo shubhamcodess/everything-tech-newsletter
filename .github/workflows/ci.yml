@@ -1,0 +1,46 @@
+name: CI
+
+# Catches what the daily Claude Code routine can't afford to discover on its
+# own run: invalid config JSON, or a fetcher script that's actually broken
+# (not just one source's feed being temporarily down). Does not generate or
+# publish the digest -- that stays the routine's job.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Validate config JSON
+        run: |
+          for f in config/*.json data/seen.json; do
+            echo "checking $f"
+            python -m json.tool "$f" > /dev/null
+          done
+
+      - name: Smoke-test all fetchers
+        run: |
+          python scripts/fetch_all.py
+          python -c "
+          import json
+          d = json.load(open('data/raw_latest.json'))
+          ok, total = d['ok_sources'], d['total_sources']
+          print(f'{ok}/{total} sources ok, {len(d[\"articles\"])} articles')
+          # Fail only if fetching is broadly broken, not for a handful of
+          # flaky sources (Reddit's 403s are expected -- see CLAUDE.md).
+          assert ok >= total * 0.7, f'too many sources failing: {ok}/{total}'
+          assert len(d['articles']) > 0, 'zero articles fetched'
+          "

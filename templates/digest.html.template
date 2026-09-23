@@ -177,6 +177,43 @@
     opacity: 0.92;
   }
 
+  .story-more { display: none; }
+  .story-more.revealed {
+    display: block;
+    animation: reveal 0.25s ease;
+  }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .load-more-btn {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cyan);
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    padding: 14px;
+    margin-bottom: 28px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .load-more-btn:hover {
+    color: var(--pink);
+    border-color: var(--pink);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--pink), 4px 4px 0 var(--shadow-dark);
+  }
+  .load-more-btn .count { color: var(--muted); font-weight: 400; }
+  .load-more-btn:hover .count { color: inherit; }
+
   footer {
     text-align: center;
     color: var(--muted);
@@ -253,7 +290,11 @@
 </header>
 
 <!--
-  Repeat this block per story, in ranked order:
+  Repeat this block per story, in ranked order. Stories 1-10 use
+  class="story"; story 11 onward use class="story story-more" instead (they
+  start hidden, revealed by the load-more button below). If
+  articles_per_digest <= 10, every story is class="story" and the
+  load-more button that follows must be omitted entirely.
 
   <div class="story">
     <span class="tag">AI</span>
@@ -263,6 +304,24 @@
        source's own blurb pasted verbatim.</p>
   </div>
 -->
+
+<!--
+  Load-more button: fixed markup, only its "(+N)" count changes, N = number
+  of .story-more elements above. Omit this whole button if there are none.
+-->
+<button id="load-more" class="load-more-btn" type="button">load more <span class="count">(+15)</span></button>
+<script>
+(function () {
+  var btn = document.getElementById('load-more');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('.story-more').forEach(function (el) {
+      el.classList.add('revealed');
+    });
+    btn.remove();
+  });
+})();
+</script>
 
 <!--
   This footer block is fixed content -- do not regenerate or drop it on any
