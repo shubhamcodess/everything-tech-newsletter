@@ -1,85 +1,69 @@
 # Tech Newsletter — routine instructions
 
-This repo generates a daily personalized tech-news digest and publishes it via
-GitHub Pages from `docs/index.html`. This file is read automatically by the
-Claude Code cloud routine on every run — follow the pipeline below exactly.
+Generates a daily digest at `docs/index.html`, served by GitHub Pages.
+Runs unattended as a scheduled Claude Code routine. Follow the steps below
+in order, exactly — don't explore the repo beyond what each step names,
+don't touch files not listed, don't add prose explanation beyond the final
+summary in step 10.
 
-## Pipeline, every run
+## Steps
 
-1. **Install deps if needed.** `pip install -r scripts/requirements.txt`.
+1. `pip install -q -r scripts/requirements.txt`
 
-2. **Fetch.** Run `python scripts/fetch_all.py`. This writes
-   `data/raw_latest.json`: every source's articles, normalized, plus a log of
-   which sources succeeded/failed. A source failing does not stop the run —
-   note failures in your final summary but keep going with what you got.
+2. `python scripts/fetch_all.py` → writes `data/raw_latest.json`. Failed
+   sources are logged inside it, not fatal — continue regardless.
 
-3. **Load config.** Read `config/interests.json` (the topic boundary — the
-   user edits this any time), `config/settings.json`
-   (`articles_per_digest`, `fetch_lookback_hours`, `dedup_lookback_days`), and
-   `data/seen.json` (stories already featured in the last
-   `dedup_lookback_days` days — don't feature the same story, or an obvious
-   re-report of it by another outlet, again).
+3. Read `config/interests.json` (topic whitelist), `config/settings.json`
+   (`articles_per_digest`, `fetch_lookback_hours`, `dedup_lookback_days`),
+   `data/seen.json` (recently featured stories to avoid repeating).
 
-4. **Filter to the interest boundary.** Drop articles that don't reasonably
-   match any topic in `config/interests.json`. Also drop anything published
-   outside `fetch_lookback_hours`.
+4. Filter `data/raw_latest.json`'s `articles`: keep only items published
+   within `fetch_lookback_hours` AND matching at least one topic in
+   `config/interests.json`. Drop everything else, no explanation needed.
 
-5. **Cluster duplicates.** Multiple sources often cover the same underlying
-   story. Group near-duplicate articles (similar title/topic, same
-   event) into one story. Prefer the best-written/highest-trust source as the
-   representative; you may note which other outlets also covered it.
+5. Cluster: group articles covering the same underlying story (similar
+   title/subject, regardless of source). One representative per cluster —
+   pick the source with the highest `trust` value in `config/sources.json`.
+   List the other sources in that cluster in the story's meta line.
 
-6. **Judge and rank.** You are the ranker — there is no scoring formula. Pick
-   the `articles_per_digest` best stories using your own judgment of:
-   genuine importance/impact, quality and depth (not just clickbait), and
-   topical diversity (don't let one topic, like "another LLM release,"
-   dominate the whole digest even if it dominates the raw feed — spread
-   across the interest list where the day's news allows it). Cross-check
-   against `data/seen.json` and skip stories already featured recently.
+6. Select exactly `articles_per_digest` clusters:
+   - Drop any cluster whose title or url already appears in
+     `data/seen.json` within the last `dedup_lookback_days` days.
+   - Drop ads, coupon/promo posts, game hints/puzzles outright — not news.
+   - Rank what's left by importance and substance (a real development beats
+     a minor update; a specific, concrete story beats a vague one).
+   - Diversity cap: at most 2 selected clusters per interest topic, unless
+     fewer than `articles_per_digest` clusters remain in total after the
+     drops above.
 
-7. **Write the digest.** Compose `docs/index.html`, following the structure
-   and styling in `templates/digest.html.template` (dark-blue neubrutalist
-   theme: squarish cards, two-tone hard box-shadows, neon cyan/pink/green
-   accents, JetBrains Mono). For each story, write your own brief, engaging
-   summary in your own words — don't just paste the source's description.
-   Order/group stories however reads best (by topic, by importance — your
-   call). Keep the header's brand block (the EverythingTech name, pixel
-   chip icon, tagline, and the "view source" link) and the footer block
-   (the "curated_by Shubham Prakash" signoff and GitHub/LinkedIn icon
-   buttons) exactly as they are in the template — both are fixed content,
-   not something to regenerate or drop. Only the date in the header and
-   the stories in between change day to day.
+7. Write `docs/index.html`. Copy `templates/digest.html.template`'s
+   structure and `<style>` block exactly — the dark neon theme, header
+   brand block, and footer block are fixed, byte-for-byte, on every run.
+   Only the date and the story blocks change. One `<div class="story">`
+   per pick, ranked order, each with a short 1–3 sentence original summary
+   (write it yourself — don't copy the source's own blurb).
 
-8. **Update memory.** Append the day's featured stories (id, title, url,
-   source, date) to `data/seen.json`, and prune entries older than
-   `dedup_lookback_days`.
+8. Update `data/seen.json`: append today's picks (title, url, source,
+   date), then remove entries older than `dedup_lookback_days`.
 
-9. **Commit and push.** Commit `docs/index.html` and `data/seen.json` (do
-   not commit `data/raw_latest.json` — it's regenerated every run and
-   gitignored) with a short message like `digest: 2026-09-24`. Push directly
-   to `main`. GitHub Pages redeploys automatically on push.
+9. Commit `docs/index.html` and `data/seen.json` only — not
+   `data/raw_latest.json` (gitignored, regenerated every run). Commit
+   message: `digest: YYYY-MM-DD`. Push to `main`.
 
-10. **Report.** In your final summary for the run, state: how many sources
-    succeeded/failed (and which failed, if any), how many articles were
-    fetched, and how many made the final digest.
+10. Final summary, one short line: sources ok/failed, articles fetched,
+    articles featured. Nothing else.
 
-## Maintenance
+## Scope
 
-- If a source fails repeatedly (check `errors` in `data/raw_latest.json`
-  across runs), the site likely changed its feed URL or HTML structure. You
-  have full repo access — inspect the source and fix `config/sources.json`
-  or the relevant `scripts/fetch_*.py`, then commit the fix as part of the
-  same run.
-- `scripts/fetch_github_trending.py` and `scripts/fetch_tldr.py` both scrape
-  HTML (no official API for either) and are the most likely to break if
-  those sites change their markup — check these first if they start
-  returning 0 items. `fetch_tldr.py` in particular relies on a specific
-  `<article class="mt-3">...` shape; an unpublished day's URL redirects to
-  an unrelated page with differently-shaped `<article>` tags, which the
-  fetcher already guards against by only accepting a day once the real
-  story pattern matches — if TLDR redesigns the page, that guard is where
-  to start fixing it.
-- A few sources in `config/sources.json` are marked `"verify_url": true`
-  (mostly AI-lab company blogs, whose feed URLs move around). If one fails,
-  search for that company's current blog RSS URL, update the config, and
-  note the fix in your run summary.
+Only ever read/write: `config/*.json`, `scripts/*.py`, `data/seen.json`,
+`data/raw_latest.json`, `docs/index.html`. Nothing else in the repo should
+change on a normal run.
+
+## If a source breaks
+
+Check `errors` in `data/raw_latest.json`. One quick fix attempt only — a
+stale `feed_url` in `config/sources.json`, or an obvious bug in
+`scripts/fetch_github_trending.py` / `scripts/fetch_tldr.py` (the two HTML
+scrapers, most likely to break if a site's markup changes). If the cause
+isn't obvious immediately, skip it and mention it in the step 10 summary —
+don't spend the run debugging it.

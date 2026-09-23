@@ -1,10 +1,8 @@
 # Setup
 
-## 1. Create the GitHub repo
+## 1. Repo
 
-Create an empty repo (public is simplest for free GitHub Pages; private also
-works on paid GitHub plans). Give the URL back so this project's commits can
-be pushed to it.
+Done — [shubhamcodess/everything-tech-newsletter](https://github.com/shubhamcodess/everything-tech-newsletter).
 
 ## 2. Enable GitHub Pages
 
@@ -24,6 +22,13 @@ connected (routines need this to clone/push).
 At [claude.ai/code/routines/new](https://claude.ai/code/routines/new):
 
 - **Prompt** — paste the text from `ROUTINE_PROMPT.md`.
+- **Model** — Haiku is the intended model for this routine. `CLAUDE.md`'s
+  steps are written as a concrete, mostly-deterministic checklist (explicit
+  filter/diversity rules instead of open-ended "use your judgment" prose)
+  specifically so a smaller model can follow them reliably without drifting
+  or overspending tokens reasoning about ambiguous steps. If digest quality
+  degrades on Haiku, the first thing to revisit is step 6's ranking rule in
+  `CLAUDE.md`, not the model choice.
 - **Repository** — select this repo.
 - **Environment** — open the environment editor and set **Network access** to
   **Custom**, then paste the domain list below into **Allowed domains**
