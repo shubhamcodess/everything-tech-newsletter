@@ -17,7 +17,25 @@ prose explanation beyond the final summary in step 11.
 
 3. Read `config/interests.json` (topic whitelist), `config/settings.json`
    (`articles_per_digest`, `fetch_lookback_hours`, `dedup_lookback_days`),
-   `data/seen.json` (recently featured stories to avoid repeating).
+   `data/seen.json` (recently featured stories to avoid repeating), then
+   `data/raw_latest.json` itself — read it directly with a normal file
+   read, in one go. `config/settings.json`'s `max_items_per_source` and
+   `scripts/common.py`'s summary length are deliberately tuned to keep
+   this file well under a single read's token limit (~16k tokens
+   typically, against a ~25k budget) — if a read of it is ever rejected
+   as too large anyway, that's a real regression in those settings, not
+   something to route around: note it in the step 11 summary and use
+   `offset`/`limit` to read it in two halves for this run only, but leave
+   the settings alone — don't shrink `articles_per_digest`, don't write a
+   script to pre-process or filter the file, don't take any other action
+   to compensate. Steps 4-6 below (filter, cluster, select) are things
+   *you* reason about directly, in-context, from what you just read —
+   never write a Python/Bash script that does the filtering, clustering,
+   ranking, or summarizing for you. A past run did exactly that when it
+   hit a read error, and it produced nothing usable: judgment work
+   belongs to you reading and reasoning, not to code you write to do it
+   for you. Scripts are only for the mechanical, already-deterministic
+   steps this file already names (fetching, archiving via file copies).
 
 4. Filter `data/raw_latest.json`'s `articles`: keep only items published
    within `fetch_lookback_hours` AND matching at least one topic in
