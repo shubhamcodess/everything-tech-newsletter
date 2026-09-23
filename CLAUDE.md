@@ -57,11 +57,12 @@ prose explanation beyond the final summary in step 11.
 
 8. Write `docs/index.html`. Copy `templates/digest.html.template`'s
    structure and `<style>`/`<script>` exactly — the dark neon theme,
-   header brand block, footer block, AI-curated popover, and load-more
+   header brand block, footer block, "how it works" popover, and load-more
    mechanism are fixed, byte-for-byte, on every run. Only the date and
    the story blocks change. One `<div class="story">` per pick, ranked
-   order, each with a short 1–3 sentence original summary (write it
-   yourself — don't copy the source's own blurb). Every story headline's
+   order, each with a summary written per "Writing digest summaries"
+   below — read that section before writing the first one, it's the part
+   of this job that actually matters. Every story headline's
    `<a href="ARTICLE_URL">` must include `target="_blank"
    rel="noopener noreferrer"` — it opens the original source in a new
    tab, not internal links like the archive or repo link, which stay
@@ -71,6 +72,56 @@ prose explanation beyond the final summary in step 11.
    the exact markup. If `articles_per_digest` is 10 or fewer, every story
    is `class="story"` and the load-more button should not be rendered at
    all (the template shows how to omit it).
+
+## Writing digest summaries
+
+This is the part readers actually judge the digest on — a story with a
+lazy summary is worse than no story at all. A real example from a past
+run, to never repeat:
+
+> "OpenAI GPT-6 Astra breaks Enigma message that has resisted solution
+> since 2005. An important update for the tech industry."
+
+Two failures stacked on top of each other: the first sentence just
+restates the title word-for-word, and the second is generic filler that
+could be glued onto literally any story unchanged. Do neither.
+
+**Before writing each summary, check `data/raw_latest.json` for that
+article's `summary` field** — if it has real content (most RSS sources
+do), pull the specific fact from there, don't invent one. If it's empty
+(common for Hacker News link posts and GitHub Trending, which have no
+article text at all), the title itself is all you have — read it closely
+for the specific noun/number/mechanism already in it, and build the
+sentence around that, rather than writing something generic that ignores
+it.
+
+Rules, every story, no exceptions:
+1. Never open by restating the title as a sentence. If you're tempted to
+   write "X does Y" where X and Y are just copied from the title, stop —
+   add or lead with a specific fact instead (a number, a name, a
+   consequence, a comparison).
+2. Never close on a sentence that isn't specific to this exact story.
+   Banned phrases and close paraphrases of them — if what you wrote
+   contains one, delete it and write something real: "important update",
+   "significant development", "growing trend", "worth noting", "shows
+   how", "highlights the", "underscores", "in the tech industry", "in
+   the world of [X]", "continues to evolve".
+3. Self-check before moving on: could this exact sentence be pasted
+   under a different headline with zero changes? If yes, it's filler —
+   rewrite it with something unique to this story.
+4. 1–3 sentences, plain language, no marketing tone.
+
+Good version of the same story used in the bad example above:
+
+> A cryptography puzzle from 2005 that nobody had cracked finally fell to
+> GPT-6 Astra — notable less as a novelty and more as a data point on how
+> far model reasoning has moved past what dedicated human cryptanalysts
+> could do with two decades to work on it.
+
+If you notice yourself running low on time or context partway through the
+list, it is better to feature fewer stories with real summaries than to
+hit `articles_per_digest` with filler — cutting the count is fine, cutting
+corners on the summaries is not.
 
 9. Update `data/seen.json`: append today's picks (title, url, source,
    date), then remove entries older than `dedup_lookback_days`.
