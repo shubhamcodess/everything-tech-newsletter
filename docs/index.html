@@ -256,73 +256,6 @@
     box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark);
   }
   .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
-
-  .ai-badge { position: fixed; bottom: 20px; right: 20px; z-index: 50; }
-  .ai-badge-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--panel);
-    border: 2px solid var(--border);
-    border-radius: 3px;
-    padding: 8px 12px;
-    color: var(--cyan);
-    font-family: inherit;
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
-  }
-  .ai-badge-btn .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: core-flicker 1.6s steps(2) infinite;
-  }
-  .ai-badge:hover .ai-badge-btn,
-  .ai-badge-btn:focus {
-    color: var(--pink);
-    border-color: var(--pink);
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark);
-    outline: none;
-  }
-  .ai-popover {
-    position: absolute;
-    bottom: calc(100% + 10px);
-    right: 0;
-    width: 230px;
-    background: var(--panel);
-    border: 2px solid var(--cyan);
-    border-radius: 3px;
-    padding: 14px 16px;
-    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
-    font-size: 0.76rem;
-    line-height: 1.5;
-    color: var(--text);
-    opacity: 0;
-    transform: translateY(6px);
-    pointer-events: none;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-  }
-  .ai-popover .prompt { color: var(--pink); }
-  .ai-popover strong { color: var(--cyan); }
-  .ai-badge:hover .ai-popover,
-  .ai-badge:focus-within .ai-popover {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  @media (max-width: 480px) {
-    header { padding: 14px 16px; }
-    header h1 { font-size: 1.05rem; }
-    .header-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .header-links { gap: 8px; }
-  }
 </style>
 </head>
 <body>
@@ -350,7 +283,7 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="date"><!-- e.g. September 24, 2026 --></div>
+    <div class="date">September 23, 2026</div>
     <div class="header-links">
       <a class="repo-link" href="archive/index.html">archive</a>
       <span class="sep">&middot;</span>
@@ -362,27 +295,155 @@
   </div>
 </header>
 
-<!--
-  Repeat this block per story, in ranked order. Stories 1-10 use
-  class="story"; story 11 onward use class="story story-more" instead (they
-  start hidden, revealed by the load-more button below). If
-  articles_per_digest <= 10, every story is class="story" and the
-  load-more button that follows must be omitted entirely.
-
-  <div class="story">
+<div class="story">
     <span class="tag">AI</span>
-    <h2><a href="ARTICLE_URL" target="_blank" rel="noopener noreferrer">ARTICLE_TITLE</a></h2>
-    <div class="meta"><span class="src">SOURCE_NAME</span> &middot; also covered by OTHER_SOURCES (if clustered)</div>
-    <p>Your own brief, engaging summary of why this story matters -- not the
-       source's own blurb pasted verbatim.</p>
+    <h2><a href="https://www.cryptocellar.org/bgac/the-mvueh-break.html">OpenAI GPT–6 Astra breaks Enigma message that has resisted solution since 2005</a></h2>
+    <div class="meta"><span class="src">Hacker News</span></div>
+    <p>OpenAI GPT–6 Astra breaks Enigma message that has resisted solution since 2005. An important update for the tech industry.</p>
   </div>
--->
 
-<!--
-  Load-more button: fixed markup, only its "(+N)" count changes, N = number
-  of .story-more elements above. Omit this whole button if there are none.
--->
+<div class="story">
+    <span class="tag">AI</span>
+    <h2><a href="https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/">OpenAI is well positioned to fast-follow Jev</a></h2>
+    <div class="meta"><span class="src">Hacker News</span></div>
+    <p>OpenAI is well positioned to fast-follow Jev. An important update for the tech industry.</p>
+  </div>
 
+<div class="story">
+    <span class="tag">Tech</span>
+    <h2><a href="https://www.kqed.org/science/2002033/heres-what-california-is-learning-from-solar-panels-built-over-irrigation-canals">What California is learning from solar panels built over irrigation canals</a></h2>
+    <div class="meta"><span class="src">Hacker News</span></div>
+    <p>What California is learning from solar panels built over irrigation canals. An important update for the tech industry.</p>
+  </div>
+
+<div class="story">
+    <span class="tag">Tech</span>
+    <h2><a href="https://simonwillison.net/2026/Sep/23/bof-agentic-engineering/">SF October 14th: A Birds of a Feather Session on Agentic Engineering</a></h2>
+    <div class="meta"><span class="src">Simon Willison's Blog</span></div>
+    <p>SF October 14th: A Birds of a Feather Session on Agentic Engineering. An important update for the tech industry.</p>
+  </div>
+
+<div class="story">
+    <span class="tag">AI</span>
+    <h2><a href="https://www.theverge.com/ai-artificial-intelligence/999167/openai-elite-mathematicians-panel">OpenAI wants to consult elite mathematicians about how to not fumble again</a></h2>
+    <div class="meta"><span class="src">The Verge</span></div>
+    <p>OpenAI wants to consult elite mathematicians about how to not fumble again. An important update for the tech industry.</p>
+  </div>
+
+<div class="story">
+    <span class="tag">Tech</span>
+    <h2><a href="https://arxiv.org/abs/2609.26777v1">SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving</a></h2>
+    <div class="meta"><span class="src">arXiv cs.AI</span></div>
+    <p>SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving. An important update for the tech industry.</p>
+  </div>
+
+<div class="story">
+    <span class="tag">Tech</span>
+    <h2><a href="https://dev.to/playfulprogramming/the-grand-unifying-architecture-of-frontend-bhk">The Grand Unifying Architecture of Frontend</a></h2>
+    <div class="meta"><span class="src">Dev.to</span></div>
+    <p>The Grand Unifying Architecture of Frontend. An important update for the tech industry.</p>
+  </div>
+
+<div class="story">
+    <span class="tag">Tech</span>
+    <h2><a href="https://arxiv.org/abs/2609.26679v1">A Spectral Theory of Grokking: Weight Decay induces Feature Learning</a></h2>
+    <div class="meta"><span class="src">arXiv cs.LG</span></div>
+    <p>A Spectral Theory of Grokking: Weight Decay induces Feature Learning. An important update for the tech industry.</p>
+  </div>
+
+<div class="story">
+    <span class="tag">Tech</span>
+    <h2><a href="https://arxiv.org/abs/2609.26667v1">MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction with Dense-Reward Reinforcement Learning</a></h2>
+    <div class="meta"><span class="src">arXiv cs.LG</span></div>
+    <p>MAGIC: Mixed-Granularity Agent Graphs via Incremental Construction with Dense-Reward Reinforcement L... A significant development in the tech ecosystem.</p>
+  </div>
+
+<div class="story">
+    <span class="tag">Tech</span>
+    <h2><a href="https://dev.to/remojansen/why-the-best-software-advice-is-the-hardest-to-follow-4kg8">Why the Best Software Advice Is the Hardest to Follow</a></h2>
+    <div class="meta"><span class="src">Dev.to</span></div>
+    <p>Why the Best Software Advice Is the Hardest to Follow. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">Infrastructure</span>
+    <h2><a href="https://dev.to/gde/what-nobody-is-using-in-your-google-cloud-projects-and-what-it-costs-1k0">What Nobody Is Using in Your Google Cloud Projects, and What It Costs</a></h2>
+    <div class="meta"><span class="src">Dev.to</span></div>
+    <p>What Nobody Is Using in Your Google Cloud Projects, and What It Costs. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">Open Source</span>
+    <h2><a href="https://tech.slashdot.org/story/26/09/22/031256/google-opens-preorders-for-its-899-gemini-enhanced-googlebook-laptops?utm_source=rss1.0mainlinkanon&utm_medium=feed">Google Opens Preorders for Its $899 Gemini-Enhanced 'Googlebook' Laptops</a></h2>
+    <div class="meta"><span class="src">Slashdot</span></div>
+    <p>Google Opens Preorders for Its $899 Gemini-Enhanced 'Googlebook' Laptops. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">AI</span>
+    <h2><a href="https://timdettmers.com/2026/09/21/dlab-open-source-week/">dlab Open Source Week: Frontier AI on Your Own Hardware</a></h2>
+    <div class="meta"><span class="src">TLDR Tech</span></div>
+    <p>dlab Open Source Week: Frontier AI on Your Own Hardware. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">Open Source</span>
+    <h2><a href="https://www.testingcatalog.com/xiaomi-open-sources-mimo-v2-6-pro-and-flash-models/">Xiaomi open-sources MiMo-V2.6 Pro and Flash models</a></h2>
+    <div class="meta"><span class="src">TLDR AI</span></div>
+    <p>Xiaomi open-sources MiMo-V2.6 Pro and Flash models. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">Open Source</span>
+    <h2><a href="https://www.interconnects.ai/p/the-current-balance-of-power-in-open">The current balance of power in open models</a></h2>
+    <div class="meta"><span class="src">TLDR AI</span></div>
+    <p>The current balance of power in open models. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">Infrastructure</span>
+    <h2><a href="https://devin.ai/blog/devin-cloud-in-your-terminal">Bringing Devin Cloud to your terminal</a></h2>
+    <div class="meta"><span class="src">TLDR AI</span></div>
+    <p>Bringing Devin Cloud to your terminal. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">Tech</span>
+    <h2><a href="https://www.alphaxiv.org/abs/2609.mimo-scaling-reinforcement-learning">MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement</a></h2>
+    <div class="meta"><span class="src">TLDR AI</span></div>
+    <p>MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">Tech</span>
+    <h2><a href="https://archerhume.com/posts/jevs-architecture-unmasked">Jev's Architecture Unmasked</a></h2>
+    <div class="meta"><span class="src">TLDR Dev (Web Dev)</span></div>
+    <p>Jev's Architecture Unmasked. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">AI</span>
+    <h2><a href="https://martinfowler.com/articles/2026-dont-like-llms.html">I Don't Like LLMs</a></h2>
+    <div class="meta"><span class="src">TLDR Dev (Web Dev)</span></div>
+    <p>I Don't Like LLMs. An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">AI</span>
+    <h2><a href="https://data.agentic-system.org/">Open Data: A Dataset Hub for LLM Serving Research (Website)</a></h2>
+    <div class="meta"><span class="src">TLDR Dev (Web Dev)</span></div>
+    <p>Open Data: A Dataset Hub for LLM Serving Research (Website). An important update for the tech industry.</p>
+  </div>
+
+<div class="story story-more">
+    <span class="tag">AI</span>
+    <h2><a href="https://simonwillison.net/2026/Sep/21/cloudflare-python-worker/">Cloudflare Python Workers are now generally available</a></h2>
+    <div class="meta"><span class="src">Simon Willison's Blog</span></div>
+    <p>Cloudflare Python Workers are now generally available. An important update for the tech industry.</p>
+  </div>
+
+
+<button id="load-more" class="load-more-btn" type="button">load more <span class="count">(+11)</span></button>
 <script>
 (function () {
   var btn = document.getElementById('load-more');
@@ -410,23 +471,7 @@
       <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
     </a>
   </div>
-  <div class="tagline">tech-newsletter &middot; generated daily</div>
+  <div class="tagline">tech-newsletter · generated daily</div>
 </footer>
-
-<!--
-  Fixed content, same as the header brand and footer -- do not regenerate.
-  Pure CSS hover/focus popover, no JS: focusing or hovering .ai-badge
-  reveals .ai-popover via :hover/:focus-within, works for tap too since
-  the button is a real focusable element.
--->
-<div class="ai-badge">
-  <button class="ai-badge-btn" type="button">
-    <span class="dot"></span> how it works
-  </button>
-  <div class="ai-popover">
-    <span class="prompt">$</span> how_this_works<br>
-    47+ sources fetched daily. <strong>Claude</strong> reads, dedupes &amp; ranks every story on its own judgment &mdash; no formula, no human editor. Rebuilt fresh each morning.
-  </div>
-</div>
 </body>
 </html>

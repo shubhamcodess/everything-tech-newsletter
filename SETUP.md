@@ -38,6 +38,20 @@ also needed Settings → Actions → General → "Allow GitHub Actions to
 create and approve pull requests" — a separate, easy-to-miss gate. Moving
 PR creation to the routine itself avoids needing that setting at all.)
 
+### Make CI actually gate the merge
+
+"Merges once CI passes" only holds if CI is a **required** status check —
+otherwise `gh pr merge --auto` can merge before `ci.yml` even finishes,
+or regardless of whether it failed. (This happened once: a run wrote
+broken placeholder content to `docs/index.html`, `ci.yml` didn't check
+digest content at the time, and the PR merged anyway. `ci.yml` now has a
+"Validate digest content" step that would catch that specific failure —
+but only if it's required.)
+
+**Settings → Branches → Branch protection rules → add/edit a rule for
+`main` → check "Require status checks to pass before merging" → search
+for and select `validate` (the job name in `ci.yml`) → Save.**
+
 ## 4. Connect the repo to Claude Code
 
 At [claude.ai/code](https://claude.ai/code), make sure GitHub access is

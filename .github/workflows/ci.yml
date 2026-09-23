@@ -44,3 +44,37 @@ jobs:
           assert ok >= total * 0.7, f'too many sources failing: {ok}/{total}'
           assert len(d['articles']) > 0, 'zero articles fetched'
           "
+
+      # A routine run once wrote templates/digest.html.template's literal
+      # placeholder markup (ARTICLE_URL, ARTICLE_TITLE, ...) straight into
+      # docs/index.html instead of real story data, and it merged -- CI
+      # validated fetchers, not the actual digest content. This closes
+      # that gap: fails the build (and therefore blocks auto-merge, once
+      # this job is a required status check -- see SETUP.md) on a digest
+      # that's obviously broken, without trying to judge summary quality,
+      # which stays a human/LLM call, not CI's.
+      - name: Validate digest content
+        run: |
+          python -c "
+          import glob
+
+          BAD_TOKENS = ['ARTICLE_URL', 'ARTICLE_TITLE', 'SOURCE_NAME', 'OTHER_SOURCES',
+                        \"Your own brief, engaging summary\"]
+
+          def check(path):
+              html = open(path, encoding='utf-8').read()
+              if 'awaiting first run' in html:
+                  return  # legitimate placeholder state, nothing to check yet
+              bad = [t for t in BAD_TOKENS if t in html]
+              if bad:
+                  raise SystemExit(f'{path}: contains template placeholder text {bad} -- looks like real content was never substituted in')
+              if 'class=\"story' not in html:
+                  raise SystemExit(f'{path}: has no story content and is not the awaiting-first-run placeholder')
+              print(f'{path}: OK')
+
+          check('docs/index.html')
+          for p in glob.glob('docs/archive/*.html'):
+              if p.endswith('index.html'):
+                  continue
+              check(p)
+          "

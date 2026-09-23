@@ -59,7 +59,7 @@ billed per run. This isn't that.
 | 🔁 **Doesn't repeat itself** | [`data/seen.json`](data/seen.json) tracks recently-featured stories so the same news doesn't resurface for a week |
 | 📖 **25 stories, 10 up front** | The rest sit behind a load-more button — no pagination, no reload, just a bit of vanilla JS |
 | 🗂️ **Self-pruning archive** | Every day's digest before it's overwritten is snapshotted to `docs/archive/`, capped at the last 7 — old snapshots delete themselves, nothing to clean up by hand |
-| 🛡️ **CI that catches breakage early** | Every push validates config and smoke-tests all 47 fetchers, so a bad edit gets caught before the next scheduled run does |
+| 🛡️ **CI that checks the actual output** | Every push validates config, smoke-tests all 47 fetchers, and scans `docs/index.html` for template placeholder leakage or empty content — set as a required check, it blocks a broken digest from merging, not just a broken fetcher |
 | 🚀 **Deploy is just a push** | GitHub Pages redeploys `docs/` automatically on every push to `main` — no GitHub Action, no build step, the routine just commits |
 | 🔀 **Self-merging when it can't push to `main`** | If the routine lands on a `claude/…` branch instead (a protected `main`, most likely), it opens its own PR — it's authenticated as a real account, unlike GitHub Actions' own token — and [`auto-merge-routine.yml`](.github/workflows/auto-merge-routine.yml) merges it once CI passes, no manual click required |
 | 🎨 **Self-contained styling** | One template, one `<style>` block, no build step — the whole site is a single static HTML file |

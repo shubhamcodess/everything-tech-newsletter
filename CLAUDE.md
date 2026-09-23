@@ -77,19 +77,38 @@ prose explanation beyond the final summary in step 11.
    structure and `<style>`/`<script>` exactly — the dark neon theme,
    header brand block, footer block, "how it works" popover, and load-more
    mechanism are fixed, byte-for-byte, on every run. Only the date and
-   the story blocks change. One `<div class="story">` per pick, ranked
-   order, each with a summary written per "Writing digest summaries"
-   below — read that section before writing the first one, it's the part
-   of this job that actually matters. Every story headline's
-   `<a href="ARTICLE_URL">` must include `target="_blank"
-   rel="noopener noreferrer"` — it opens the original source in a new
-   tab, not internal links like the archive or repo link, which stay
+   the story blocks change.
+
+   The template's commented-out story block (between the load-more
+   button's markup comments) is a schema showing where each piece goes —
+   it is not real content and none of its placeholder text ever appears
+   in what you write. If your finished `docs/index.html` contains the
+   literal strings "ARTICLE_URL", "ARTICLE_TITLE", "SOURCE_NAME", or
+   "OTHER_SOURCES", that placeholder schema got copied in unedited
+   somewhere instead of being replaced with a real story's actual data —
+   go back and fix it before committing. A past run did exactly this and
+   it reached production before anyone noticed.
+
+   One `<div class="story">` per pick, ranked order, each with a real
+   article's actual title and URL, and a summary written per "Writing
+   digest summaries" below — read that section before writing the first
+   one, it's the part of this job that actually matters. Every story
+   headline's link must include `target="_blank" rel="noopener
+   noreferrer"` and a real `href` pointing at that story's actual source
+   URL — not internal links like the archive or repo link, which stay
    same-tab. The first 10 stories get `class="story"`; the
    11th onward get `class="story story-more"` (hidden by default, revealed
    by the template's load-more button) — see the template's comment for
    the exact markup. If `articles_per_digest` is 10 or fewer, every story
    is `class="story"` and the load-more button should not be rendered at
    all (the template shows how to omit it).
+
+   **Before moving on to step 9, run one check:** `grep -c
+   'ARTICLE_URL\|ARTICLE_TITLE\|SOURCE_NAME' docs/index.html` — it must
+   print `0`. If it doesn't, the placeholder schema leaked into real
+   output; fix it before continuing. (CI also checks this now and will
+   fail the build if it's wrong, but catching it yourself here means the
+   run doesn't waste a whole cycle on a rejected PR.)
 
 ## Writing digest summaries
 
