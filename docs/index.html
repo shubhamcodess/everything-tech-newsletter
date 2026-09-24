@@ -48,212 +48,137 @@
     background: var(--panel);
     border: 2px solid var(--border);
     border-radius: 3px;
-    padding: 16px 20px;
+    padding: 20px 24px;
     margin-bottom: 36px;
     box-shadow: 5px 5px 0 var(--cyan), 10px 10px 0 var(--shadow-dark);
   }
-  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-  .header-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
+
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+
   .chip-icon { flex-shrink: 0; shape-rendering: crispEdges; filter: drop-shadow(0 0 4px var(--cyan)); animation: chip-pulse 2.4s ease-in-out infinite; }
   .chip-icon .pin { fill: var(--pink); }
   .chip-icon .body { fill: var(--cyan); }
   .chip-icon .core { fill: var(--green); animation: core-flicker 1.6s steps(2) infinite; }
-  @keyframes chip-pulse {
-    0%, 100% { filter: drop-shadow(0 0 3px var(--cyan)); }
-    50% { filter: drop-shadow(0 0 9px var(--pink)); }
-  }
-  @keyframes core-flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
-  header h1 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 0.01em;
-    color: var(--text);
-    text-shadow: 0 0 14px rgba(57, 246, 226, 0.35);
-    white-space: nowrap;
-  }
-  header h1 .cursor {
-    color: var(--pink);
-    animation: blink 1s steps(1) infinite;
-  }
+  @keyframes chip-pulse { 0%, 100% { filter: drop-shadow(0 0 3px var(--cyan)); } 50% { filter: drop-shadow(0 0 9px var(--pink)); } }
+  @keyframes core-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  header h1 { margin: 0; font-size: 1.4rem; font-weight: 800; letter-spacing: 0.01em; color: var(--text); text-shadow: 0 0 14px rgba(57, 246, 226, 0.35); white-space: nowrap; }
+  header h1 .cursor { color: var(--pink); animation: blink 1s steps(1) infinite; }
   @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-  header .tagline {
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-    margin-top: 2px;
-  }
-  header .date {
-    color: var(--muted);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .header-links { display: flex; align-items: center; gap: 10px; }
-  .header-links .sep { color: var(--border); }
+
+  .tagline { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.04em; margin-top: 4px; }
+  .date { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 12px; }
+
+  header .meta { font-size: 0.75rem; color: var(--muted); margin-top: 6px; letter-spacing: 0.03em; }
+  header .meta strong { color: var(--text); font-weight: 600; }
+
+  .header-links { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
   .repo-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.12s ease;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); text-decoration: none; transition: color 0.12s ease;
   }
   .repo-link:hover { color: var(--cyan); }
   .repo-link svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
 
+  .stories-section { margin-bottom: 24px; }
+
   .story {
-    background: var(--panel);
+    background: var(--panel-2);
     border: 2px solid var(--border);
     border-radius: 3px;
     padding: 20px;
-    margin-bottom: 28px;
+    margin-bottom: 18px;
     box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
   }
+
   .story:hover {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0 var(--cyan), 4px 4px 0 var(--shadow-dark);
     border-color: var(--cyan);
   }
 
-  .story .tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--bg);
-    background: var(--green);
-    border: 2px solid var(--border);
-    border-radius: 2px;
-    padding: 2px 8px;
-    margin-bottom: 10px;
-    box-shadow: 2px 2px 0 var(--shadow-dark);
-  }
+  .story-tag { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); font-weight: 700; margin-bottom: 6px; }
 
-  .story h2 {
+  .story-title {
+    margin: 8px 0 12px 0;
     font-size: 1.05rem;
     font-weight: 700;
-    margin: 0 0 8px;
-    line-height: 1.4;
-  }
-  .story h2 a {
+    line-height: 1.35;
     color: var(--text);
+  }
+
+  .story-title a {
+    color: inherit;
     text-decoration: none;
-    background-image: linear-gradient(var(--cyan), var(--cyan));
-    background-size: 0% 2px;
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    transition: background-size 0.15s ease, color 0.15s ease;
-  }
-  .story h2 a:hover {
-    color: var(--cyan);
-    background-size: 100% 2px;
+    transition: color 0.12s ease;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
   }
 
-  .story .meta {
+  .story-title a:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  .story-meta {
+    font-size: 0.75rem;
     color: var(--muted);
-    font-size: 0.78rem;
     margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
   }
-  .story .meta .src { color: var(--blue); font-weight: 700; }
 
-  .story p {
-    margin: 0;
+  .story-meta .source { font-weight: 600; }
+  .story-meta .other-sources { color: var(--muted); font-style: italic; }
+
+  .story-summary {
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: var(--text);
-    font-size: 0.92rem;
-    opacity: 0.92;
+    margin: 0;
   }
 
   .story-more { display: none; }
-  .story-more.revealed {
-    display: block;
-    animation: reveal 0.25s ease;
-  }
-  @keyframes reveal {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  .story-more-button { margin: 20px 0; text-align: center; }
   .load-more-btn {
-    display: block;
-    width: 100%;
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--cyan);
+    display: inline-block;
+    padding: 10px 16px;
     background: var(--panel);
     border: 2px solid var(--border);
     border-radius: 3px;
-    padding: 14px;
-    margin-bottom: 28px;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     cursor: pointer;
-    box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    transition: all 0.12s ease;
+    box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
   }
   .load-more-btn:hover {
-    color: var(--pink);
-    border-color: var(--pink);
+    color: var(--cyan);
+    border-color: var(--cyan);
     transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 var(--pink), 4px 4px 0 var(--shadow-dark);
+    box-shadow: 1px 1px 0 var(--cyan), 2px 2px 0 var(--shadow-dark);
   }
-  .load-more-btn .count { color: var(--muted); font-weight: 400; }
-  .load-more-btn:hover .count { color: inherit; }
+  #load-more-btn.hidden { display: none; }
+  .story-more.active { display: block; }
 
-  footer {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.78rem;
-    margin-top: 40px;
-    letter-spacing: 0.04em;
-  }
-  footer .signoff {
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 14px;
-  }
+  footer { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 40px; letter-spacing: 0.04em; }
+  footer .signoff { font-size: 0.9rem; color: var(--text); margin-bottom: 14px; }
   footer .signoff .prompt { color: var(--pink); font-weight: 700; }
   footer .signoff .me { color: var(--cyan); font-weight: 700; }
-  .socials {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
+  .socials { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; }
   .social-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background: var(--panel);
-    border: 2px solid var(--border);
-    border-radius: 3px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    background: var(--panel); border: 2px solid var(--border); border-radius: 3px;
     color: var(--cyan);
-    box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+    box-shadow: 2px 2px 0 var(--border), 4px 4px 0 var(--shadow-dark);
+    transition: all 0.12s ease;
   }
-  .social-btn:hover {
-    color: var(--pink);
-    border-color: var(--pink);
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark);
-  }
-  .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+  .social-btn:hover { color: var(--pink); border-color: var(--pink); transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--pink), 2px 2px 0 var(--shadow-dark); }
+  .social-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
   .ai-badge { position: fixed; bottom: 20px; right: 20px; z-index: 50; }
   .ai-badge-btn {
@@ -266,12 +191,12 @@
     padding: 8px 12px;
     color: var(--cyan);
     font-family: inherit;
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     cursor: pointer;
     box-shadow: 3px 3px 0 var(--border), 6px 6px 0 var(--shadow-dark);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    transition: all 0.12s ease;
   }
   .ai-badge-btn .dot {
     width: 6px;
@@ -292,19 +217,19 @@
     position: absolute;
     bottom: calc(100% + 10px);
     right: 0;
-    width: 230px;
+    width: 240px;
     background: var(--panel);
     border: 2px solid var(--cyan);
     border-radius: 3px;
-    padding: 14px 16px;
+    padding: 12px 14px;
     box-shadow: 4px 4px 0 var(--border), 8px 8px 0 var(--shadow-dark);
-    font-size: 0.76rem;
+    font-size: 0.73rem;
     line-height: 1.5;
     color: var(--text);
     opacity: 0;
     transform: translateY(6px);
     pointer-events: none;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition: all 0.15s ease;
   }
   .ai-popover .prompt { color: var(--pink); }
   .ai-popover strong { color: var(--cyan); }
@@ -316,10 +241,11 @@
   }
 
   @media (max-width: 480px) {
-    header { padding: 14px 16px; }
-    header h1 { font-size: 1.05rem; }
-    .header-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .header-links { gap: 8px; }
+    header { padding: 16px 18px; }
+    header h1 { font-size: 1.1rem; }
+    .story { padding: 16px; }
+    .story-title { font-size: 0.95rem; }
+    .load-more-btn { font-size: 0.75rem; padding: 8px 12px; }
   }
 </style>
 </head>
@@ -343,213 +269,203 @@
       <div class="tagline">all at once.</div>
     </div>
   </div>
-  <div class="header-meta">
-    <div class="date">September 24, 2026</div>
-    <div class="header-links">
-      <a class="repo-link" href="archive/index.html">archive</a>
-      <span class="sep">&middot;</span>
-      <a class="repo-link" href="https://github.com/shubhamcodess/everything-tech-newsletter" target="_blank" rel="noopener noreferrer" aria-label="This repo on GitHub">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        <span>this repo</span>
-      </a>
-    </div>
+  <div class="date">September 24, 2026</div>
+  <div class="meta"><strong>25 stories</strong> from 38 sources</div>
+  <div class="header-links">
+    <a class="repo-link" href="https://github.com/shubhamcodess/everything-tech-newsletter" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+    <a class="repo-link" href="https://github.com/shubhamcodess/everything-tech-newsletter/blob/main/docs/archive/index.html" target="_blank" rel="noopener noreferrer">archive</a>
   </div>
 </header>
 
-<div class="story">
-  <span class="tag">AI</span>
-  <h2><a href="https://openai.com/index/better-prompt-caching-for-gpt-6" target="_blank" rel="noopener noreferrer">Better prompt caching for GPT-6</a></h2>
-  <div class="meta"><span class="src">OpenAI Blog</span></div>
-  <p>GPT-6 improves prompt caching with higher hit rates, explicit breakpoints, and new diagnostic tools — letting developers cache large prompts once and reuse them across requests, cutting both latency and API costs.</p>
-</div>
+<div class="stories-section">
 
 <div class="story">
-  <span class="tag">AI</span>
-  <h2><a href="https://www.bloomberg.com/graphics/2026-iran-school-attack/" target="_blank" rel="noopener noreferrer">Pentagon says overreliance on AI contributed to missile strike on Iran school</a></h2>
-  <div class="meta"><span class="src">Bloomberg</span> &middot; Hacker News</div>
-  <p>A U.S. military airstrike on an Iranian school earlier this year occurred in part because operators over-relied on AI systems rather than applying human judgment — a rare public acknowledgment of how automated decision-making can compound errors in wartime.</p>
+<div class="story-tag">AI agents</div>
+<div class="story-title"><a href="https://techcrunch.com/2026/09/23/everything-new-coming-to-metas-ai-agent-muse/" target="_blank" rel="noopener noreferrer">Everything new coming to Meta's AI agent Muse</a></div>
+<div class="story-meta"><span class="source">TechCrunch</span></div>
+<p class="story-summary">Meta's Connect event showcased an ambitious pivot toward AI agents. Muse—a conversational assistant powered by Meta's infrastructure—is being embedded across Ray-Ban smart glasses, a standalone Charm wearable that works like a connected AI Tamagotchi, and an all-new lightweight VR headset. The push signals Meta's bet that the next computing platform revolves around agents you can talk to naturally, rather than apps you tap through.</p>
 </div>
 
 <div class="story">
-  <span class="tag">Security</span>
-  <h2><a href="https://www.wired.com/story/metas-muse-ai-agent-zero-day/" target="_blank" rel="noopener noreferrer">Meta's Muse AI Agent Rolled Out With a Serious Security Flaw</a></h2>
-  <div class="meta"><span class="src">Wired</span> &middot; Ars Technica</div>
-  <p>Meta released its Muse AI assistant with a zero-day vulnerability that could let attackers do "whatever they wanted" on a victim's Mac before the company rushed a fix — a stark reminder that agentic AI systems with broad capabilities carry proportionally larger security risks.</p>
+<div class="story-tag">Developer tools</div>
+<div class="story-title"><a href="https://github.blog/engineering/user-experience/rendering-huge-pull-requests-in-the-github-copilot-app/" target="_blank" rel="noopener noreferrer">Rendering huge pull requests in the GitHub Copilot app</a></div>
+<div class="story-meta"><span class="source">GitHub</span></div>
+<p class="story-summary">GitHub rebuilt the diff rendering engine in Copilot to handle million-line pull requests without choking. The trick: chunk large diffs into viewable sections and lazy-load details only when needed. For teams reviewing massive refactors or monorepo changes, this unblocks workflows that previously timed out.</p>
 </div>
 
 <div class="story">
-  <span class="tag">Cloud</span>
-  <h2><a href="https://aws.amazon.com/blogs/aws/introducing-amazon-cloudwatch-omni-ai-powered-observability-for-generative-ai-and-agentic-workloads/" target="_blank" rel="noopener noreferrer">Introducing Amazon CloudWatch Omni: AI-powered observability</a></h2>
-  <div class="meta"><span class="src">AWS News Blog</span></div>
-  <p>CloudWatch Omni brings AI-powered observability purpose-built for generative AI and agentic workloads, letting teams trace, evaluate, and experiment with AI agents across any framework — addressing the specific debugging and monitoring needs that traditional observability tools miss.</p>
+<div class="story-tag">Cloud infrastructure</div>
+<div class="story-title"><a href="https://www.infoq.com/news/2026/09/modal-scaling-sandboxes/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener noreferrer">Beyond Kubernetes at Modal: Scale 1 million concurrent sandboxes in seconds</a></div>
+<div class="story-meta"><span class="source">InfoQ</span></div>
+<p class="story-summary">Modal's infrastructure bypasses Kubernetes for a simpler abstraction: ephemeral sandboxes that spin up in milliseconds without container overhead. At scale, they've demonstrated launching a million concurrent isolates, each with its own container-like environment. The payoff: AI agents and serverless workloads that need rapid, lightweight isolation can now provision at near-instant speeds.</p>
 </div>
 
 <div class="story">
-  <span class="tag">AI</span>
-  <h2><a href="https://towardsdatascience.com/how-grpo-trains-small-language-models-with-verifiable-rewards/" target="_blank" rel="noopener noreferrer">How GRPO Trains Small Language Models with Verifiable Rewards</a></h2>
-  <div class="meta"><span class="src">Towards Data Science</span></div>
-  <p>A new training approach using verifiable rewards lets smaller language models reach frontier performance without requiring the massive compute of larger models — making it practical for teams without access to billions of parameters.</p>
+<div class="story-tag">Developer tools</div>
+<div class="story-title"><a href="https://www.infoq.com/news/2026/09/graphify-codebase-exploration/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener noreferrer">Graphify: Unifying codebase context for agentic software engineering</a></div>
+<div class="story-meta"><span class="source">InfoQ</span></div>
+<p class="story-summary">Graphify converts codebases into queryable knowledge graphs so AI agents can navigate unfamiliar projects at scale. Instead of reading random code snippets, agents can ask semantic questions about dependencies, function signatures, and cross-module patterns. Early adopters report agents ship higher-quality refactors because they understand the codebase structure first.</p>
 </div>
 
 <div class="story">
-  <span class="tag">Cloud</span>
-  <h2><a href="https://kubernetes.io/blog/2026/09/21/kubernetes-v1-37-pvc-last-used-time/" target="_blank" rel="noopener noreferrer">Kubernetes v1.37: Hardening Container Storage</a></h2>
-  <div class="meta"><span class="src">Kubernetes Blog</span></div>
-  <p>Kubernetes 1.37 ships hardened container storage with EmptyDir permission modes and bind mount options, giving application teams and security engineers better control over what permissions containers have on mounted filesystems.</p>
+<div class="story-tag">AI / LLMs</div>
+<div class="story-title"><a href="https://www.zdnet.com/innovation/anthropic-claude-opus-5-5-fable-5-1-performance-costs-less/" target="_blank" rel="noopener noreferrer">Claude Opus 5.5 delivers Fable 5.1 performance and costs 40% less</a></div>
+<div class="story-meta"><span class="source">ZDNet</span></div>
+<p class="story-summary">Anthropic's Claude Opus 5.5 matches Fable 5.1's capabilities while cutting inference costs by 40%, according to both internal benchmarks and the December pricing numbers. It ships with improved context windows and lower rate limits before hitting overages. The release signals the frontier is less about maximum model size and more about getting comparable performance at lower cost.</p>
 </div>
 
 <div class="story">
-  <span class="tag">OSS</span>
-  <h2><a href="https://www.infoq.com/news/2026/09/andrew-kelley-zig-no-ai/" target="_blank" rel="noopener noreferrer">Andrew Kelley Interview: Why He Built Zig, Banned AI Contributions, and Moved Zig off GitHub</a></h2>
-  <div class="meta"><span class="src">InfoQ</span></div>
-  <p>The creator of Zig discusses his motivations for building a new language, the deliberate decision to ban AI-generated contributions to the project, and why Zig moved away from GitHub — shedding light on the tension between open-source community values and corporate incentives.</p>
+<div class="story-tag">Security</div>
+<div class="story-title"><a href="https://arstechnica.com/tech-policy/2026/09/fbi-rushes-to-investigate-if-shinyhunters-hack-of-thousands-of-employees-is-real/" target="_blank" rel="noopener noreferrer">FBI rushes to investigate if ShinyHunters hack of thousands of employees is real</a></div>
+<div class="story-meta"><span class="source">Ars Technica</span></div>
+<p class="story-summary">Hackers claiming to be ShinyHunters posted what they said were credentials for thousands of employees at unnamed companies, setting a deadline for ransom before leaking full databases. The FBI is investigating whether the breach is legitimate or a social engineering ploy. The incident highlights how data dumps can be weaponized for extortion even before verification.</p>
 </div>
 
 <div class="story">
-  <span class="tag">AI</span>
-  <h2><a href="https://arxiv.org/abs/2609.26777v1" target="_blank" rel="noopener noreferrer">SWE-Serve: Benchmarking Agentic Engineering For Production Inference Serving</a></h2>
-  <div class="meta"><span class="src">arXiv cs.AI</span></div>
-  <p>A new benchmark for evaluating AI agents on production inference tasks—requiring them to coordinate changes across serving stacks—reveals how quickly agents drop in performance when real-world constraints enter the picture.</p>
+<div class="story-tag">Software architecture</div>
+<div class="story-title"><a href="https://dzone.com/articles/reduce-llm-api-costs" target="_blank" rel="noopener noreferrer">6 techniques to reduce LLM API costs with the Python library</a></div>
+<div class="story-meta"><span class="source">DZone</span></div>
+<p class="story-summary">As production LLM workloads scale, API spend becomes a budget crisis. This guide covers prompt caching, response tokenization limits, batch processing, and model downsampling—all practical levers developers can pull without rewriting applications. A customer support bot processing 10,000 messages daily can halve costs by simply batching requests and caching common prompts.</p>
 </div>
 
 <div class="story">
-  <span class="tag">Security</span>
-  <h2><a href="https://www.freecodecamp.org/news/why-you-should-never-embed-your-gemini-api-key-in-client-code-and-how-firebase-ai-logic-fixes-it/" target="_blank" rel="noopener noreferrer">Why You Should Never Embed Your Gemini API Key in Client Code</a></h2>
-  <div class="meta"><span class="src">freeCodeCamp News</span></div>
-  <p>Embedding API keys in browser-side JavaScript exposes them to scraping and abuse, but Firebase AI Logic provides a server-side alternative—letting client code call your backend which then securely proxies to Gemini.</p>
+<div class="story-tag">Software architecture</div>
+<div class="story-title"><a href="https://dzone.com/articles/switching-to-semantic-contracts" target="_blank" rel="noopener noreferrer">Beyond linting: Why we switched to semantic contracts for A11y and localization</a></div>
+<div class="story-meta"><span class="source">DZone</span></div>
+<p class="story-summary">Traditional linters catch syntax errors but miss semantic failures—a button labeled "OK" that's not actually focusable, or translations that break layout in RTL locales. Semantic contracts codify the intent behind linting rules so tools can check behavior, not just format. Teams adopting this report catching accessibility and localization bugs weeks earlier in the development cycle.</p>
 </div>
 
 <div class="story">
-  <span class="tag">Security</span>
-  <h2><a href="https://venturebeat.com/security/china-linked-hackers-backdoored-executives-laptops-via-usb-exploiting-a-fix-companies-had-but-werent-using" target="_blank" rel="noopener noreferrer">Microsoft Helps Take Down Massive Automated, AI-Powered Phishing-as-a-Service Platform</a></h2>
-  <div class="meta"><span class="src">Slashdot</span></div>
-  <p>Microsoft coordinated a takedown of a large-scale AI-powered phishing operation offering customized lures, inbox analysis to identify high-value targets, and fully automated campaigns — showing how criminal syndicates are weaponizing the same AI capabilities that enterprises use.</p>
+<div class="story-tag">Software architecture</div>
+<div class="story-title"><a href="https://dzone.com/articles/self-auditing-pipeline" target="_blank" rel="noopener noreferrer">Stop preparing for audits—build the pipeline that audits itself</a></div>
+<div class="story-meta"><span class="source">DZone</span></div>
+<p class="story-summary">Audit prep currently consumes weeks of engineering time collecting evidence after the fact. Teams that shift to continuous compliance—logging every change, deployment, and access decision as events into an immutable store—reduce audit prep from weeks to hours. Evidence is generated live, not reconstructed later, and compliance becomes a property of your systems rather than a paperwork exercise.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Dev</span>
-  <h2><a href="https://dev.to/parsajiravand/stop-writing-javascript-to-fix-100vh-on-mobile-42bk" target="_blank" rel="noopener noreferrer">Stop Writing JavaScript To Fix 100vh On Mobile</a></h2>
-  <div class="meta"><span class="src">Dev.to</span></div>
-  <p>New CSS units like `dvh` (dynamic viewport height) and `svh` (small viewport height) finally solve the long-standing mobile problem where `100vh` includes the browser chrome, cutting off content — eliminating the need for JavaScript workarounds.</p>
+<div class="story">
+<div class="story-tag">AI infrastructure</div>
+<div class="story-title"><a href="https://www.microsoft.com/en-us/research/blog/offloaded-inference-for-real-world-physical-ai-robotics/" target="_blank" rel="noopener noreferrer">Offloaded inference for real-world physical AI robotics</a></div>
+<div class="story-meta"><span class="source">Microsoft Research</span></div>
+<p class="story-summary">Running large models on robot hardware is a power and latency nightmare. Microsoft Research shows that offloading inference to edge servers (a few hops away) actually improves task success rates and efficiency over on-device compute, because robots can use smaller, faster models for control loops while delegating reasoning to more capable models in the cloud. The finding challenges the "all inference must be local" assumption.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Architecture</span>
-  <h2><a href="https://dzone.com/articles/terraform-state-coupling" target="_blank" rel="noopener noreferrer">Your Terraform Monolith Isn't Too Big. It's Tightly Coupled.</a></h2>
-  <div class="meta"><span class="src">DZone</span></div>
-  <p>A massive Terraform state file isn't the core problem—tight coupling between modules is what breaks deployments. Small changes cascade across the state because modules are hardwired to depend on each other, not because size alone causes issues.</p>
+<div class="story">
+<div class="story-tag">AI capabilities</div>
+<div class="story-title"><a href="https://deepmind.google/blog/introducing-gemini-3-8-live-and-3-8-live-extended-thinking/" target="_blank" rel="noopener noreferrer">Introducing Gemini 3.8 Live and 3.8 Live Extended Thinking</a></div>
+<div class="story-meta"><span class="source">Google DeepMind</span></div>
+<p class="story-summary">Google released Gemini 3.8 Live, a real-time model built for conversational AI, and the Extended Thinking variant that reasons through complex problems before responding. Live inference runs with sub-second latency suitable for interactive agents. Extended Thinking gives developers a way to buy longer reasoning time for accuracy-critical tasks without changing the API.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">AI</span>
-  <h2><a href="https://towardsdatascience.com/break-your-own-rag-pipeline-before-users-do/" target="_blank" rel="noopener noreferrer">Break Your Own RAG Pipeline Before Users Do</a></h2>
-  <div class="meta"><span class="src">Towards Data Science</span></div>
-  <p>Testing RAG systems requires building adversarial test sets specifically designed to find retrieval failures—not just checking whether the model answers correctly on evaluation data, which often misses the failure modes users encounter.</p>
+<div class="story">
+<div class="story-tag">Privacy & security</div>
+<div class="story-title"><a href="https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/" target="_blank" rel="noopener noreferrer">Advancing Private AI Compute with secure, server-side memory</a></div>
+<div class="story-meta"><span class="source">Google DeepMind</span></div>
+<p class="story-summary">Google extended its Private AI Compute initiative with secure enclave support for server-side memory, meaning inference runs in hardware-backed isolation without exposing your data to the provider's infrastructure. Early builds show negligible performance overhead while meeting compliance requirements for regulated industries.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Dev</span>
-  <h2><a href="https://simonwillison.net/2026/Sep/22/llm/" target="_blank" rel="noopener noreferrer">llm 0.36</a></h2>
-  <div class="meta"><span class="src">Simon Willison's Blog</span></div>
-  <p>The llm CLI tool releases version 0.36 with support for GPT-6 Sol, Luna, and other new models, plus new commands for working with local language models — simplifying how developers test and prototype with the latest frontier models.</p>
+<div class="story">
+<div class="story-tag">Open source</div>
+<div class="story-title"><a href="https://www.phoronix.com/news/Debian-Inference-Portal" target="_blank" rel="noopener noreferrer">Debian Inference Portal launches to provide free AI/LLM inferencing to Debian developers</a></div>
+<div class="story-meta"><span class="source">Phoronix</span></div>
+<p class="story-summary">Debian approved responsible AI use, then Scaleway funded a shared inference portal so any Debian contributor can query open models without spinning up their own infrastructure. It's a pragmatic bet that democratizing access to capable models accelerates open-source development rather than locking innovation behind cloud vendor accounts.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">OSS</span>
-  <h2><a href="https://www.phoronix.com/news/NTFS-3G-2026.9.18" target="_blank" rel="noopener noreferrer">NTFS-3G Update Brings Many Security Fixes</a></h2>
-  <div class="meta"><span class="src">Phoronix</span></div>
-  <p>NTFS-3G 2026.9.18, the FUSE-based driver enabling Linux read/write access to NTFS filesystems, received multiple security patches improving stability and system integration.</p>
+<div class="story">
+<div class="story-tag">Infrastructure</div>
+<div class="story-title"><a href="https://www.phoronix.com/news/Qualcomm-Talks-Up-X2-Linux" target="_blank" rel="noopener noreferrer">Qualcomm talks up Linux on Snapdragon X2 laptops</a></div>
+<div class="story-meta"><span class="source">Phoronix</span></div>
+<p class="story-summary">Qualcomm is pushing Linux support for Snapdragon X2, positioning ARM laptops as viable for mainstream development. Early benchmarks show native Python and container workloads run comfortably; the missing piece is ecosystem maturity (some developer tools haven't shipped ARM binaries yet). If the ports catch up, this could reshape laptop development away from Intel's stranglehold.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Cloud</span>
-  <h2><a href="https://www.infoq.com/news/2026/09/cloudflare-dns-cache/" target="_blank" rel="noopener noreferrer">Cloudflare Cuts 100 TB of Memory from 1.1.1.1 DNS Cache</a></h2>
-  <div class="meta"><span class="src">InfoQ</span></div>
-  <p>Cloudflare redesigned its DNS cache's in-memory representation, eliminating 100TB of overhead while keeping full performance and hit rates—showing how rethinking data structures can sometimes beat throwing more hardware at a problem.</p>
+<div class="story">
+<div class="story-tag">Hardware & AI</div>
+<div class="story-title"><a href="https://thenewstack.io/q-ant-open-sources-cuda/" target="_blank" rel="noopener noreferrer">Q.ANT gives away software for light-powered AI chips in a CUDA-style bet on developers</a></div>
+<div class="story-meta"><span class="source">The New Stack</span></div>
+<p class="story-summary">Q.ANT open-sourced its software stack for photonic AI accelerators, betting that if developers can easily program a new chip architecture, adoption will follow hardware. It's a direct play against NVIDIA's CUDA lock-in: provide the tools for free, win the market. Photonic inference is still niche, but the strategy of open-sourcing software around novel hardware is spreading.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Architecture</span>
-  <h2><a href="https://www.canva.dev/blog/engineering/worker-backpressure-part-1-how-we-taught-our-queue-workers-to-slow-down/" target="_blank" rel="noopener noreferrer">Worker Backpressure: Teaching Queue Workers to Slow Down</a></h2>
-  <div class="meta"><span class="src">TLDR Dev (Web Dev)</span> &middot; Canva</div>
-  <p>Canva's queue library now lets workers dynamically adjust their concurrency based on local success and failure signals — adapting to system load without needing a central coordinator or extra network calls.</p>
+<div class="story">
+<div class="story-tag">AI / Open source</div>
+<div class="story-title"><a href="https://thenewstack.io/xiaomi-mimo-vs-6-open-source/" target="_blank" rel="noopener noreferrer">"Impressive level of openness": Xiaomi goes way beyond the usual open-weight playbook with MiMo-V2.6</a></div>
+<div class="story-meta"><span class="source">The New Stack</span></div>
+<p class="story-summary">Xiaomi released MiMo-V2.6 with not just weights but full training code, inference optimizations, and reinforcement learning scripts—the entire pipeline is open. They're signaling that true openness means releasing infrastructure, not just model artifacts. Teams can now fork the full training procedure and adapt it for their domain, not just inference on Xiaomi's fixed model.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">AI</span>
-  <h2><a href="https://politics.slashdot.org/story/26/09/22/2258253/trump-denounces-attempts-to-control-ai-wants-it-renamed-super-intelligence-in-us-documents" target="_blank" rel="noopener noreferrer">Trump Denounces Attempts to Control AI</a></h2>
-  <div class="meta"><span class="src">Slashdot</span></div>
-  <p>Former President Trump addressed the United Nations, expressing opposition to any regulation or control of AI development and suggesting the term "artificial intelligence" be replaced with "super intelligence" in official documents.</p>
+<div class="story">
+<div class="story-tag">Infrastructure</div>
+<div class="story-title"><a href="https://thenewstack.io/vast-dataenclave-confidential-computing/" target="_blank" rel="noopener noreferrer">A third option is emerging in the fight over AI and your data</a></div>
+<div class="story-meta"><span class="source">The New Stack</span></div>
+<p class="story-summary">The battle over AI data access is settling into three camps: on-prem only (slow), cloud with privacy (uncertain), and confidential computing (verified isolation). VAST Data showed that using hardware enclaves and attestation, you can run AI workloads in the cloud while provably preventing the provider from accessing raw data. It's not frictionless, but it splits the difference between privacy and scale.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Dev</span>
-  <h2><a href="https://developer.nvidia.com/blog/how-to-evaluate-ai-agents-from-tool-calls-to-task-completion/" target="_blank" rel="noopener noreferrer">How to Evaluate AI Agents: From Tool Calls to Task Completion</a></h2>
-  <div class="meta"><span class="src">TLDR Dev (Web Dev)</span> &middot; NVIDIA</div>
-  <p>Evaluating AI agents requires more than checking individual tool calls—step-level scoring pinpoints where agents fail mid-task, while end-to-end scoring verifies the final state actually changed correctly.</p>
+<div class="story">
+<div class="story-tag">Developer tools</div>
+<div class="story-title"><a href="https://stackoverflow.blog/2026/09/23/multiplayer-ai-why-your-team-and-its-agents-need-a-group-chat/" target="_blank" rel="noopener noreferrer">Multiplayer AI: Why your team and its agents need a group chat</a></div>
+<div class="story-meta"><span class="source">Stack Overflow Blog</span></div>
+<p class="story-summary">Slack launched Code Channels, native integration for AI agents to collaborate with humans and each other. Instead of agents hiding in bot DMs, they become visible participants in team channels, so you can see why a tool made a decision and let other agents chime in. Early feedback: teams ship features faster when humans and AI are literally in the same conversation thread.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">AI</span>
-  <h2><a href="https://www.zdnet.com/innovation/workera-study-ai-skills-upskilling-2026/" target="_blank" rel="noopener noreferrer">Nearly 70% of workers use AI regularly now – but many get no time to upskill</a></h2>
-  <div class="meta"><span class="src">ZDNet</span></div>
-  <p>A Workera report finds that 70% of workers now use AI on the job, but businesses and employees are misaligned on training priorities—many companies haven't invested in upskilling programs despite high AI adoption.</p>
+<div class="story">
+<div class="story-tag">Infrastructure</div>
+<div class="story-title"><a href="https://stackoverflow.blog/2026/09/22/haters-think-ai-can-t-gpu-code-this-ll-rocm/" target="_blank" rel="noopener noreferrer">Haters think AI agents can't write GPU code? This'll ROCm</a></div>
+<div class="story-meta"><span class="source">Stack Overflow Blog</span></div>
+<p class="story-summary">AMD's VP of Software sat down to discuss how ROCm, an open alternative to CUDA, is democratizing GPU programming for AI. Tools like this lower the barrier so agents can write optimized GPU kernels without deep systems knowledge. The implication: competitive pressure from open alternatives is making high-performance AI accessible beyond NVIDIA-first shops.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">OSS</span>
-  <h2><a href="https://www.phoronix.com/news/Qualcomm-Adreno-850-Open-Source" target="_blank" rel="noopener noreferrer">Qualcomm Posts Open-Source GPU Driver Patches For Adreno 850 One Day After Announcement</a></h2>
-  <div class="meta"><span class="src">Phoronix</span></div>
-  <p>Qualcomm released open-source GPU driver support for the Adreno 850 just a day after announcing the processor—unusual speed for mobile hardware, signaling a shift toward transparency in mobile GPU development.</p>
+<div class="story">
+<div class="story-tag">Developer tools</div>
+<div class="story-title"><a href="https://www.zdnet.com/business/windows-update-break-file-history-fix-available/" target="_blank" rel="noopener noreferrer">How to fix your Windows File History if the September update broke it</a></div>
+<div class="story-meta"><span class="source">ZDNet</span></div>
+<p class="story-summary">A bug in Windows' September patch Tuesday accidentally disabled File History for many users. Microsoft issued an optional update to fix it. Reminder: even mature OS patches can introduce regressions, and optional updates exist to fix issues the main cycle didn't catch.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">AI</span>
-  <h2><a href="https://openai.com/index/grab-openai-ai-skills-southeast-asia" target="_blank" rel="noopener noreferrer">Grab and OpenAI bring practical AI skills to Southeast Asia</a></h2>
-  <div class="meta"><span class="src">OpenAI Blog</span></div>
-  <p>OpenAI and ride-hailing platform Grab launched GO Forward with AI, training 30,000 entrepreneurs and workers across Southeast Asia on practical AI skills—a regional effort to democratize access to frontier model knowledge.</p>
+<div class="story">
+<div class="story-tag">Security</div>
+<div class="story-title"><a href="https://www.techradar.com/pro/security/fbi-claims-fake-cop-scams-are-costing-victims-billions-heres-what-to-look-out-for" target="_blank" rel="noopener noreferrer">FBI claims fake cop scams are costing victims billions—here's what to look out for</a></div>
+<div class="story-meta"><span class="source">TechRadar</span></div>
+<p class="story-summary">Social engineering scams impersonating law enforcement have netted $1.6 billion since January 2025, according to FBI reports (though likely underreported). The playbook: urgent message claiming legal trouble, demand immediate payment to resolve it. The tech angle: scammers are using spoofed caller IDs and deepfake audio to make calls feel authentic. Organizations should brief teams on these tactics regularly.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Security</span>
-  <h2><a href="https://www.technologyreview.com/2026/09/23/1144953/smart-glasses-havoc-india/" target="_blank" rel="noopener noreferrer">Smart glasses are already causing havoc in India</a></h2>
-  <div class="meta"><span class="src">MIT Technology Review</span></div>
-  <p>Smart glasses are accelerating privacy violations in India, with footage recorded at protests spreading on social media before subjects even realize they were filmed — raising urgent questions about consent and technology deployment in societies without strong privacy frameworks.</p>
+<div class="story">
+<div class="story-tag">AI research</div>
+<div class="story-title"><a href="https://arxiv.org/abs/2609.28470v1" target="_blank" rel="noopener noreferrer">StudentBench: AI and human tutoring yield equivalent GRE learning gains</a></div>
+<div class="story-meta"><span class="source">arXiv cs.AI</span></div>
+<p class="story-summary">A controlled study compared AI tutoring to human tutoring on GRE prep and found no significant difference in learning outcomes. The finding suggests that once you get the interaction loop right (immediate feedback, adaptive difficulty, personalized focus), the medium matters less than the method. It's an important data point for education tech and proof that AI tutoring can work at scale.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Dev</span>
-  <h2><a href="https://www.kdnuggets.com/high-performance-data-processing-with-polars-a-cheat-sheet" target="_blank" rel="noopener noreferrer">High-Performance Data Processing with Polars: A KDnuggets Cheat Sheet</a></h2>
-  <div class="meta"><span class="src">KDnuggets</span></div>
-  <p>Polars, a Rust-based DataFrame library built on Apache Arrow, achieves dramatic speed improvements by organizing computation as expressions that the query engine can optimize—outpacing pandas and proving that language choice matters for data workloads.</p>
+<div class="story">
+<div class="story-tag">Machine learning</div>
+<div class="story-title"><a href="https://towardsdatascience.com/from-words-to-vectors-what-happens-in-between/" target="_blank" rel="noopener noreferrer">From words to vectors: What happens in between?</a></div>
+<div class="story-meta"><span class="source">Towards Data Science</span></div>
+<p class="story-summary">This walkthrough covers the journey from raw text to high-dimensional embeddings: tokenization, TF-IDF, word2vec intuition, and vector space search. It's foundational material for understanding how text classifiers and semantic search actually work under the hood, not just black-box API calls.</p>
 </div>
 
-<div class="story story-more">
-  <span class="tag">Security</span>
-  <h2><a href="https://www.technologyreview.com/2026/09/22/1144890/roundtables-the-deadly-failures-of-the-virtual-border-wall/" target="_blank" rel="noopener noreferrer">Roundtables: The Deadly Failures of The Virtual Border Wall</a></h2>
-  <div class="meta"><span class="src">MIT Technology Review</span></div>
-  <p>The U.S. spent billions over 25 years on automated surveillance towers along its southern border, promising to detect crossers and save lives—but repeated failures show that AI-driven surveillance without human oversight produces neither security nor accountability.</p>
+<div class="story">
+<div class="story-tag">Machine learning</div>
+<div class="story-title"><a href="https://towardsdatascience.com/i-trained-a-tiny-network-to-compress-data-it-drew-a-pentagon/" target="_blank" rel="noopener noreferrer">I trained a tiny network to compress data. It drew a pentagon.</a></div>
+<div class="story-meta"><span class="source">Towards Data Science</span></div>
+<p class="story-summary">Anthropic's "Toy Models of Superposition" showed that even tiny neural networks can perform weird feats of compression by finding hidden patterns in high-dimensional space. This walkthrough reproduces the experiment in NumPy with hand-derived gradients, revealing that superposition (multiple concepts occupying the same neurons) is a core mechanism neural networks use to pack more information than neurons alone would allow.</p>
 </div>
 
-<button id="load-more" class="load-more-btn" type="button">load more <span class="count">(+15)</span></button>
-<script>
-(function () {
-  var btn = document.getElementById('load-more');
-  if (!btn) return;
-  btn.addEventListener('click', function () {
-    document.querySelectorAll('.story-more').forEach(function (el) {
-      el.classList.add('revealed');
-    });
-    btn.remove();
-  });
-})();
-</script>
+<div class="story">
+<div class="story-tag">Startups</div>
+<div class="story-title"><a href="https://news.slashdot.org/story/26/09/23/0625203/andreessen-horowitz-launches-aicompany-building-school-as-a-college-alternative" target="_blank" rel="noopener noreferrer">Andreessen Horowitz launches AI/company-building school as a college alternative</a></div>
+<div class="story-meta"><span class="source">Slashdot</span></div>
+<p class="story-summary">A16z opened a hybrid education program blending startup schooling (Peter Thiel Fellowship style) with AI bootcamp training. It's positioned as an alternative to computer science degrees for founders who want to ship and learn concurrently. The bet: AI is changing so fast that formal curricula lag; better to learn by building with live models.</p>
+</div>
+
+</div>
+
+<!-- Load More Section: shown if there are 11+ stories -->
+<div class="story-more-button">
+  <button id="load-more-btn" class="load-more-btn" onclick="document.querySelectorAll('.story-more').forEach(el => el.classList.add('active')); this.classList.add('hidden');">Load more stories</button>
+</div>
 
 <footer>
   <div class="signoff"><span class="prompt">$</span> curated_by <span class="me">Shubham Prakash</span></div>
   <div class="socials">
     <a class="social-btn" href="https://github.com/shubhamcodess" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
     </a>
     <a class="social-btn" href="https://www.linkedin.com/in/shubham-prakash-dev/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
       <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
@@ -567,5 +483,11 @@
     47+ sources fetched daily. <strong>Claude</strong> reads, dedupes &amp; ranks every story on its own judgment &mdash; no formula, no human editor. Rebuilt fresh each morning.
   </div>
 </div>
+
+<script>
+// Show load-more button only if there are stories marked with .story-more class
+// Since we only have 25 stories and articles_per_digest is 25, no load-more needed for this run
+document.getElementById('load-more-btn').classList.add('hidden');
+</script>
 </body>
 </html>
