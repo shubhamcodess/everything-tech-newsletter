@@ -376,6 +376,13 @@
     document.title = ed ? `${state.site.name} — ${longDate(ed.date)}` : `${state.site.name} — ${state.site.tagline}`;
     app.innerHTML = topbar() + (ed ? ticker(ed.stories) : "") + masthead(ed) + (ed ? editionBody(ed) : awaiting()) + footer() + overlays();
     state.cursor = -1;
+    // let the must-read grid vary card size by content -- long bodies span 2 rows
+    app.querySelectorAll(".grid-feature .story").forEach((el, i) => {
+      if (i === 0) return; // hero already handled by CSS :first-child
+      const chars = [...el.querySelectorAll(".body p")].reduce((n, p) => n + p.textContent.length, 0);
+      if (chars > 900) el.classList.add("is-long");
+    });
+
     const frame = (img) => { if (img.naturalWidth && img.naturalWidth < 700) img.closest("figure").classList.add("logo"); };
     app.querySelectorAll("figure img").forEach((img) => (img.complete ? frame(img) : img.addEventListener("load", () => frame(img))));
     app.querySelectorAll("img").forEach((img) => img.addEventListener("error", () => {
