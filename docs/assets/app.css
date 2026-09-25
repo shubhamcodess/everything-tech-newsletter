@@ -147,6 +147,10 @@ button { font: inherit; color: inherit; }
 .tb-btn[disabled] { opacity: .3; pointer-events: none; }
 .tb-btn svg { width: 15px; height: 15px; }
 .tb-date { color: var(--ink); white-space: nowrap; }
+.tb-top { display: none; }
+.scrolled .tb-top { display: inline-flex; }
+.tb-top svg { width: 15px; height: 15px; }
+
 .tb-count { color: var(--muted); white-space: nowrap; }
 
 @media (max-width: 720px) {
