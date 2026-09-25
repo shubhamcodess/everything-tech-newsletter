@@ -15,6 +15,7 @@
   const state = { site: null, index: null, edition: null, date: null, topic: "", signal: "", cursor: -1 };
 
   /* ---------- helpers ---------- */
+  const md = (v) => esc(v).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*\*/g, "");
   const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const safeUrl = (u) => {
     if (!u || typeof u !== "string" || !/^https?:\/\//i.test(u.trim())) return "";
@@ -176,7 +177,7 @@
     const collapsible = (wireKind || kind === "feature-rest" || kind === "brief-item") && (body.length > keep || (s.takeaways || []).length);
     const shown = collapsible ? body.slice(0, keep) : body;
     const hidden = collapsible ? body.slice(keep) : [];
-    const paras = (list) => list.map((p) => `<p>${esc(p)}</p>`).join("");
+    const paras = (list) => list.map((p) => `<p>${md(p)}</p>`).join("");
     const kindCls = kind === "feature-hero" ? "feature feature-hero" : kind === "feature-rest" ? "feature" : wireKind ? `wire ${kind}` : kind;
     const cls = ["story", kind === "brief-item" ? "" : "box", kindCls, s.signal === "notable" ? "notable" : "", `signal-${s.signal}`].filter(Boolean).join(" ");
     const title = `<h3>${ext(s.url, esc(s.headline))}</h3>`;
@@ -294,7 +295,7 @@
   function brief(ed) {
     if (!feature("brief") || !(ed.brief || []).length) return "";
     return `<section class="brief box" aria-label="The Brief"><div class="brief-head"><h2>The Brief</h2><span>60-second version</span></div>
-      <ol>${ed.brief.map((b) => `<li>${esc(b)}</li>`).join("")}</ol></section>`;
+      <ol>${ed.brief.map((b) => `<li>${md(b)}</li>`).join("")}</ol></section>`;
   }
 
   function machineRoom(ed) {
@@ -430,7 +431,7 @@
           <li>Prints at ${esc(site.edition_time)}. No ads, no trackers.</li>
         </ul></div>
       </div>
-      <div class="colophon"><span>Set in Bricolage Grotesque, Newsreader &amp; JetBrains Mono.</span>
+      <div class="colophon"><span></span>
         <span>${site.repo ? ext(site.repo, "Fork it on GitHub ↗") : ""}</span></div>
     </div></footer>`;
   }
@@ -463,7 +464,7 @@
   /* ---------- render ---------- */
   function render() {
     const ed = state.edition;
-    document.title = ed ? `${state.site.name} — ${longDate(ed.date)}` : `${state.site.name} — ${state.site.tagline}`;
+    document.title = ed ? `${state.site.name} · ${longDate(ed.date)}` : `${state.site.name} · ${state.site.tagline}`;
     app.innerHTML = topbar() + (ed ? ticker(ed.stories) : "") + masthead(ed) + (ed ? editionBody(ed) : awaiting()) + footer() + overlays();
     state.cursor = -1;
 
