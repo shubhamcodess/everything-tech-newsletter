@@ -210,8 +210,6 @@
       ${nav(newer, "r", "Newer")}
       <span class="tb-count">${esc(count)}</span>
       <span class="spacer"></span>
-      ${byBrand()}
-      <span class="spacer"></span>
       <button class="tb-btn tb-how" data-act="how" title="How it works">How it works</button>
       <a class="tb-btn" href="feed.xml" title="RSS feed">${ICON.rss}<span class="tb-label">RSS</span></a>
       <button class="tb-btn" id="theme-btn" data-act="theme" title="Toggle theme (t)">${themeButton()}</button>
@@ -244,7 +242,8 @@
     return `<header class="masthead wrap" id="top">
       <div class="masthead-meta"><span>Vol. 1 · No. ${pad(ed ? ed.edition : 0, 3)}</span><span>Printed daily at ${esc(site.edition_time)}</span><span>Assembled ${esc(assembled || "")}</span></div>
       <a class="brand" href="${esc(location.pathname)}" data-date="${esc(state.index.latest || "")}" aria-label="${esc(site.name)}, latest edition">${CHIP}<span class="brand-name">${esc(site.name)}<span class="cursor">_</span></span></a>
-      <p class="tagline">${esc(site.tagline)} <span class="coffee-wrap" aria-hidden="true">${ICON.coffee}</span></p>
+      <p class="tagline"><span class="tag-neon">all at once.</span> <span class="tag-body">${esc(site.tagline)}</span> <span class="coffee-wrap" aria-hidden="true">${ICON.coffee}</span></p>
+      ${(function(){const c=state.site.curator||{};const l=c.site||c.linkedin||c.github||"#";return c.name?`<p class="curator-line">curated_by ${ext(l, esc(c.name), "curator-name")}</p>`:"";})()}
       <div class="rule"></div>
       <div class="edition-line">${line}</div>
       ${ed && state.date !== state.index.latest ? `<p class="legacy-note">You're reading an archived edition. <a href="${esc(location.pathname)}" data-date="${esc(state.index.latest)}">Jump to today's →</a></p>` : ""}
