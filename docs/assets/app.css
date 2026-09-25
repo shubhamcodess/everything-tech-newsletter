@@ -536,3 +536,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; padding: 2px 7px; border: 
 /* ---------- toast ---------- */
 #toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); z-index: 90; opacity: 0; pointer-events: none; transition: all .2s; font-family: var(--font-mono); font-size: 13px; padding: 10px 16px; background: var(--ink); color: var(--bg); box-shadow: 4px 4px 0 var(--accent); border-radius: var(--radius); }
 #toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* no visible page scrollbar; the reading progress bar shows position */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
