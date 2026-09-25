@@ -157,7 +157,7 @@ button { font: inherit; color: inherit; }
   .tb-count, .tb-label, .tb-how { display: none; }
   .masthead { padding-top: 26px; }
   .masthead-meta { justify-content: center; }
-  .masthead-meta span:nth-child(2) { display: none; }
+  .masthead-meta { gap: 6px 14px; }
   .lead, .story { padding-left: 18px; padding-right: 18px; }
   .box { box-shadow: 4px 4px 0 var(--shadow); }
   .topbar .wrap { gap: 6px; }
@@ -390,56 +390,93 @@ figure.shot::after { content: attr(data-src); position: absolute; right: 8px; bo
 @media (max-width: 860px) { .lead .body.cols { column-count: 1; } }
 
 /* must-reads */
-/* must-reads: hero column-2 span + row-2 span, then compact cards next to it */
-.grid-feature {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: min-content;
-  grid-auto-flow: dense;
-  gap: var(--gap);
-  align-items: start;
-}
-.grid-feature .story:first-child { grid-column: span 2; grid-row: span 2; }
-.grid-feature .story:first-child h3 { font-size: 32px; line-height: 1.1; }
-.grid-feature .story:first-child figure.shot { aspect-ratio: 21 / 9; }
-.grid-feature .story.is-long { grid-row: span 2; }
-.grid-feature .story.is-wide { grid-column: span 2; }
-.grid-feature .feature h3 { font-size: 24px; }
-@media (min-width: 1700px) {
-  .grid-feature { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .grid-feature .story:first-child { grid-column: span 2; }
-}
-@media (max-width: 1180px) {
-  .grid-feature { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .grid-feature .story:first-child { grid-column: span 2; grid-row: auto; }
-}
-@media (max-width: 720px) {
-  .grid-feature { grid-template-columns: 1fr; }
-  .grid-feature .story:first-child { grid-column: 1 / -1; }
+/* must-reads: full-width hero band, then compact cards packed as masonry */
+.grid-feature { display: block; }
+.grid-feature .story.feature-hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 26px 36px; padding: 28px 32px; margin-bottom: var(--gap); align-items: start; }
+.grid-feature .story.feature-hero .kicker,
+.grid-feature .story.feature-hero h3,
+.grid-feature .story.feature-hero .dek,
+.grid-feature .story.feature-hero .byline { grid-column: 1; }
+.grid-feature .story.feature-hero figure.shot { grid-column: 2; grid-row: 1 / span 4; aspect-ratio: 16/10; margin: 0; }
+.grid-feature .story.feature-hero .body,
+.grid-feature .story.feature-hero .takeaways,
+.grid-feature .story.feature-hero .also,
+.grid-feature .story.feature-hero .actions { grid-column: 1 / -1; }
+.grid-feature .story.feature-hero h3 { font-size: clamp(28px, 2.6vw, 40px); line-height: 1.06; letter-spacing: -0.025em; }
+.grid-feature .story.feature-hero .dek { font-size: 1.15em; }
+.grid-feature .story.feature-hero .body { column-count: 2; column-gap: 32px; column-rule: 1px solid var(--line); }
+.grid-feature .story.feature-hero .body p { break-inside: avoid-column; }
+@media (max-width: 960px) {
+  .grid-feature .story.feature-hero { grid-template-columns: 1fr; }
+  .grid-feature .story.feature-hero figure.shot { grid-column: 1; grid-row: auto; aspect-ratio: 16/9; }
+  .grid-feature .story.feature-hero .body { column-count: 1; }
 }
 
+/* remaining must-reads: masonry columns capped at 3 for breathing room -- must-reads deserve it */
+.grid-feature .feature-rest { column-count: 3; column-gap: 32px; column-fill: balance; }
+@media (max-width: 1180px) { .grid-feature .feature-rest { column-count: 2; } }
+@media (max-width: 720px) { .grid-feature .feature-rest { column-count: 1; column-gap: var(--gap); } }
+.grid-feature .feature-rest .story { display: block; break-inside: avoid; -webkit-column-break-inside: avoid; width: 100%; margin: 0 0 32px; padding: 26px 28px 22px; }
+.grid-feature .feature-rest .story h3 { font-size: 23px; line-height: 1.18; }
+.grid-feature .feature-rest .story .dek { font-size: 1.05em; }
+.grid-feature .feature-rest .story figure.shot { aspect-ratio: 16/9; margin-bottom: 16px; }
+
 /* the wire */
-/* wire: masonry-style multi-column flow -- cards keep their natural heights */
-.grid-wire { column-count: 3; column-gap: var(--gap); column-fill: balance; }
-@media (min-width: 1700px) { .grid-wire { column-count: 4; } }
-@media (max-width: 1180px) { .grid-wire { column-count: 2; } }
-@media (max-width: 720px) { .grid-wire { column-count: 1; } }
-.grid-wire .story {
-  display: block;
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
-  width: 100%;
-  margin: 0 0 var(--gap);
-  font-size: 16.5px;
-}
+/* wire: rows composed in app.js from each story's length, on a 6-track grid
+   (never more than 3 across). Boxes in a row share a height, like a page. */
+.grid-wire { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 32px; align-items: stretch; }
+.grid-wire .story { font-size: 16.5px; }
 .grid-wire .story h3 { font-size: 21px; }
-.grid-wire .story .actions { margin-top: 14px; }
+.grid-wire .w-third { grid-column: span 2; }
+.grid-wire .w-half { grid-column: span 3; }
+.grid-wire .w-half h3 { font-size: 24px; }
+.grid-wire .w-wide { grid-column: span 4; }
+.grid-wire .w-full { grid-column: span 6; }
+.grid-wire .w-wide h3, .grid-wire .w-full h3 { font-size: clamp(24px, 2vw, 30px); line-height: 1.12; }
+.grid-wire .w-wide .dek, .grid-wire .w-full .dek { font-size: 1.08em; }
+.wide-top.has-fig { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+.wide-top.has-fig figure.shot { margin: 0; aspect-ratio: 4 / 3; }
+.body.cols2 { column-count: 2; column-gap: 30px; column-rule: 1px solid var(--line); }
+.body.cols2 p { break-inside: avoid-column; }
+.grid-wire .deferred { display: none; }
+.grid-wire.filtering { align-items: start; grid-auto-flow: dense; }
+.grid-wire.filtering .story { grid-column: span 2; }
+.grid-wire.filtering .deferred:not([hidden]) { display: flex; }
+.grid-wire.filtering ~ .more-wrap { display: none; }
+.more-wrap { display: flex; justify-content: center; margin-top: 34px; }
+.more-btn { font-size: 12.5px; padding: 11px 22px; }
+.more-btn b { color: var(--accent); margin-left: 6px; }
+@media (max-width: 1180px) {
+  .grid-wire { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: dense; gap: var(--gap); }
+  .grid-wire .w-third, .grid-wire .w-half, .grid-wire.filtering .story { grid-column: span 1; }
+  .grid-wire .w-wide, .grid-wire .w-full { grid-column: span 2; }
+}
+@media (max-width: 720px) {
+  .grid-wire { grid-template-columns: 1fr; }
+  .grid-wire .story, .grid-wire.filtering .story { grid-column: auto; }
+  .wide-top.has-fig { grid-template-columns: 1fr; }
+  .wide-top.has-fig figure.shot { aspect-ratio: 16 / 9; }
+  .body.cols2 { column-count: 1; }
+  .grid-wire figure.shot { display: none; }
+}
+
+/* in brief: notables as a compact, ruled column list -- a change of pace after the boxes */
+.briefs { column-count: 3; column-gap: 44px; column-rule: 1px solid var(--line); }
+@media (max-width: 1180px) { .briefs { column-count: 2; } }
+@media (max-width: 720px) { .briefs { column-count: 1; } }
+.briefs .story.brief-item { display: block; break-inside: avoid; padding: 0 0 20px; margin: 0 0 20px; border-bottom: 1px dashed var(--line); background: none; box-shadow: none; border-radius: 0; font-size: 16px; }
+.briefs .story.brief-item:hover, .briefs .story.brief-item.is-current { transform: none; box-shadow: none; }
+.story.brief-item.is-current { outline-offset: 8px; }
+.brief-item h3 { font-size: 19px; }
+.brief-item .kicker { margin-bottom: 8px; }
+.brief-item .dek { font-style: normal; color: var(--ink-2); font-size: .98em; }
+.brief-item .byline { border-top: 0; padding-top: 0; margin-top: 8px; }
+.brief-item .actions { padding-top: 10px; }
+.brief-item .act { padding: 4px 8px; font-size: 11px; }
 .story.notable { background: var(--bg-2); box-shadow: 3px 3px 0 var(--shadow); }
 .story.notable h3 { font-size: 19px; }
 
 
-.grid-wire.is-filtered { column-count: unset; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 420px)); justify-content: start; gap: var(--gap); }
 .grid-feature.is-filtered { grid-template-columns: repeat(auto-fill, minmax(420px, 560px)); justify-content: start; }
 .grid-feature.is-filtered .story { grid-column: auto !important; grid-row: auto !important; }
 

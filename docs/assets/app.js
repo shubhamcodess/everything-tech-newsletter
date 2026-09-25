@@ -17,7 +17,8 @@
   /* ---------- helpers ---------- */
   const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const safeUrl = (u) => {
-    try { const url = new URL(String(u), location.href); return /^https?:$/.test(url.protocol) ? url.href : ""; } catch (e) { return ""; }
+    if (!u || typeof u !== "string" || !/^https?:\/\//i.test(u.trim())) return "";
+    try { const url = new URL(u.trim()); return /^https?:$/.test(url.protocol) ? url.href : ""; } catch (e) { return ""; }
   };
   const ext = (u, text, cls) => {
     const href = safeUrl(u);
@@ -170,17 +171,21 @@
 
   function story(s, n, kind) {
     const body = s.body || [];
-    const collapsible = kind === "wire" && (body.length > 1 || (s.takeaways || []).length);
-    const shown = collapsible ? body.slice(0, 1) : body;
-    const hidden = collapsible ? body.slice(1) : [];
+    const wireKind = kind.startsWith("w-");
+    const keep = kind === "w-wide" || kind === "w-full" ? 2 : kind === "brief-item" ? 0 : 1;
+    const collapsible = (wireKind || kind === "feature-rest" || kind === "brief-item") && (body.length > keep || (s.takeaways || []).length);
+    const shown = collapsible ? body.slice(0, keep) : body;
+    const hidden = collapsible ? body.slice(keep) : [];
     const paras = (list) => list.map((p) => `<p>${esc(p)}</p>`).join("");
-    const cls = ["story", "box", kind, s.signal === "notable" ? "notable" : "", `signal-${s.signal}`].filter(Boolean).join(" ");
+    const kindCls = kind === "feature-hero" ? "feature feature-hero" : kind === "feature-rest" ? "feature" : wireKind ? `wire ${kind}` : kind;
+    const cls = ["story", kind === "brief-item" ? "" : "box", kindCls, s.signal === "notable" ? "notable" : "", `signal-${s.signal}`].filter(Boolean).join(" ");
     const title = `<h3>${ext(s.url, esc(s.headline))}</h3>`;
     // migrated editions carry one summary as both dek and body; print it once
     const dek = s.dek && s.dek.trim() !== String(body[0] || "").trim() ? `<p class="dek">${esc(s.dek)}</p>` : "";
     const head = `${kicker(s, n)}${title}${dek}${byline(s)}`;
+    const bodyCls = kind === "w-wide" || kind === "w-full" ? "body cols2" : "body";
     const rest = collapsible
-      ? `<div class="body">${paras(shown)}</div><div class="more"><div class="body">${paras(hidden)}</div>${takeaways(s)}</div>`
+      ? `${shown.length ? `<div class="${bodyCls}">${paras(shown)}</div>` : ""}<div class="more"><div class="body">${paras(hidden)}</div>${takeaways(s)}</div>`
       : `<div class="body${kind === "lead" ? " dropcap" : ""}${kind === "lead" && body.join(" ").length > 900 ? " cols" : ""}">${paras(shown)}</div>${takeaways(s)}`;
     const actions = `<div class="actions">
         ${ext(s.url, "Read at source ↗", "act primary")}
@@ -188,12 +193,44 @@
         <span class="spacer"></span>
         <button class="act ghost" data-act="copy" title="Copy a link to this story">Link #</button>
       </div>`;
-    const inner = kind === "lead" && figure(s)
-      ? `<div class="lead-grid"><div>${head}</div>${figure(s)}</div>${rest}${also(s)}${actions}`
-      : `${kind === "feature" ? figure(s) : ""}${head}${rest}${also(s)}${actions}`;
+    let inner;
+    if (kind === "lead" && figure(s)) {
+      inner = `<div class="lead-grid"><div>${head}</div>${figure(s)}</div>${rest}${also(s)}${actions}`;
+    } else if (kind === "feature-hero") {
+      inner = `${head}${figure(s)}${rest}${also(s)}${actions}`;
+    } else if (kind === "feature-rest" || kind === "w-half") {
+      inner = `${figure(s)}${head}${rest}${also(s)}${actions}`;
+    } else if (kind === "w-wide" || kind === "w-full") {
+      const fig = figure(s);
+      inner = `<div class="wide-top${fig ? " has-fig" : ""}"><div>${head}</div>${fig}</div>${rest}${also(s)}${actions}`;
+    } else {
+      inner = `${head}${rest}${also(s)}${actions}`;
+    }
     return `<article class="${cls}${kind === "lead" && figure(s) ? " has-image" : ""}" id="s-${n + 1}" data-n="${n}"
       data-topic="${esc(s.topic)}" data-signal="${esc(s.signal)}" style="--c:${topicColor(s.topic)}">${inner}</article>`;
   }
+
+  // Right-hand masthead slot: a countdown to the next edition on today's
+  // paper, how old it is on an archived one. Times are in the paper's zone.
+  function tzNow() {
+    const tz = (state.site && state.site.timezone) || "Asia/Kolkata";
+    const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+      .formatToParts(new Date()).map((p) => [p.type, p.value]));
+    return { date: `${parts.year}-${parts.month}-${parts.day}`, minutes: Number(parts.hour) * 60 + Number(parts.minute) };
+  }
+  function clockText() {
+    if (!state.site) return "";
+    let now;
+    try { now = tzNow(); } catch (e) { return ""; }
+    if (state.index && state.date && state.date !== state.index.latest) {
+      const days = Math.round((parseDate(now.date) - parseDate(state.date)) / 864e5);
+      return days <= 0 ? "From the archive" : `From the archive · ${days} day${days === 1 ? "" : "s"} ago`;
+    }
+    const [h, m] = String(state.site.edition_time || "08:30").match(/\d+/g).map(Number);
+    const left = ((h * 60 + m) - now.minutes + 1440) % 1440 || 1440;
+    return `Next edition in ${Math.floor(left / 60)}h ${pad(left % 60)}m`;
+  }
+  setInterval(() => { const el = document.getElementById("clock"); if (el) el.textContent = clockText(); }, 30000);
 
   /* ---------- page sections ---------- */
   function topbar() {
@@ -232,9 +269,11 @@
     const site = state.site;
     const stories = ed ? ed.stories : [];
     const digestWords = stories.reduce((a, s) => a + words(s.dek) + (s.body || []).reduce((b, p) => b + words(p), 0), 0);
-    const assembled = ed && ed.generated_at
-      ? new Date(ed.generated_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false, timeZoneName: "short" })
-      : site.edition_time;
+    const tz = site.timezone || "Asia/Kolkata", tzLabel = site.timezone_label || "IST";
+    let printed = site.edition_time;
+    try {
+      if (ed && ed.generated_at) printed = new Date(ed.generated_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: tz }) + " " + tzLabel;
+    } catch (e) {}
     const line = ed ? [
       `<span>${esc(longDate(ed.date))}</span>`,
       `<span>${stories.length} stories</span>`,
@@ -242,7 +281,7 @@
       `<span>~${Math.max(1, Math.round(digestWords / 230))} min read</span>`,
     ].join("") : `<span>${esc(site.description)}</span>`;
     return `<header class="masthead wrap" id="top">
-      <div class="masthead-meta"><span>Vol. 1 · No. ${pad(ed ? ed.edition : 0, 3)}</span><span>Printed daily at ${esc(site.edition_time)}</span><span>Assembled ${esc(assembled || "")}</span></div>
+      <div class="masthead-meta"><span>Vol. 1 · No. ${pad(ed ? ed.edition : 0, 3)}</span><span>Printed ${esc(printed || "")}</span><span id="clock">${esc(clockText())}</span></div>
       <a class="brand" href="${esc(location.pathname)}" data-date="${esc(state.index.latest || "")}" aria-label="${esc(site.name)}, latest edition">${CHIP}<span class="brand-name">${esc(site.name)}<span class="cursor">_</span></span></a>
       <p class="tagline"><span class="tag-neon">all at once.</span> <span class="tag-body">${esc(site.tagline)}</span> <span class="coffee-wrap" aria-hidden="true">${ICON.coffee}</span></p>
       ${(function(){const c=state.site.curator||{};const l=c.site||c.linkedin||c.github||"#";return c.name?`<p class="curator-line">curated_by ${ext(l, esc(c.name), "curator-name")}</p>`:"";})()}
@@ -291,19 +330,70 @@
     </div>`;
   }
 
+  // Compose the wire like a page, not a grid: each row is picked from the
+  // next stories' length -- a long story gets a wide block beside a narrow
+  // one, two mid-length stories split the row, short ones go three across.
+  const WIRE_INITIAL = 8;
+  function wireRows(items) {
+    // weights are ranked within the day, so "long" means long for this edition
+    const weight = ([st]) => (st.body || []).join(" ").length + (st.takeaways || []).join(" ").length / 2 + (safeUrl(st.image) ? 350 : 0);
+    const sorted = items.map(weight).sort((x, y) => y - x);
+    const heavy = sorted[Math.floor(sorted.length * 0.3)] ?? Infinity;
+    const mid = sorted[Math.floor(sorted.length * 0.65)] ?? Infinity;
+    const tier = (it) => (weight(it) > heavy ? 2 : weight(it) > mid ? 1 : 0);
+    const rows = [];
+    let last = "";
+    for (let i = 0; i < items.length;) {
+      const [a, b, c] = [items[i], items[i + 1], items[i + 2]];
+      let type;
+      if (!b) type = "full";
+      else if ((tier(a) === 2 || tier(b) === 2) && last !== "wide") type = "wide";
+      else if (c && last !== "triple" && (tier(a) + tier(b) + tier(c) <= 3 || last === "half")) type = "triple";
+      else if (last !== "half" && tier(a) >= 1 && tier(b) >= 1) type = "half";
+      else if (c) type = "triple";
+      else type = "half";
+      if (type === "full") rows.push([[a, "w-full"]]);
+      else if (type === "wide") {
+        const aWide = weight(a) >= weight(b);
+        rows.push([[a, aWide ? "w-wide" : "w-third"], [b, aWide ? "w-third" : "w-wide"]]);
+      } else if (type === "half") rows.push([[a, "w-half"], [b, "w-half"]]);
+      else rows.push([[a, "w-third"], [b, "w-third"], [c, "w-third"]]);
+      i += rows[rows.length - 1].length;
+      last = type;
+    }
+    return rows;
+  }
+  function wireSection(items) {
+    let shown = 0;
+    const cards = wireRows(items).map((row) => {
+      const deferred = shown >= WIRE_INITIAL;
+      shown += row.length;
+      return row.map(([[s, n], kind]) => story(s, n, kind).replace('class="story', `class="${deferred ? "deferred " : ""}story`)).join("");
+    }).join("");
+    const later = (cards.match(/class="deferred story/g) || []).length;
+    return `<section data-section><div class="sec-head"><h2>The Wire</h2><span class="line"></span><span class="note">everything else worth your time</span></div>
+      <div class="grid-wire">${cards}</div>
+      ${later ? `<div class="more-wrap"><button class="act more-btn" data-act="more-wire">More from the wire <b>+${later}</b></button></div>` : ""}</section>`;
+  }
+
   function editionBody(ed) {
     const [lead, ...rest] = ed.stories;
     const indexed = rest.map((s, i) => [s, i + 1]);
     const features = indexed.filter(([s]) => s.signal === "must-read");
-    const wire = indexed.filter(([s]) => s.signal !== "must-read");
+    const wire = indexed.filter(([s]) => s.signal === "recommended");
+    const briefs = indexed.filter(([s]) => s.signal !== "must-read" && s.signal !== "recommended");
     const side = brief(ed) + machineRoom(ed);
     return `<main class="wrap">
       <div class="front">${story(lead, 0, "lead")}${side ? `<aside class="side">${side}</aside>` : ""}</div>
       ${filters(ed)}
       ${features.length ? `<section data-section><div class="sec-head"><h2>Must-reads</h2><span class="line"></span><span class="note">${features.length} picks</span></div>
-        <div class="grid-feature">${features.map(([s, n]) => story(s, n, "feature")).join("")}</div></section>` : ""}
-      ${wire.length ? `<section data-section><div class="sec-head"><h2>The Wire</h2><span class="line"></span><span class="note">everything else worth your time</span></div>
-        <div class="grid-wire">${wire.map(([s, n]) => story(s, n, "wire")).join("")}</div></section>` : ""}
+        <div class="grid-feature">
+          ${story(features[0][0], features[0][1], "feature-hero")}
+          ${features.length > 1 ? `<div class="feature-rest">${features.slice(1).map(([s, n]) => story(s, n, "feature-rest")).join("")}</div>` : ""}
+        </div></section>` : ""}
+      ${wire.length ? wireSection(wire) : ""}
+      ${briefs.length ? `<section data-section><div class="sec-head"><h2>In Brief</h2><span class="line"></span><span class="note">quick hits, one tap to expand</span></div>
+        <div class="briefs">${briefs.map(([s, n]) => story(s, n, "brief-item")).join("")}</div></section>` : ""}
       <p class="empty-filter" id="empty-filter">Nothing matches that filter today. <button class="act" data-act="clear">Clear filters</button></p>
     </main>`;
   }
@@ -376,12 +466,6 @@
     document.title = ed ? `${state.site.name} — ${longDate(ed.date)}` : `${state.site.name} — ${state.site.tagline}`;
     app.innerHTML = topbar() + (ed ? ticker(ed.stories) : "") + masthead(ed) + (ed ? editionBody(ed) : awaiting()) + footer() + overlays();
     state.cursor = -1;
-    // let the must-read grid vary card size by content -- long bodies span 2 rows
-    app.querySelectorAll(".grid-feature .story").forEach((el, i) => {
-      if (i === 0) return; // hero already handled by CSS :first-child
-      const chars = [...el.querySelectorAll(".body p")].reduce((n, p) => n + p.textContent.length, 0);
-      if (chars > 900) el.classList.add("is-long");
-    });
 
     const frame = (img) => { if (img.naturalWidth && img.naturalWidth < 700) img.closest("figure").classList.add("logo"); };
     app.querySelectorAll("figure img").forEach((img) => (img.complete ? frame(img) : img.addEventListener("load", () => frame(img))));
@@ -410,7 +494,8 @@
       const grid = sec.querySelector(".grid-wire, .grid-feature");
       if (grid) {
         const visible = grid.querySelectorAll(".story:not([hidden])").length;
-        grid.classList.toggle("is-filtered", filtered && visible > 0 && visible < 4);
+        if (grid.classList.contains("grid-wire")) grid.classList.toggle("filtering", filtered);
+        else grid.classList.toggle("is-filtered", filtered && visible > 0 && visible < 4);
       }
     });
     app.querySelectorAll(".pill").forEach((p) => {
@@ -446,7 +531,7 @@
   }
 
   /* ---------- interaction ---------- */
-  const visibleCards = () => [...app.querySelectorAll(".story:not([hidden])")];
+  const visibleCards = () => [...app.querySelectorAll(".story:not([hidden])")].filter((c) => c.offsetParent);
   function focusCard(i) {
     const cards = visibleCards();
     if (!cards.length) return;
@@ -519,6 +604,10 @@
       case "theme": toggleTheme(); break;
       case "close": closeOverlays(); break;
       case "clear": state.topic = state.signal = ""; writeUrl(false); applyFilters(); break;
+      case "more-wire":
+        app.querySelectorAll(".grid-wire .deferred").forEach((c) => c.classList.remove("deferred"));
+        act.closest(".more-wrap").remove();
+        break;
       case "top": window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); break;
     }
   });

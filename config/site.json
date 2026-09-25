@@ -28,5 +28,7 @@
   "keyboard_shortcuts": true,
   "images": true
  },
- "notes": "Rendering config for the whole site -- every edition, current and archived, is drawn from this plus docs/assets/. theme.dark / theme.light take CSS variable overrides, e.g. {\"--accent\": \"#5ef0d6\"}. After editing, run: python scripts/build_site.py"
+ "notes": "Rendering config for the whole site -- every edition, current and archived, is drawn from this plus docs/assets/. theme.dark / theme.light take CSS variable overrides, e.g. {\"--accent\": \"#5ef0d6\"}. After editing, run: python scripts/build_site.py",
+ "timezone": "Asia/Kolkata",
+ "timezone_label": "IST"
 }
