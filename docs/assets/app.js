@@ -295,7 +295,7 @@
   function brief(ed) {
     if (!feature("brief") || !(ed.brief || []).length) return "";
     return `<section class="brief box" aria-label="The Brief"><div class="brief-head"><h2>The Brief</h2><span>60-second version</span></div>
-      <ol>${ed.brief.map((b) => `<li>${md(b)}</li>`).join("")}</ol></section>`;
+      <ol>${ed.brief.map((b) => `<li><span>${md(b)}</span></li>`).join("")}</ol></section>`;
   }
 
   function machineRoom(ed) {
