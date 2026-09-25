@@ -447,7 +447,7 @@
           <div class="top"><span>${esc(longDate(e.date))}</span><b>No. ${pad(e.edition, 3)}</b></div>
           <p class="lead-line">${esc(e.lead)}</p>
           <div class="top" style="margin-top:8px"><span>${esc(e.stories)} stories · ${esc(e.must_read)} must-read</span>${e.date === state.index.latest ? "<b>today</b>" : ""}</div></a>`).join("")}</div>
-        <div class="foot">The paper keeps the last ${eds.length} edition${eds.length === 1 ? "" : "s"}. Every one is drawn fresh from its Markdown file with today's template.</div>
+        <div class="foot">${eds.length} edition${eds.length === 1 ? "" : "s"} so far. Past papers stay here for ${esc(state.index.archive_days || 30)} days, so pour another coffee and catch up.</div>
       </aside>
       <div class="dialog box" id="keys" role="dialog" aria-label="Keyboard shortcuts"><h2>Keyboard shortcuts</h2>
         <div class="keys">${shortcuts.map(([k, d]) => `<span>${k.split(" / ").map((x) => `<kbd>${esc(x)}</kbd>`).join(" / ")}</span><span>${esc(d)}</span>`).join("")}</div></div>

@@ -111,6 +111,7 @@ def main():
     with open(os.path.join(DATA, "index.json"), "w") as f:
         json.dump({"count": max((m["edition"] for m in manifest), default=0),
                    "latest": manifest[0]["date"] if manifest else None,
+                   "archive_days": settings.get("archive_days", 7),
                    "editions": manifest}, f, ensure_ascii=False, indent=1)
     with open(os.path.join(DATA, "site.json"), "w") as f:
         json.dump(site, f, ensure_ascii=False, indent=1)
