@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# Resets generated state so a fresh fork starts clean: an "awaiting first run"
-# placeholder as the live page, an empty archive, and no remembered stories.
-# Run once from the repo root after forking, then commit.
+# Resets generated state so a fresh fork starts clean: no editions, empty
+# archive, no remembered stories. The site shows an "awaiting the first
+# edition" page until the routine's first run. Run once after forking, then commit.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-cp templates/placeholder.html docs/index.html
-sed '1,/^-->$/d' templates/archive.html.template > docs/archive/index.html
-find docs/archive -name '20*.html' -delete
-rm -f docs/sample-output.html
+rm -rf editions/20*
 echo '{"featured": []}' > data/seen.json
-echo "Reset done. Now personalize (see README), then commit and push."
+python3 scripts/build_site.py
+echo "Reset done. Now edit config/site.json and config/interests.json (see README), then commit and push."

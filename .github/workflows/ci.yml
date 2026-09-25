@@ -45,36 +45,23 @@ jobs:
           assert len(d['articles']) > 0, 'zero articles fetched'
           "
 
-      # A routine run once wrote templates/digest.html.template's literal
-      # placeholder markup (ARTICLE_URL, ARTICLE_TITLE, ...) straight into
-      # docs/index.html instead of real story data, and it merged -- CI
-      # validated fetchers, not the actual digest content. This closes
-      # that gap: fails the build (and therefore blocks auto-merge, once
-      # this job is a required status check -- see SETUP.md) on a digest
-      # that's obviously broken, without trying to judge summary quality,
-      # which stays a human/LLM call, not CI's.
-      - name: Validate digest content
+      - name: Smoke-test the candidate builder
         run: |
-          python -c "
-          import glob
+          python scripts/build_candidates.py
+          test -s data/candidates.md
 
-          BAD_TOKENS = ['ARTICLE_URL', 'ARTICLE_TITLE', 'SOURCE_NAME', 'OTHER_SOURCES',
-                        \"Your own brief, engaging summary\"]
+      # Editions are Markdown in editions/<date>/edition.md; the site renders
+      # them from docs/data/*.json. This fails the build (and so blocks the
+      # routine's auto-merge) on an edition that doesn't parse, still carries
+      # placeholder text or markup, or wasn't rebuilt into docs/data. It
+      # doesn't judge writing quality -- publish_edition.py's validator does
+      # that before anything is committed.
+      - name: Validate editions and site data
+        run: python scripts/validate_editions.py
 
-          def check(path):
-              html = open(path, encoding='utf-8').read()
-              if 'awaiting first run' in html:
-                  return  # legitimate placeholder state, nothing to check yet
-              bad = [t for t in BAD_TOKENS if t in html]
-              if bad:
-                  raise SystemExit(f'{path}: contains template placeholder text {bad} -- looks like real content was never substituted in')
-              if 'class=\"story' not in html:
-                  raise SystemExit(f'{path}: has no story content and is not the awaiting-first-run placeholder')
-              print(f'{path}: OK')
-
-          check('docs/index.html')
-          for p in glob.glob('docs/archive/*.html'):
-              if p.endswith('index.html'):
-                  continue
-              check(p)
-          "
+      - name: Check the site template is present
+        run: |
+          for f in docs/index.html docs/assets/app.js docs/assets/app.css docs/data/site.json docs/data/index.json; do
+            test -s "$f" || { echo "missing $f"; exit 1; }
+          done
+          grep -q 'assets/app.js' docs/index.html

@@ -1,13 +1,13 @@
 {
-  "interests": [
-    "AI / LLMs / machine learning",
-    "developer tools & IDEs",
-    "programming languages",
-    "open source",
-    "startups & funding",
-    "cloud infrastructure & Kubernetes",
-    "security",
-    "software architecture & engineering practice"
+  "topics": [
+    { "label": "AI", "about": "AI, LLMs, agents, machine learning research and products" },
+    { "label": "Dev Tools", "about": "developer tools, IDEs, coding agents, CI/CD, developer experience" },
+    { "label": "Languages", "about": "programming languages, compilers, runtimes, WebAssembly" },
+    { "label": "Open Source", "about": "open-source projects, maintainers, licensing, community" },
+    { "label": "Startups", "about": "startups, funding, acquisitions, IPOs, the business of tech" },
+    { "label": "Infra", "about": "cloud infrastructure, Kubernetes, databases, operating systems, hardware" },
+    { "label": "Security", "about": "security, breaches, vulnerabilities, privacy, cryptography" },
+    { "label": "Engineering", "about": "software architecture, engineering practice, system design, careers" }
   ],
-  "notes": "Edit this list any time — add or remove topics, commit, push. The next routine run picks it up automatically. Fetched articles that don't reasonably match any topic here are filtered out before ranking."
+  "notes": "Edit any time -- add, remove, or rename topics, then commit. 'label' is the short filter chip shown on the site; 'about' tells the routine what belongs in it. Stories that fit no topic are dropped."
 }

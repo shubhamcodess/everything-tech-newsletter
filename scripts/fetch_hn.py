@@ -36,5 +36,6 @@ def fetch(source: dict, max_items: int) -> list[dict]:
             summary=story_text,
             points=hit.get("points"),
             comments=hit.get("num_comments"),
+            discuss_url=f"https://news.ycombinator.com/item?id={hit['objectID']}",
         ))
     return articles

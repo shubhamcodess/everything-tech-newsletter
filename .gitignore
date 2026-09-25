@@ -1,5 +1,11 @@
 __pycache__/
 *.pyc
-data/raw_latest.json
 .DS_Store
 .venv/
+# per-run scratch; the durable copies live in editions/<date>/
+data/raw_latest.json
+data/candidates.json
+data/candidates.md
+data/articles.json
+data/articles.md
+data/draft.md

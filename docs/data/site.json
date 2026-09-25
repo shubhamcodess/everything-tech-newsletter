@@ -1,0 +1,32 @@
+{
+ "name": "EverythingTech",
+ "tagline": "all at once.",
+ "description": "A daily tech newspaper. 47 sources, read in full and edited by an LLM every morning.",
+ "url": "https://shubhamcodess.github.io/everything-tech-newsletter/",
+ "repo": "https://github.com/shubhamcodess/everything-tech-newsletter",
+ "curator": {
+  "name": "Shubham Prakash",
+  "github": "https://github.com/shubhamcodess",
+  "linkedin": "https://www.linkedin.com/in/shubham-prakash-dev/"
+ },
+ "edition_time": "08:30 IST",
+ "theme": {
+  "default": "system",
+  "dark": {},
+  "light": {}
+ },
+ "signals": {
+  "must-read": "Must-read",
+  "recommended": "Recommended",
+  "notable": "Notable"
+ },
+ "features": {
+  "ticker": true,
+  "brief": true,
+  "machine_room": true,
+  "reading_progress": true,
+  "keyboard_shortcuts": true,
+  "images": true
+ },
+ "notes": "Rendering config for the whole site -- every edition, current and archived, is drawn from this plus docs/assets/. theme.dark / theme.light take CSS variable overrides, e.g. {\"--accent\": \"#5ef0d6\"}. After editing, run: python scripts/build_site.py"
+}

@@ -34,5 +34,6 @@ def fetch(source: dict, max_items: int) -> list[dict]:
             summary=d.get("selftext", ""),
             points=d.get("score"),
             comments=d.get("num_comments"),
+            discuss_url=f"https://reddit.com{d.get('permalink', '')}",
         ))
     return articles

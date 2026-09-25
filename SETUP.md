@@ -21,7 +21,7 @@ the first commit touching `docs/` lands.
 A Claude Code routine pushes its commit to a `claude/`-prefixed branch
 instead of `main` whenever a direct push to `main` isn't accepted — which
 happens whenever `main` has any branch protection at all. When that
-happens, the routine opens its own PR (see `CLAUDE.md` step 10) — it can,
+happens, the routine opens its own PR (see `CLAUDE.md` step 8) — it can,
 because it's authenticated as your real GitHub account through the
 routine's GitHub proxy, unlike GitHub Actions' own token, which GitHub
 deliberately blocks from creating PRs by default.
@@ -62,19 +62,19 @@ connected (routines need this to clone/push).
 At [claude.ai/code/routines/new](https://claude.ai/code/routines/new):
 
 - **Prompt** — paste the text from `ROUTINE_PROMPT.md`.
-- **Model** — Haiku is the intended model for this routine. `CLAUDE.md`'s
-  steps are written as a concrete, mostly-deterministic checklist (explicit
-  filter/diversity rules instead of open-ended "use your judgment" prose)
-  specifically so a smaller model can follow them reliably without drifting
-  or overspending tokens reasoning about ambiguous steps. If digest quality
-  degrades on Haiku, the first thing to revisit is step 6's ranking rule in
-  `CLAUDE.md`, not the model choice.
+- **Model** — Sonnet gives the best writing; Haiku works too. Scripts do
+  all the mechanical work (clustering, full-text fetching, links, HTML), so
+  the model only reads two token-budgeted Markdown files (~14K + ~19K
+  tokens) and writes one. If quality slips on Haiku, try Sonnet before
+  touching `CLAUDE.md`.
 - **Repository** — select this repo.
-- **Environment** — open the environment editor and set **Network access** to
-  **Custom**, then paste the domain list below into **Allowed domains**
-  (check "Also include default list of common package managers" so pip/apt
-  installs in the setup step still work). This is required — none of the
-  sources below are in the Trusted default allowlist.
+- **Environment** — open the environment editor and set **Network access**.
+  **Full is recommended**: step 5 fetches each picked story's full article
+  from whatever site it lives on, which no fixed list can cover. On
+  **Custom** (the domain list below, plus "Also include default list of
+  common package managers" for pip), feeds still work, but articles on
+  unlisted sites fall back to their feed snippet and get thinner write-ups.
+  Either way, none of the sources are in the Trusted default allowlist.
 - **Trigger** — Schedule, recurring, daily, your preferred time (e.g. 6:00 AM
   IST — times are entered in your local zone).
 - **Connectors** — none needed; leave default or remove all.
@@ -132,15 +132,15 @@ tldr.tech
 ## 6. First run
 
 Open the routine and click **Run now**. Open the run's session to watch it
-work; confirm at the end that `docs/index.html`, `docs/archive/`, and
+work; confirm at the end that `editions/<today>/`, `docs/data/`, and
 `data/seen.json` were committed, and that the run summary reports source
-successes and the article count.
+successes and the story count.
 
 Then check where the commit landed:
 - **Directly on `main`** — check the Pages URL; it should already be live.
 - **On a `claude/…` branch instead** — check the repo's **Pull requests**
   tab. The routine should have opened one itself as its last action (see
-  `CLAUDE.md` step 10), and `auto-merge-routine.yml` should show up in
+  `CLAUDE.md` step 8), and `auto-merge-routine.yml` should show up in
   its checks within a few seconds of that, enabling auto-merge (visible
   as "Auto-merge enabled" in the PR). It merges itself once `ci.yml`
   passes — typically well under a minute — and the branch is deleted
@@ -156,17 +156,18 @@ itself and note it in the summary.
 
 - **Change what topics show up**: edit `config/interests.json`, commit, push.
   No routine edit needed.
-- **Change how many stories per day**: edit `articles_per_digest` in
+- **Change how many stories per day**: edit `stories_per_edition` in
   `config/settings.json`.
 - **Add/remove a source**: edit `config/sources.json`. If it's RSS, just add
   an entry with `"type": "rss"` and a `feed_url` — no new code needed.
-- **Change the visual design**: once you have a specific style in mind,
-  replace `templates/digest.html.template` (and mention it in `CLAUDE.md`'s
-  step 8 if the structure changes) — the pipeline logic doesn't need to
-  change.
-- **Archive**: past digests live at `docs/archive/`, capped at the last 7
-  days automatically (`CLAUDE.md` step 7 prunes the oldest once there are
-  more than 7) — nothing to maintain by hand.
+- **Change the name, curator links, colours or features**: edit
+  `config/site.json`, then `python scripts/build_site.py` and commit.
+- **Change the visual design**: edit `docs/assets/app.css` / `app.js`. There
+  is one template; every edition, today's and archived, renders through it,
+  so a change applies everywhere at once. The routine never touches it.
+- **Archive**: each day is a Markdown file in `editions/<date>/` (edition,
+  full source text, and every candidate considered). `build_site.py` keeps
+  the last `archive_days` + 1 and prunes the rest; nothing to maintain.
 - **Branch → main handoff**: if the routine ever lands on a `claude/…`
   branch instead of `main` (see step 6), that's expected, not an error —
   `auto-merge-routine.yml` handles it every time without you touching

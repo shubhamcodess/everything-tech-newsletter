@@ -23,5 +23,17 @@ def fetch(source: dict, max_items: int) -> list[dict]:
             published_at=published,
             summary=entry.get("summary", ""),
             tags=tags,
+            image=_image(entry),
         ))
     return articles
+
+
+def _image(entry) -> str | None:
+    for key in ("media_content", "media_thumbnail"):
+        for media in entry.get(key) or []:
+            if media.get("url") and "image" in (media.get("type") or "image"):
+                return media["url"]
+    for link in entry.get("links") or []:
+        if link.get("rel") == "enclosure" and (link.get("type") or "").startswith("image"):
+            return link.get("href")
+    return None
