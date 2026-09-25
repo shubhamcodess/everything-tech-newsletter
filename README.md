@@ -76,7 +76,7 @@ today's and archived, changes with it. Its instructions live in
 - **Ranked.** The lead, must-reads, and the wire, plus a 60-second Brief.
 - **Readable.** Night and day themes, topic and signal filters, keyboard shortcuts (`?`), and a live ticker.
 - **Portable.** Every edition also comes as [Markdown](https://shubhamcodess.github.io/everything-tech-newsletter/latest.md), [JSON](https://shubhamcodess.github.io/everything-tech-newsletter/latest.json) and [RSS](https://shubhamcodess.github.io/everything-tech-newsletter/feed.xml).
-- **Self-pruning archive.** The last 7 days; older editions stay in git history.
+- **Self-pruning archive.** The last 30 days (`archive_days` in settings); older editions stay in git history.
 
 ## Fork it and make it yours
 

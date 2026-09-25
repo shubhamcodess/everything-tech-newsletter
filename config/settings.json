@@ -4,7 +4,7 @@
   "max_items_per_source": 10,
   "fetch_lookback_hours": 48,
   "dedup_lookback_days": 7,
-  "archive_days": 7,
+  "archive_days": 30,
   "candidate_token_budget": 18000,
   "article_chars": 2800,
   "timezone": "Asia/Kolkata"
