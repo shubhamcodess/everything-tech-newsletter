@@ -1,8 +1,15 @@
 {
- "count": 3,
- "latest": "2026-09-25",
+ "count": 4,
+ "latest": "2026-09-26",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-09-26",
+   "edition": 4,
+   "stories": 28,
+   "must_read": 6,
+   "lead": "Pentagon wins suit to block Anthropic from US military systems"
+  },
   {
    "date": "2026-09-25",
    "edition": 3,
