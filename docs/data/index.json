@@ -1,8 +1,15 @@
 {
- "count": 5,
- "latest": "2026-09-27",
+ "count": 6,
+ "latest": "2026-09-28",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-09-28",
+   "edition": 6,
+   "stories": 29,
+   "must_read": 6,
+   "lead": "OpenAI Halts Latest Model Training to Build Safeguards"
+  },
   {
    "date": "2026-09-27",
    "edition": 5,
