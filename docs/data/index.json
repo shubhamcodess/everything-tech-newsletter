@@ -1,8 +1,15 @@
 {
- "count": 6,
- "latest": "2026-09-28",
+ "count": 7,
+ "latest": "2026-09-29",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-09-29",
+   "edition": 7,
+   "stories": 3,
+   "must_read": 1,
+   "lead": "Claude Sonnet 5.5 arrives 30% faster and cheaper, with cybersecurity guardrails"
+  },
   {
    "date": "2026-09-28",
    "edition": 6,
