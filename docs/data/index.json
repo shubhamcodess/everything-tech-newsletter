@@ -1,8 +1,15 @@
 {
- "count": 9,
- "latest": "2026-10-01",
+ "count": 10,
+ "latest": "2026-10-02",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-02",
+   "edition": 10,
+   "stories": 30,
+   "must_read": 6,
+   "lead": "OpenAI's GPT-6 Astra Ultrafast cuts token generation time by 8x on Blackwell"
+  },
   {
    "date": "2026-10-01",
    "edition": 9,
