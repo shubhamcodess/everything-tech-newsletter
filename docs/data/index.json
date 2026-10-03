@@ -1,8 +1,15 @@
 {
- "count": 10,
- "latest": "2026-10-02",
+ "count": 11,
+ "latest": "2026-10-03",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-03",
+   "edition": 11,
+   "stories": 18,
+   "must_read": 4,
+   "lead": "Apple tightens Full Disk Access in macOS as AI agents pose security risk"
+  },
   {
    "date": "2026-10-02",
    "edition": 10,
