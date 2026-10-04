@@ -1,8 +1,15 @@
 {
- "count": 11,
- "latest": "2026-10-03",
+ "count": 12,
+ "latest": "2026-10-04",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-04",
+   "edition": 12,
+   "stories": 20,
+   "must_read": 6,
+   "lead": "David Robinson quit OpenAI, warning its culture prioritizes pace over caution"
+  },
   {
    "date": "2026-10-03",
    "edition": 11,
