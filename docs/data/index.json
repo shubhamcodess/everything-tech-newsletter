@@ -1,8 +1,15 @@
 {
- "count": 12,
- "latest": "2026-10-04",
+ "count": 13,
+ "latest": "2026-10-05",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-05",
+   "edition": 13,
+   "stories": 30,
+   "must_read": 6,
+   "lead": "Qwen 3.8 Flash runs on RTX 4090 at 100 tokens per second"
+  },
   {
    "date": "2026-10-04",
    "edition": 12,
