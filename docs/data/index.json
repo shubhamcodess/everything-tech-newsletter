@@ -1,8 +1,15 @@
 {
- "count": 16,
- "latest": "2026-10-08",
+ "count": 17,
+ "latest": "2026-10-09",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-09",
+   "edition": 17,
+   "stories": 30,
+   "must_read": 6,
+   "lead": "Chinese models beat frontier labs on cost, rival them on capability"
+  },
   {
    "date": "2026-10-08",
    "edition": 16,
