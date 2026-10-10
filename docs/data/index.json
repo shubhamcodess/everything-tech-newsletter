@@ -1,8 +1,15 @@
 {
- "count": 17,
- "latest": "2026-10-09",
+ "count": 18,
+ "latest": "2026-10-10",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-10",
+   "edition": 18,
+   "stories": 27,
+   "must_read": 6,
+   "lead": "Cloudflare buys Deno and its entire team"
+  },
   {
    "date": "2026-10-09",
    "edition": 17,
