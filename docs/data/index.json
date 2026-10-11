@@ -1,8 +1,15 @@
 {
- "count": 18,
- "latest": "2026-10-10",
+ "count": 19,
+ "latest": "2026-10-11",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-11",
+   "edition": 19,
+   "stories": 30,
+   "must_read": 6,
+   "lead": "Cloudflare acquires Deno to reshape serverless runtime strategy"
+  },
   {
    "date": "2026-10-10",
    "edition": 18,
