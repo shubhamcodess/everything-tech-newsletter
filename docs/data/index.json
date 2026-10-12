@@ -1,8 +1,15 @@
 {
- "count": 19,
- "latest": "2026-10-11",
+ "count": 20,
+ "latest": "2026-10-12",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-12",
+   "edition": 20,
+   "stories": 28,
+   "must_read": 6,
+   "lead": "Linus Torvalds uses Claude Code to improve Linux kernel"
+  },
   {
    "date": "2026-10-11",
    "edition": 19,
