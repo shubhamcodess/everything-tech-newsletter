@@ -1,8 +1,15 @@
 {
- "count": 20,
- "latest": "2026-10-12",
+ "count": 21,
+ "latest": "2026-10-13",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-13",
+   "edition": 21,
+   "stories": 29,
+   "must_read": 4,
+   "lead": "Meta's Muse Wonder marks new frontier in AI model capability"
+  },
   {
    "date": "2026-10-12",
    "edition": 20,
