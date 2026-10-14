@@ -1,8 +1,15 @@
 {
- "count": 21,
- "latest": "2026-10-13",
+ "count": 22,
+ "latest": "2026-10-14",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-14",
+   "edition": 22,
+   "stories": 30,
+   "must_read": 6,
+   "lead": "Gemini 4 Argon reshapes large engineering projects"
+  },
   {
    "date": "2026-10-13",
    "edition": 21,
