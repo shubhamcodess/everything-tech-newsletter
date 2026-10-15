@@ -1,8 +1,15 @@
 {
- "count": 22,
- "latest": "2026-10-14",
+ "count": 23,
+ "latest": "2026-10-15",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-15",
+   "edition": 23,
+   "stories": 30,
+   "must_read": 6,
+   "lead": "Google links phone numbers across accounts without disclosure"
+  },
   {
    "date": "2026-10-14",
    "edition": 22,
