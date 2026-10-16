@@ -1,8 +1,15 @@
 {
- "count": 23,
- "latest": "2026-10-15",
+ "count": 24,
+ "latest": "2026-10-16",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-16",
+   "edition": 24,
+   "stories": 30,
+   "must_read": 6,
+   "lead": "Spyware vendor ran ad network infecting 200,000 websites in zero-click attack"
+  },
   {
    "date": "2026-10-15",
    "edition": 23,
