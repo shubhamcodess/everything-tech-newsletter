@@ -1,8 +1,15 @@
 {
- "count": 25,
- "latest": "2026-10-17",
+ "count": 26,
+ "latest": "2026-10-18",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-18",
+   "edition": 26,
+   "stories": 29,
+   "must_read": 6,
+   "lead": "DeepSeek releases Flash variant, hitting 729-point engagement on Hacker News"
+  },
   {
    "date": "2026-10-17",
    "edition": 25,
