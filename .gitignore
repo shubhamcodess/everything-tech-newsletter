@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .DS_Store
 .venv/
+venv/
 # per-run scratch; the durable copies live in editions/<date>/
 data/raw_latest.json
 data/candidates.json

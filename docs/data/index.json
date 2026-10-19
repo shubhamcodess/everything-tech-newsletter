@@ -1,8 +1,15 @@
 {
- "count": 26,
- "latest": "2026-10-18",
+ "count": 27,
+ "latest": "2026-10-19",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-19",
+   "edition": 27,
+   "stories": 9,
+   "must_read": 1,
+   "lead": "Hybrid Reasoning Agents think in latent space, act through text"
+  },
   {
    "date": "2026-10-18",
    "edition": 26,
