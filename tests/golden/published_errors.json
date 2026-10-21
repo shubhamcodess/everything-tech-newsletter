@@ -1,0 +1,57 @@
+{
+ "body_entity": [
+  "edition.stories[0].body[2]: placeholder or markup in published text"
+ ],
+ "dek_markup": [
+  "edition.stories[0].dek: placeholder or markup in published text"
+ ],
+ "event_bad": [
+  "edition.stories[0].event: must be 3-6 lowercase keywords naming the event, e.g. 'cloudflare deno acquisition' (got 1 words)"
+ ],
+ "event_fine": [],
+ "headline_placeholder": [
+  "edition.stories[0].headline: placeholder or markup in published text"
+ ],
+ "missing_brief": [
+  "edition: missing 'brief'"
+ ],
+ "missing_date": [
+  "edition: missing 'date'"
+ ],
+ "missing_edition": [
+  "edition: missing 'edition'"
+ ],
+ "missing_stories": [
+  "edition: missing 'stories'"
+ ],
+ "no_event_legacy_ok": [],
+ "story_bad_url": [
+  "edition.stories[0].url: not an http(s) URL"
+ ],
+ "story_empty_body": [
+  "edition.stories[0]: missing 'body'"
+ ],
+ "story_no_dek": [
+  "edition.stories[0]: missing 'dek'"
+ ],
+ "story_no_headline": [
+  "edition.stories[0]: missing 'headline'"
+ ],
+ "story_no_signal": [
+  "edition.stories[0]: missing 'signal'"
+ ],
+ "story_no_sources": [
+  "edition.stories[0]: missing 'sources'"
+ ],
+ "story_no_topic": [
+  "edition.stories[0]: missing 'topic'"
+ ],
+ "story_no_url": [
+  "edition.stories[0]: missing 'url'",
+  "edition.stories[0].url: not an http(s) URL"
+ ],
+ "story_relative_url": [
+  "edition.stories[0].url: not an http(s) URL"
+ ],
+ "valid": []
+}

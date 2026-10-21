@@ -1,0 +1,188 @@
+{
+ "body_copied_from_source": [
+  "stories[0].body[0]: copies 12+ words verbatim from the source article -- paraphrase in your own words"
+ ],
+ "body_empty": [
+  "stories[0].body: must be a list of 1-6 paragraphs"
+ ],
+ "body_filler": [
+  "stories[0].body[1]: generic filler phrase 'growing trend' -- say something specific"
+ ],
+ "body_html": [
+  "stories[0].body[1]: contains HTML tags or entities -- write plain text"
+ ],
+ "body_missing": [
+  "stories[0].body: must be a list of 1-6 paragraphs"
+ ],
+ "body_not_list": [
+  "stories[0].body: must be a list of 1-6 paragraphs"
+ ],
+ "body_para_cut_off": [
+  "stories[0].body[0]: doesn't end with punctuation -- looks cut off mid-sentence"
+ ],
+ "body_para_short": [
+  "stories[0].body[0]: must be a string of at least 80 characters"
+ ],
+ "body_placeholder": [
+  "stories[0].body[1]: contains template placeholder text -- write real content"
+ ],
+ "body_restates_headline": [
+  "stories[0].body[0]: opens by restating the headline"
+ ],
+ "body_seven_paragraphs": [
+  "stories[0].body: must be a list of 1-6 paragraphs"
+ ],
+ "brief_line_html": [
+  "brief[0]: contains HTML tags or entities -- write plain text"
+ ],
+ "brief_line_not_string": [
+  "brief[0]: must be a string of at least 20 characters"
+ ],
+ "brief_line_short": [
+  "brief[0]: must be a string of at least 20 characters"
+ ],
+ "brief_missing": [
+  "brief: must be a list of 3-6 short strings"
+ ],
+ "brief_seven_lines": [
+  "brief: must be a list of 3-6 short strings"
+ ],
+ "brief_two_lines": [
+  "brief: must be a list of 3-6 short strings"
+ ],
+ "dek_copied_from_source": [
+  "stories[0].dek: copies 12+ words verbatim from the source article -- paraphrase in your own words"
+ ],
+ "dek_missing": [
+  "stories[0].dek: must be a string of at least 40 characters"
+ ],
+ "dek_not_string": [
+  "stories[0].dek: must be a string of at least 40 characters"
+ ],
+ "dek_short": [
+  "stories[0].dek: must be a string of at least 40 characters"
+ ],
+ "draft_extra_keys_ignored": [],
+ "event_empty": [
+  "stories[0].event: missing -- add '- event: ...' with 3-6 lowercase keywords naming the event, e.g. 'cloudflare deno acquisition'"
+ ],
+ "event_missing": [
+  "stories[0].event: missing -- add '- event: ...' with 3-6 lowercase keywords naming the event, e.g. 'cloudflare deno acquisition'"
+ ],
+ "event_not_string": [
+  "stories[0].event: must be 3-6 lowercase keywords naming the event, e.g. 'cloudflare deno acquisition' (got 1 words)"
+ ],
+ "event_punctuation": [
+  "stories[0].event: keywords only -- no punctuation, URLs or long strings (problem: 'zorbex1,')"
+ ],
+ "event_seven_words": [
+  "stories[0].event: must be 3-6 lowercase keywords naming the event, e.g. 'cloudflare deno acquisition' (got 7 words)"
+ ],
+ "event_two_words": [
+  "stories[0].event: must be 3-6 lowercase keywords naming the event, e.g. 'cloudflare deno acquisition' (got 2 words)"
+ ],
+ "event_ungrounded": [
+  "stories[0].event: keywords don't appear in this story's headline, summary or source titles -- describe this story's event"
+ ],
+ "headline_filler": [
+  "stories[0].headline: generic filler phrase 'important update' -- say something specific"
+ ],
+ "headline_html": [
+  "stories[0].headline: contains HTML tags or entities -- write plain text"
+ ],
+ "headline_long": [
+  "stories[0].headline: 171 chars -- keep it under 130"
+ ],
+ "headline_missing": [
+  "stories[0].headline: must be a string of at least 15 characters"
+ ],
+ "headline_not_string": [
+  "stories[0].headline: must be a string of at least 15 characters"
+ ],
+ "headline_placeholder": [
+  "stories[0].headline: contains template placeholder text -- write real content"
+ ],
+ "headline_raw_url": [
+  "stories[0].headline: contains a raw URL -- describe it in words, links come from sources"
+ ],
+ "headline_short": [
+  "stories[0].headline: must be a string of at least 15 characters"
+ ],
+ "ids_duplicate_across_stories": [
+  "stories[1].ids: 1 already used by stories[0] -- one story per cluster"
+ ],
+ "ids_empty": [
+  "stories[0].ids: must be a non-empty list of candidate ids (integers)"
+ ],
+ "ids_missing": [
+  "stories[0].ids: must be a non-empty list of candidate ids (integers)"
+ ],
+ "ids_not_list": [
+  "stories[0].ids: must be a non-empty list of candidate ids (integers)"
+ ],
+ "ids_strings": [
+  "stories[0].ids: must be a non-empty list of candidate ids (integers)"
+ ],
+ "ids_unknown": [
+  "stories[0].ids: 999 is not a candidate id in data/candidates.md"
+ ],
+ "lead_not_must_read": [
+  "stories[0]: the lead story must be signal 'must-read'"
+ ],
+ "not_a_dict": [
+  "draft must be a JSON object with 'brief' and 'stories'"
+ ],
+ "seven_must_reads": [
+  "7 must-read stories -- at most 6; must-read should mean it"
+ ],
+ "several_problems_at_once": [
+  "brief: must be a list of 3-6 short strings",
+  "stories[0].headline: must be a string of at least 15 characters",
+  "stories[1].ids: 999 is not a candidate id in data/candidates.md",
+  "stories[2].topic: 'Nope' -- must be one of ['AI', 'Dev Tools', 'Languages', 'Open Source', 'Startups', 'Infra', 'Security', 'Engineering']"
+ ],
+ "signal_missing": [
+  "stories[0].signal: None -- must be one of ['must-read', 'recommended', 'notable']",
+  "stories[0]: the lead story must be signal 'must-read'"
+ ],
+ "signal_unknown": [
+  "stories[1].signal: 'must-see' -- must be one of ['must-read', 'recommended', 'notable']"
+ ],
+ "six_must_reads_ok": [],
+ "stories_at_limit_plus_five": [],
+ "stories_empty": [
+  "stories: must be a non-empty list"
+ ],
+ "stories_missing": [
+  "stories: must be a non-empty list"
+ ],
+ "stories_not_list": [
+  "stories: must be a non-empty list"
+ ],
+ "stories_too_many": [
+  "stories: 36 stories, more than stories_per_edition (30) allows"
+ ],
+ "story_not_object": [
+  "stories[1]: must be an object"
+ ],
+ "takeaway_filler": [
+  "stories[0].takeaways[0]: generic filler phrase 'Stay tuned' -- say something specific"
+ ],
+ "takeaway_short": [
+  "stories[0].takeaways[0]: must be a string of at least 15 characters"
+ ],
+ "takeaways_absent_ok": [],
+ "takeaways_not_list": [
+  "stories[0].takeaways: must be a list of 0-5 strings"
+ ],
+ "takeaways_six": [
+  "stories[0].takeaways: must be a list of 0-5 strings"
+ ],
+ "topic_missing": [
+  "stories[0].topic: None -- must be one of ['AI', 'Dev Tools', 'Languages', 'Open Source', 'Startups', 'Infra', 'Security', 'Engineering']"
+ ],
+ "topic_unknown": [
+  "stories[0].topic: 'Gardening' -- must be one of ['AI', 'Dev Tools', 'Languages', 'Open Source', 'Startups', 'Infra', 'Security', 'Engineering']"
+ ],
+ "valid": []
+}

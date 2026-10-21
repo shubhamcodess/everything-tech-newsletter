@@ -28,7 +28,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_site  # noqa: E402
 import edition_md  # noqa: E402
 from dedupe import normalize_event  # noqa: E402
-from edition_schema import validate_draft  # noqa: E402
+from edition_model import SCHEMA_VERSION  # noqa: E402
+from edition_schema import validate_draft, validate_edition  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AGGREGATORS = ("hn", "reddit", "lobsters", "tldr", "github_trending")
@@ -154,6 +155,7 @@ def main():
     edition = {
         "date": date,
         "edition": number,
+        "schema_version": SCHEMA_VERSION,
         "generated_at": now.isoformat(timespec="seconds"),
         "stats": {
             "sources_ok": cand_file["ok_sources"],
@@ -165,6 +167,14 @@ def main():
         "brief": draft["brief"],
         "stories": stories,
     }
+    # last guard before anything is written: the finished edition must satisfy the schema
+    problems = validate_edition(edition)
+    if problems:
+        print("the edition built from data/draft.md doesn't satisfy the schema -- this is a bug in the "
+              "scripts, not in the draft:")
+        print("\n".join(f"  - {p}" for p in problems))
+        sys.exit(1)
+
     day_dir = os.path.join(ROOT, "editions", date)
     os.makedirs(day_dir, exist_ok=True)
     with open(os.path.join(day_dir, "edition.md"), "w") as f:

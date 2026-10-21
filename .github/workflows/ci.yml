@@ -59,6 +59,19 @@ jobs:
       - name: Validate editions and site data
         run: python scripts/validate_editions.py
 
+      # The edition contract (#26): validators must keep giving the answers recorded
+      # in tests/golden/, every old edition must still validate, and the site data
+      # must rebuild byte-for-byte. Fails the build, so a rule change is deliberate.
+      - name: Unit tests
+        run: python -m unittest discover -s tests -t .
+
+      # schema/*.schema.json is generated from scripts/edition_model.py. Different
+      # pydantic releases can word the same schema slightly differently, so a stale
+      # file warns instead of blocking the routine's auto-merge.
+      - name: Exported JSON Schema is up to date
+        continue-on-error: true
+        run: python scripts/export_schema.py --check
+
       - name: Check the site template is present
         run: |
           for f in docs/index.html docs/assets/app.js docs/assets/app.css docs/data/site.json docs/data/index.json; do

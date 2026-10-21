@@ -10,6 +10,7 @@ One format serves two purposes:
     ---
     date: 2026-09-25
     edition: 3
+    schema_version: 1      (absent in editions written before it existed: version 0)
     ---
 
     # The Brief
@@ -135,7 +136,7 @@ def parse(text):
     """Markdown -> edition dict. Raises ParseError with a fixable message."""
     front, text = _split_front_matter(text)
     edition = {k: v for k, v in front.items()}
-    for key in ("edition", "sources_ok", "sources_total", "fetched", "candidates", "full_text"):
+    for key in ("edition", "schema_version", "sources_ok", "sources_total", "fetched", "candidates", "full_text"):
         if key in edition and str(edition[key]).isdigit():
             edition[key] = int(edition[key])
 
@@ -153,8 +154,10 @@ def parse(text):
 def write(edition):
     """Canonical edition dict -> Markdown."""
     stats = edition.get("stats", {})
-    out = ["---", f"date: {edition['date']}", f"edition: {edition['edition']}",
-           f"generated_at: {edition['generated_at']}"]
+    out = ["---", f"date: {edition['date']}", f"edition: {edition['edition']}"]
+    if edition.get("schema_version") is not None:
+        out.append(f"schema_version: {edition['schema_version']}")
+    out.append(f"generated_at: {edition['generated_at']}")
     out += [f"{k}: {v}" for k, v in stats.items()]
     out += ["---", "", "# The Brief", "", *[f"- {b}" for b in edition["brief"]], "", "# Stories", ""]
     for s in edition["stories"]:

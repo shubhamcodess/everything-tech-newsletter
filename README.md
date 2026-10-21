@@ -131,6 +131,17 @@ Edit, commit, push. The next run picks it up.
 | [`docs/assets/`](docs/assets) | The one template: every edition renders through it |
 | [`CLAUDE.md`](CLAUDE.md) | The routine's step-by-step pipeline and writing rules |
 
+## The edition format
+
+An edition is a versioned contract, so any model, script or template can rely on its shape.
+
+- **Authoring format:** `editions/<date>/edition.md`, Markdown with a front-matter header. `data/draft.md` is the same format, minus the fields the scripts fill in.
+- **The contract:** [`scripts/edition_model.py`](scripts/edition_model.py) defines it as [Pydantic](https://docs.pydantic.dev) models: `DraftEdition` (what the routine writes) and `PublishedEdition` (the durable record). A draft or edition that doesn't fit is rejected with the exact field named, e.g. `stories[3].dek: must be a string of at least 40 characters`.
+- **For other languages:** [`schema/edition.schema.json`](schema/edition.schema.json) and [`schema/draft.schema.json`](schema/draft.schema.json) are generated from the models (`python scripts/export_schema.py`), so a JS front end or a structured-output API call can use the same definition.
+- **What the models don't judge:** content. Copied text, filler, cut-off sentences, unknown candidate ids and topic labels are checked in [`scripts/edition_schema.py`](scripts/edition_schema.py).
+- **Versioning:** editions carry `schema_version` in their front matter (the site JSON carries it too). Editions from before it existed have none, which means version 0; they are upgraded in memory when read and the files are never rewritten. Adding an optional field needs no bump. A change that would make an older edition invalid bumps `SCHEMA_VERSION`, adds a step to `migrate()` and a frozen sample to `tests/frozen/`.
+- **Tests:** `python -m unittest discover -s tests -t .` replays recorded validator answers (`tests/golden/`) and real old editions (`tests/frozen/`), and checks that the site data rebuilds byte for byte.
+
 ## Project structure
 
 ```
@@ -154,9 +165,13 @@ Edit, commit, push. The next run picks it up.
 │   ├── publish_edition.py          # validate draft -> editions/<date>/
 │   ├── build_site.py               # editions -> docs/data, feed.xml, latest.*
 │   ├── edition_md.py               # the edition Markdown format
-│   ├── edition_schema.py           # prose + structure validation
+│   ├── edition_model.py            # the edition contract: models + schema_version + migrate()
+│   ├── edition_schema.py           # content rules: copied text, filler, ids, topics
+│   ├── export_schema.py            # models -> schema/*.schema.json
 │   ├── validate_editions.py        # CI check
 │   └── reset_for_fork.sh           # clean slate for a fresh fork
+├── schema/                         # generated JSON Schema of the edition contract
+├── tests/                          # validator parity, old editions, versioning, site rebuild
 ├── editions/
 │   └── YYYY-MM-DD/
 │       ├── edition.md              # the day's paper, self-contained

@@ -1,0 +1,112 @@
+{
+  "$defs": {
+    "DraftStory": {
+      "description": "One story as the routine writes it. Unknown keys are ignored, not rejected:\nthe draft format lets the author include fields (url, image, ...) that publishing\noverwrites anyway.",
+      "properties": {
+        "body": {
+          "description": "1-6 paragraphs of prose.",
+          "items": {
+            "minLength": 80,
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 1,
+          "title": "Body",
+          "type": "array"
+        },
+        "dek": {
+          "description": "One sentence under the headline that adds what the headline doesn't.",
+          "minLength": 40,
+          "title": "Dek",
+          "type": "string"
+        },
+        "event": {
+          "description": "3-6 lowercase keywords naming what happened; used to recognise a repeat tomorrow.",
+          "minLength": 1,
+          "title": "Event",
+          "type": "string"
+        },
+        "headline": {
+          "maxLength": 130,
+          "minLength": 15,
+          "title": "Headline",
+          "type": "string"
+        },
+        "ids": {
+          "description": "Candidate ids from data/candidates.md; the cluster's lead id first.",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "title": "Ids",
+          "type": "array"
+        },
+        "signal": {
+          "enum": [
+            "must-read",
+            "recommended",
+            "notable"
+          ],
+          "title": "Signal",
+          "type": "string"
+        },
+        "takeaways": {
+          "items": {
+            "minLength": 15,
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Takeaways",
+          "type": "array"
+        },
+        "topic": {
+          "description": "One of the labels in config/interests.json.",
+          "minLength": 1,
+          "title": "Topic",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ids",
+        "topic",
+        "signal",
+        "event",
+        "headline",
+        "dek",
+        "body"
+      ],
+      "title": "DraftStory",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "What the routine writes to data/draft.md, as parsed.",
+  "properties": {
+    "brief": {
+      "description": "3-6 bullets: the day's themes.",
+      "items": {
+        "minLength": 20,
+        "type": "string"
+      },
+      "maxItems": 6,
+      "minItems": 3,
+      "title": "Brief",
+      "type": "array"
+    },
+    "stories": {
+      "items": {
+        "$ref": "#/$defs/DraftStory"
+      },
+      "minItems": 1,
+      "title": "Stories",
+      "type": "array"
+    }
+  },
+  "required": [
+    "brief",
+    "stories"
+  ],
+  "title": "DraftEdition",
+  "type": "object",
+  "x-schema-version": 1
+}
