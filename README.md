@@ -75,7 +75,7 @@ today's and archived, changes with it. Its instructions live in
 - **Deduped.** One story covered by five outlets shows once, crediting all five.
 - **Ranked.** The lead, must-reads, and the wire, plus a 60-second Brief.
 - **Readable.** Night and day themes, topic and signal filters, keyboard shortcuts (`?`), and a live ticker.
-- **Portable.** Every edition also comes as [Markdown](https://shubhamcodess.github.io/everything-tech-newsletter/latest.md), [JSON](https://shubhamcodess.github.io/everything-tech-newsletter/latest.json) and [RSS](https://shubhamcodess.github.io/everything-tech-newsletter/feed.xml).
+- **Portable.** Every edition also comes as [JSON](https://shubhamcodess.github.io/everything-tech-newsletter/latest.json) and [RSS](https://shubhamcodess.github.io/everything-tech-newsletter/feed.xml).
 - **Self-pruning archive.** The last 30 days (`archive_days` in settings); older editions stay in git history.
 
 ## Fork it and make it yours
@@ -171,7 +171,7 @@ Edit, commit, push. The next run picks it up.
     ├── assets/                     # app.css + app.js: the one template
     ├── data/                       # site.json, index.json, <date>.json
     ├── feed.xml                    # RSS
-    └── latest.md / latest.json     # today's edition, machine-readable
+    └── latest.json                 # today's edition, machine-readable
 ```
 
 ---
