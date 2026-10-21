@@ -66,110 +66,6 @@ def render_rss(edition, site):
             f"<lastBuildDate>{pub}</lastBuildDate>{''.join(items)}</channel></rss>\n")
 
 
-SIGNAL_META = {"must-read": ("Must read", "Must reads"),
-               "recommended": ("Recommended", "Recommended"),
-               "notable": ("Notable", "Quick hits")}
-
-
-def render_markdown(edition, site):
-    """Clean, professional Markdown of one edition. Pure GFM: no emoji, no SVG,
-    no inline HTML. The Brief and Takeaways render as GitHub alert callouts and
-    degrade to blockquotes elsewhere."""
-    stories = edition["stories"]
-    stats = edition.get("stats", {})
-    day = datetime.fromisoformat(edition["date"])
-    pretty = f"{day:%A}, {day.day} {day:%B %Y}"
-    url = site.get("url", "")
-    name = site.get("name", "")
-    tagline = site.get("tagline", "")
-    must_count = sum(1 for s in stories if s["signal"] == "must-read")
-
-    def cell(text):
-        # Keep table cells tidy: escape pipes, flatten whitespace.
-        return " ".join(str(text).replace("|", "\\|").split())
-
-    out = [f"# {name}: No. {edition['edition']}", ""]
-    if tagline:
-        out += [f"*{tagline}*", ""]
-    meta_bits = [pretty, f"{len(stories)} stories",
-                 f"{must_count} must-read{'s' if must_count != 1 else ''}"]
-    if "sources_ok" in stats and "sources_total" in stats:
-        meta_bits.append(f"{stats['sources_ok']}/{stats['sources_total']} sources read")
-    out += [" \u00b7 ".join(meta_bits), "", "---", ""]
-
-    if edition.get("brief"):
-        out += ["## The Brief", "",
-                "> [!NOTE]",
-                "> **The day in a few lines.**",
-                ">"]
-        out += [f"> - {b}" for b in edition["brief"]]
-        out += ["", "---", ""]
-
-    out += ["## In this edition", "",
-            "| # | Signal | Topic | Read | Story |",
-            "|---:|:---|:---|---:|:---|"]
-    for rank, st in enumerate(stories, start=1):
-        label, _ = SIGNAL_META.get(st["signal"], (st["signal"].title(), ""))
-        read_cell = f"{st['read_minutes']} min" if st.get("read_minutes") else "n/a"
-        out.append(f"| {rank} | {cell(label)} | {cell(st['topic'])} | {read_cell} | {cell(st['headline'])} |")
-    out += ["", "---", ""]
-
-    for signal in ("must-read", "recommended", "notable"):
-        group = [(r, st) for r, st in enumerate(stories, start=1) if st["signal"] == signal]
-        if not group:
-            continue
-        label, title = SIGNAL_META[signal]
-        out += [f"## {title}", ""]
-        for rank, st in group:
-            out += [f"### {rank}. {st['headline']}", ""]
-            meta = [f"**{label}**", st["topic"]]
-            if st.get("read_minutes"):
-                meta.append(f"{st['read_minutes']} min read")
-            out += [" \u00b7 ".join(meta), ""]
-            out += [f"> {st['dek']}", ""]
-            for para in st["body"]:
-                out += [para, ""]
-            if st.get("takeaways"):
-                out += ["> [!TIP]", "> **Takeaways**", ">"]
-                out += [f"> - {t}" for t in st["takeaways"]]
-                out.append("")
-            source_links = []
-            if st.get("url"):
-                source_links.append(f"[Read the original]({st['url']})")
-            if st.get("discuss_url"):
-                bits = []
-                if st.get("points"):
-                    bits.append(f"{st['points']} points")
-                if st.get("comments"):
-                    bits.append(f"{st['comments']} comments")
-                detail = f" ({', '.join(bits)})" if bits else ""
-                source_links.append(
-                    f"[Discuss on {st.get('discuss_via', 'the web')}]({st['discuss_url']}){detail}")
-            if source_links:
-                out += [" \u00b7 ".join(source_links), ""]
-            others = [f"[{x['name']}]({x['url']})" for x in st.get("sources", []) if x["url"] != st.get("url")]
-            if others:
-                out += [f"Also covered by: {', '.join(others)}", ""]
-            out += ["---", ""]
-
-    out += ["## Take it with you", "",
-            f"- [Read it on the web]({url})",
-            f"- [RSS feed]({url}feed.xml)",
-            f"- [Edition as JSON]({url}latest.json)",
-            f"- [Raw source]({site.get('repo', '')}/blob/main/editions/{edition['date']}/edition.md)",
-            "", "---", ""]
-    curator = site.get("curator", {})
-    cname = curator.get("name", "")
-    out += ["## Curated by " + cname, "",
-            f"Pulled from {stats.get('sources_total', 'many')} sources overnight, deduplicated, "
-            f"{stats.get('full_text', 'many')} read in full, written up in plain words.", ""]
-    links = [f"[{label}]({curator[key]})" for key, label in (("github", "GitHub"), ("linkedin", "LinkedIn")) if curator.get(key)]
-    if links:
-        out += [f"Find {cname} on " + " and ".join(links) + ".", ""]
-    # No em dashes anywhere, including text lifted from the stories.
-    return "\n".join(out).replace(" \u2014 ", ", ").replace("\u2014", " - ")
-
-
 def main():
     settings = load(os.path.join(ROOT, "config", "settings.json"))
     site = load(os.path.join(ROOT, "config", "site.json"))
@@ -225,8 +121,7 @@ def main():
             os.remove(os.path.join(DOCS, name))
     if latest:
         edition, path = latest
-        with open(os.path.join(DOCS, "latest.md"), "w", encoding="utf-8-sig") as f:  # BOM: Pages serves .md without a charset
-            f.write(render_markdown(edition, site))
+        shutil.copy(path, os.path.join(DOCS, "latest.md"))
         shutil.copy(os.path.join(DATA, f"{edition['date']}.json"), os.path.join(DOCS, "latest.json"))
         with open(os.path.join(DOCS, "feed.xml"), "w") as f:
             f.write(render_rss(edition, site))
