@@ -21,6 +21,9 @@ from email.utils import parsedate_to_datetime
 from zoneinfo import ZoneInfo
 from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from dedupe import title_tokens, find_covered, prior_stories  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TRUST = {"high": 3, "medium": 2, "low": 1}
 
@@ -29,11 +32,6 @@ JUNK = re.compile(
     r"connections hints|strands hints|\(sponsor\)|\(\$\d+k|\bbest .* deals?\b|"
     r"\bsave \$\d+|\$?\d+%? off\b|deal of the day|prime day|\bon sale\b|very good deal|best early .* sales",
     re.I,
-)
-STOP = set(
-    "a an and are as at be by for from has have how in into is it its of on or "
-    "that the their this to was what when why will with you your new now after "
-    "about over says just more than can could may via using use".split()
 )
 
 
@@ -66,11 +64,6 @@ def parse_date(value):
         except (TypeError, ValueError):
             return None
     return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
-
-
-def title_tokens(title: str) -> set:
-    words = re.findall(r"[a-z0-9][a-z0-9.+#-]*", title.lower())
-    return {w for w in words if len(w) > 2 and w not in STOP}
 
 
 def clean_snippet(text: str) -> str:
@@ -148,23 +141,34 @@ def main():
         cluster.sort(key=lambda i: (-TRUST.get(i["trust"], 2), -(i.get("points") or 0)))
     clusters.sort(key=priority, reverse=True)
 
+    # Stories already featured under another URL (see scripts/dedupe.py). Only tagged,
+    # never dropped: the editor decides whether it's a repeat or a real follow-up.
+    prior = prior_stories(seen, today, settings.get("dedup_lookback_days", 7))
+    covered = find_covered([[i["title"] for i in c] for c in clusters], prior)
+
     candidates, next_id = {}, 1
-    for cluster in clusters:
+    for cluster, hit in zip(clusters, covered):
         ids = list(range(next_id, next_id + len(cluster)))
         for cid, item in zip(ids, cluster):
             item.pop("tokens", None)
             item["id"], item["cluster"] = cid, ids
             candidates[cid] = item
+        if hit:
+            story = hit[0]
+            cluster[0]["covered"] = {"date": story["date"], "headline": story["headline"], "event": story["event"]}
         next_id += len(cluster)
+    flagged = sum(1 for c in clusters if c[0].get("covered"))
 
     def render(snippet_len, keep):
         lines = [
             f"# Candidates -- {today} -- {len(raw['articles'])} fetched from "
             f"{raw['ok_sources']}/{raw['total_sources']} sources -> {len(candidates)} candidates "
             f"in {len(clusters)} clusters (dropped: {dropped['old']} old, {dropped['seen']} already "
-            f"featured, {dropped['junk']} junk, {dropped['dupe']} duplicate URLs)",
+            f"featured, {dropped['junk']} junk, {dropped['dupe']} duplicate URLs; "
+            f"{flagged} possible repeats flagged)",
             "# [id] Source (trust, points/comments, age) Title -- snippet",
             "# Indented '+ [id]' lines are other outlets covering the same story (same cluster).",
+            "# '>> POSSIBLE REPEAT' lines mark a story we already ran recently (date and headline shown).",
             "",
         ]
         for cluster in clusters[:keep]:
@@ -178,6 +182,10 @@ def main():
                     snippet = clean_snippet(item.get("summary"))[:snippet_len]
                     tail = f" -- {snippet}" if snippet else ""
                     lines.append(f"[{item['id']}] {item['source']} ({', '.join(meta)}) {item['title']}{tail}")
+                    if item.get("covered"):
+                        c = item["covered"]
+                        key = f" [{c['event']}]" if c.get("event") else ""
+                        lines.append(f'    >> POSSIBLE REPEAT of {c["date"]}: "{c["headline"]}"{key}')
                 else:
                     lines.append(f"    + [{item['id']}] {item['source']}: {item['title']}")
         return "\n".join(lines) + "\n"
@@ -201,7 +209,7 @@ def main():
     shown = sum(len(c) for c in clusters[:keep])
     print(f"{len(candidates)} candidates in {len(clusters)} clusters; "
           f"data/candidates.md lists {shown} (~{int(len(text) / 3.6)} tokens, budget {budget})")
-    print(f"dropped: {dropped}")
+    print(f"dropped: {dropped}; possible repeats flagged: {flagged}")
 
 
 if __name__ == "__main__":

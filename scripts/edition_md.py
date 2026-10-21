@@ -22,6 +22,7 @@ One format serves two purposes:
     - ids: 6, 15
     - topic: Security
     - signal: must-read
+    - event: three to six keywords naming the event
     - source: transluce.org | https://... | via Hacker News      (canonical only)
 
     > The dek: one sentence under the headline.
@@ -37,7 +38,7 @@ import re
 
 META_KEYS = {
     "ids", "topic", "signal", "url", "source", "author", "image", "read",
-    "discuss", "full text", "original title",
+    "discuss", "full text", "original title", "event",
 }
 
 
@@ -78,7 +79,7 @@ def _parse_story(heading, rest, n):
         key, value = key.strip().lower(), value.strip()
         if not sep or key not in META_KEYS:
             raise ParseError(f"story {n}: unknown metadata line {line[:60]!r} "
-                             f"(allowed keys: ids, topic, signal)")
+                             f"(allowed keys: ids, topic, signal, event)")
         if key == "ids":
             try:
                 story["ids"] = [int(x) for x in re.split(r"[,\s]+", value.strip("[] ")) if x]
@@ -159,6 +160,8 @@ def write(edition):
     for s in edition["stories"]:
         out += [f"## {s['headline']}", f"- ids: {', '.join(str(i) for i in s['ids'])}",
                 f"- topic: {s['topic']}", f"- signal: {s['signal']}", f"- url: {s['url']}"]
+        if s.get("event"):
+            out.append(f"- event: {s['event']}")
         if s.get("source_title") and s["source_title"] != s["headline"]:
             out.append(f"- original title: {s['source_title']}")
         for src in s["sources"]:

@@ -49,13 +49,22 @@ something to act on.
    else to compensate.
 
    Format: `[id] Source (trust, points/comments, age) Title -- snippet`.
-   Indented `+ [id]` lines are other outlets in the same cluster.
+   Indented `+ [id]` lines are other outlets in the same cluster. An
+   indented `>> POSSIBLE REPEAT of <date>: "<headline>"` line means a
+   story that looks like one we already ran (it matched by wording; the
+   headline and event keywords shown are what we called it then).
 
 4. **Pick and rank** `stories_per_edition` stories, by reasoning over
    what you just read:
    - Only stories that fit a topic in `config/interests.json`. Skip
      consumer gadget reviews, deals, games, celebrity/politics with no
      tech substance, and anything that's an ad.
+   - Repeats: skip a cluster tagged `POSSIBLE REPEAT` when it is the same
+     event as the story shown, even from a different outlet. Pick it only
+     if it brings genuinely new facts (a result, a reversal, a number, a
+     response); then the headline must say what's new, and the first
+     paragraph must say what changed since we ran it. A tag can be a false
+     alarm: if it's a different event that shares a few words, ignore it.
    - One story per cluster. A story's ids are the cluster's lead id
      first, then any other ids from that cluster you consider the same
      story.
@@ -93,6 +102,7 @@ something to act on.
    - ids: 6, 15, 16
    - topic: Security
    - signal: must-read
+   - event: three to six keywords naming the event
 
    > The dek: one sentence under the headline that adds what the
    > headline doesn't.
@@ -105,9 +115,14 @@ something to act on.
    - 0 to 5 concrete, actionable points: what to check, change, or watch.
    ```
 
-   `topic` must be a label from `config/interests.json`. Nothing else
-   goes in the metadata list; links, authors, images and read times are
-   filled in for you. Read "Writing the stories" below before you write
+   `topic` must be a label from `config/interests.json`. `event` is 3 to
+   6 lowercase keywords naming what happened, who and what, in the plainest
+   words anyone covering it would use: `cloudflare deno acquisition`,
+   `claude false murder tip`. No dates, adjectives or punctuation. It's how
+   we recognise the same story tomorrow, so for a follow-up reuse the
+   keywords from the `POSSIBLE REPEAT` line. Nothing else goes in the
+   metadata list; links, authors, images and read times are filled in for
+   you. Read "Writing the stories" below before you write
    the first one. It's the part of this job that actually matters.
 
 7. `python scripts/publish_edition.py`. It validates the draft and, if
