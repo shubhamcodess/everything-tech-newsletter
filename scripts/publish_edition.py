@@ -27,6 +27,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_site  # noqa: E402
 import edition_md  # noqa: E402
+from dedupe import normalize_event  # noqa: E402
 from edition_schema import validate_draft  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -82,6 +83,7 @@ def resolve_story(draft_story, candidates, articles):
     story = {
         **{k: draft_story[k] for k in ("headline", "dek", "body", "takeaways", "topic", "signal")},
         "ids": ids,
+        "event": normalize_event(draft_story["event"]),
         "url": clean_url(primary["url"]),
         "source_title": primary["title"],
         "sources": sources,
@@ -101,7 +103,7 @@ def resolve_story(draft_story, candidates, articles):
             story["points"] = discuss["points"]
         if discuss.get("comments"):
             story["comments"] = discuss["comments"]
-    return story, [c["url"] for c in members]
+    return story, [c["url"] for c in members], list(dict.fromkeys(c["title"] for c in members if c.get("title")))
 
 
 def main():
@@ -145,9 +147,9 @@ def main():
 
     stories, featured = [], []
     for draft_story in draft["stories"]:
-        story, urls = resolve_story(draft_story, candidates, articles)
+        story, urls, titles = resolve_story(draft_story, candidates, articles)
         stories.append(story)
-        featured.append((story, urls))
+        featured.append((story, urls, titles))
 
     edition = {
         "date": date,
@@ -176,10 +178,14 @@ def main():
     seen = load(seen_path, {"featured": []})
     cutoff = (datetime.fromisoformat(date) - timedelta(days=settings.get("dedup_lookback_days", 7))).date().isoformat()
     kept = [s for s in seen["featured"] if cutoff <= s.get("date", "") != date]
-    for story, urls in featured:
+    kept_stories = [s for s in seen.get("stories", []) if cutoff <= s.get("date", "") != date]
+    for story, urls, titles in featured:
         kept += [{"title": story["headline"], "url": u, "source": story["sources"][0]["name"], "date": date} for u in urls]
+        # what scripts/dedupe.py matches tomorrow's candidates against: the headline, the event
+        # keywords and every outlet's original title (URLs alone miss a story covered elsewhere)
+        kept_stories.append({"date": date, "headline": story["headline"], "event": story["event"], "titles": titles})
     with open(seen_path, "w") as f:
-        json.dump({"featured": kept}, f, ensure_ascii=False)
+        json.dump({"featured": kept, "stories": kept_stories}, f, ensure_ascii=False)
         f.write("\n")
 
     print(f"wrote editions/{date}/ (edition No. {number}, {len(stories)} stories, "

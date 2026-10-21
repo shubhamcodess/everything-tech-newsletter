@@ -7,7 +7,12 @@ placeholders shipped to production, raw abstracts pasted in and cut off
 mid-word, escaped HTML dumped into a summary, a bare URL standing in for a
 summary, and generic filler closing lines.
 """
+import os
 import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from dedupe import event_problem  # noqa: E402
 
 SIGNALS = ("must-read", "recommended", "notable")
 PLACEHOLDERS = re.compile(r"ARTICLE_URL|ARTICLE_TITLE|SOURCE_NAME|OTHER_SOURCES|lorem ipsum|\bTODO\b|<headline>|<paragraph>", re.I)
@@ -116,6 +121,13 @@ def validate_draft(draft, candidates, topic_labels, settings, source_texts=None)
             for t, item in enumerate(takeaways):
                 check_prose(f"{where}.takeaways[{t}]", item, errors, min_len=15, source_ngrams=source_ngrams)
 
+        grounding = " ".join([str(headline or ""), str(story.get("dek") or "")]
+                             + [(candidates.get(str(c)) or {}).get("title", "") for c in ids])
+        problem = event_problem(story.get("event"), grounding) if story.get("event") else \
+            "missing -- add '- event: ...' with 3-6 lowercase keywords naming the event, e.g. 'cloudflare deno acquisition'"
+        if problem:
+            errors.append(f"{where}.event: {problem}")
+
         if story.get("topic") not in topic_labels:
             errors.append(f"{where}.topic: {story.get('topic')!r} -- must be one of {topic_labels}")
         signal = story.get("signal")
@@ -144,6 +156,9 @@ def validate_edition(edition, where="edition"):
                 errors.append(f"{at}: missing '{key}'")
         if not str(story.get("url", "")).startswith(("http://", "https://")):
             errors.append(f"{at}.url: not an http(s) URL")
+        # optional: editions published before the event field existed don't have one
+        if story.get("event") and event_problem(story["event"]):
+            errors.append(f"{at}.event: {event_problem(story['event'])}")
         for field in ("headline", "dek", *[f"body[{i}]" for i in range(len(story.get("body", [])))]):
             value = story.get(field) if "[" not in field else story["body"][int(field[5:-1])]
             if isinstance(value, str) and (PLACEHOLDERS.search(value) or MARKUP.search(value)):

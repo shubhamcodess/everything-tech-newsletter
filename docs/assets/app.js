@@ -384,9 +384,9 @@
         </div>
         <div><h4>Take it with you</h4><ul>
           <li><a href="feed.xml">RSS feed</a></li>
-          <li><a href="latest.md">Latest edition as Markdown</a></li>
+          ${state.edition ? `<li><a href="#" data-act="download-md">Download this edition (Markdown)</a></li>` : ""}
           <li><a href="latest.json">Latest edition as JSON</a></li>
-          ${src ? `<li>${ext(src, "This edition's source file ↗")}</li>` : ""}
+          ${src ? `<li>${ext(src, "This edition's raw source ↗")}</li>` : ""}
         </ul></div>
         <div><h4>How it works</h4><ul>
           <li>Pulls ${esc(state.edition && state.edition.stats ? state.edition.stats.sources_total : "every")} sources overnight</li>
@@ -564,6 +564,74 @@
     btn.textContent = open ? "Collapse −" : "Expand +";
   }
 
+  // Builds a readable Markdown edition in the browser and downloads it. Nothing is stored in the repo.
+  function editionMarkdown(ed, site) {
+    const stories = ed.stories, stats = ed.stats || {}, curator = site.curator || {};
+    const url = site.url || "";
+    const cell = (t) => String(t).replace(/\|/g, "\\|").replace(/\s+/g, " ").trim();
+    const day = new Date(ed.date + "T00:00:00");
+    const pretty = day.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    const SIG = { "must-read": ["Must read", "Must reads"], recommended: ["Recommended", "Recommended"], notable: ["Notable", "Quick hits"] };
+    const mustCount = stories.filter((s) => s.signal === "must-read").length;
+    const out = [`# ${site.name}: No. ${ed.edition}`, ""];
+    if (site.tagline) out.push(`*${site.tagline}*`, "");
+    const meta = [pretty, `${stories.length} stories`, `${mustCount} must-read${mustCount === 1 ? "" : "s"}`];
+    if (stats.sources_ok != null && stats.sources_total != null) meta.push(`${stats.sources_ok}/${stats.sources_total} sources read`);
+    out.push(meta.join(" · "), "", "---", "");
+    if (ed.brief && ed.brief.length) {
+      out.push("## The Brief", "", "> [!NOTE]", "> **The day in a few lines.**", ">", ...ed.brief.map((b) => `> - ${b}`), "", "---", "");
+    }
+    out.push("## In this edition", "", "| # | Signal | Topic | Read | Story |", "|---:|:---|:---|---:|:---|");
+    stories.forEach((s, i) => {
+      const label = (SIG[s.signal] || [s.signal])[0];
+      out.push(`| ${i + 1} | ${cell(label)} | ${cell(s.topic)} | ${s.read_minutes ? s.read_minutes + " min" : "n/a"} | ${cell(s.headline)} |`);
+    });
+    out.push("", "---", "");
+    for (const signal of ["must-read", "recommended", "notable"]) {
+      const group = stories.map((s, i) => [i + 1, s]).filter(([, s]) => s.signal === signal);
+      if (!group.length) continue;
+      out.push(`## ${SIG[signal][1]}`, "");
+      for (const [rank, s] of group) {
+        out.push(`### ${rank}. ${s.headline}`, "");
+        out.push([`**${SIG[signal][0]}**`, s.topic, s.read_minutes ? `${s.read_minutes} min read` : ""].filter(Boolean).join(" · "), "");
+        out.push(`> ${s.dek}`, "");
+        for (const p of s.body) out.push(p, "");
+        if (s.takeaways && s.takeaways.length) out.push("> [!TIP]", "> **Takeaways**", ">", ...s.takeaways.map((t) => `> - ${t}`), "");
+        const links = [];
+        if (s.url) links.push(`[Read the original](${s.url})`);
+        if (s.discuss_url) {
+          const bits = [s.points ? `${s.points} points` : "", s.comments ? `${s.comments} comments` : ""].filter(Boolean);
+          links.push(`[Discuss on ${s.discuss_via || "the web"}](${s.discuss_url})${bits.length ? ` (${bits.join(", ")})` : ""}`);
+        }
+        if (links.length) out.push(links.join(" · "), "");
+        const others = (s.sources || []).filter((x) => x.url !== s.url).map((x) => `[${x.name}](${x.url})`);
+        if (others.length) out.push(`Also covered by: ${others.join(", ")}`, "");
+        out.push("---", "");
+      }
+    }
+    out.push("## Take it with you", "", `- [Read it on the web](${url})`, `- [RSS feed](${url}feed.xml)`, `- [Edition as JSON](${url}latest.json)`,
+      `- [Raw source](${site.repo}/blob/main/editions/${ed.date}/edition.md)`, "", "---", "");
+    out.push(`## Curated by ${curator.name || ""}`, "",
+      `Pulled from ${stats.sources_total || "many"} sources overnight, deduplicated, ${stats.full_text || "many"} read in full, written up in plain words.`, "");
+    const who = [curator.github && `[GitHub](${curator.github})`, curator.linkedin && `[LinkedIn](${curator.linkedin})`].filter(Boolean);
+    if (who.length) out.push(`Find ${curator.name} on ${who.join(" and ")}.`, "");
+    return out.join("\n").replace(/ — /g, ", ").replace(/—/g, " - ");
+  }
+
+  function downloadMarkdown() {
+    const ed = state.edition;
+    if (!ed) return;
+    const blob = new Blob(["﻿" + editionMarkdown(ed, state.site)], { type: "text/markdown;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${(state.site.name || "edition").toLowerCase().replace(/\W+/g, "")}-${ed.date}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast("Markdown downloaded");
+  }
+
   function copyLink(card) {
     if (!card) return;
     const q = new URLSearchParams();
@@ -621,6 +689,7 @@
         act.closest(".more-wrap").remove();
         layoutAll();
         break;
+      case "download-md": ev.preventDefault(); downloadMarkdown(); break;
       case "top": window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); break;
     }
   });
@@ -684,7 +753,7 @@
       }
     } catch (e) {
       app.innerHTML = `<div class="boot">the presses jammed: ${esc(e.message)}<br><br>
-        try the <a href="latest.md">Markdown edition</a> or the <a href="feed.xml">RSS feed</a>.</div>`;
+        try the <a href="latest.json">JSON edition</a> or the <a href="feed.xml">RSS feed</a>.</div>`;
     }
   })();
 })();
