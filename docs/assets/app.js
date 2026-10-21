@@ -173,20 +173,19 @@
   function story(s, n, kind) {
     const body = s.body || [];
     const wireKind = kind.startsWith("w-");
-    const keep = kind === "w-wide" || kind === "w-full" ? 2 : kind === "brief-item" ? 0 : 1;
+    const keep = kind === "brief-item" ? 0 : 1;
     const collapsible = (wireKind || kind === "feature-rest" || kind === "brief-item") && (body.length > keep || (s.takeaways || []).length);
     const shown = collapsible ? body.slice(0, keep) : body;
     const hidden = collapsible ? body.slice(keep) : [];
     const paras = (list) => list.map((p) => `<p>${md(p)}</p>`).join("");
     const kindCls = kind === "feature-hero" ? "feature feature-hero" : kind === "feature-rest" ? "feature" : wireKind ? `wire ${kind}` : kind;
-    const cls = ["story", kind === "brief-item" ? "" : "box", kindCls, s.signal === "notable" ? "notable" : "", `signal-${s.signal}`].filter(Boolean).join(" ");
+    const cls = ["story", kind === "brief-item" ? "" : "box", kindCls, s.signal === "notable" ? "notable" : "", collapsible ? "collapsible" : "", `signal-${s.signal}`].filter(Boolean).join(" ");
     const title = `<h3>${ext(s.url, esc(s.headline))}</h3>`;
     // migrated editions carry one summary as both dek and body; print it once
     const dek = s.dek && s.dek.trim() !== String(body[0] || "").trim() ? `<p class="dek">${esc(s.dek)}</p>` : "";
     const head = `${kicker(s, n)}${title}${dek}${byline(s)}`;
-    const bodyCls = kind === "w-wide" || kind === "w-full" ? "body cols2" : "body";
     const rest = collapsible
-      ? `${shown.length ? `<div class="${bodyCls}">${paras(shown)}</div>` : ""}<div class="more"><div class="body">${paras(hidden)}</div>${takeaways(s)}</div>`
+      ? `${shown.length ? `<div class="body">${paras(shown)}</div>` : ""}<div class="more"><div class="body">${paras(hidden)}</div>${takeaways(s)}</div>`
       : `<div class="body${kind === "lead" ? " dropcap" : ""}${kind === "lead" && body.join(" ").length > 900 ? " cols" : ""}">${paras(shown)}</div>${takeaways(s)}`;
     const actions = `<div class="actions">
         ${ext(s.url, "Read at source ↗", "act primary")}
@@ -199,11 +198,8 @@
       inner = `<div class="lead-grid"><div>${head}</div>${figure(s)}</div>${rest}${also(s)}${actions}`;
     } else if (kind === "feature-hero") {
       inner = `${head}${figure(s)}${rest}${also(s)}${actions}`;
-    } else if (kind === "feature-rest" || kind === "w-half") {
+    } else if (kind === "feature-rest" || kind === "w-card") {
       inner = `${figure(s)}${head}${rest}${also(s)}${actions}`;
-    } else if (kind === "w-wide" || kind === "w-full") {
-      const fig = figure(s);
-      inner = `<div class="wide-top${fig ? " has-fig" : ""}"><div>${head}</div>${fig}</div>${rest}${also(s)}${actions}`;
     } else {
       inner = `${head}${rest}${also(s)}${actions}`;
     }
@@ -331,51 +327,20 @@
     </div>`;
   }
 
-  // Compose the wire like a page, not a grid: each row is picked from the
-  // next stories' length -- a long story gets a wide block beside a narrow
-  // one, two mid-length stories split the row, short ones go three across.
-  const WIRE_INITIAL = 8;
-  function wireRows(items) {
-    // weights are ranked within the day, so "long" means long for this edition
-    const weight = ([st]) => (st.body || []).join(" ").length + (st.takeaways || []).join(" ").length / 2 + (safeUrl(st.image) ? 350 : 0);
-    const sorted = items.map(weight).sort((x, y) => y - x);
-    const heavy = sorted[Math.floor(sorted.length * 0.3)] ?? Infinity;
-    const mid = sorted[Math.floor(sorted.length * 0.65)] ?? Infinity;
-    const tier = (it) => (weight(it) > heavy ? 2 : weight(it) > mid ? 1 : 0);
-    const rows = [];
-    let last = "";
-    for (let i = 0; i < items.length;) {
-      const [a, b, c] = [items[i], items[i + 1], items[i + 2]];
-      let type;
-      if (!b) type = "full";
-      else if ((tier(a) === 2 || tier(b) === 2) && last !== "wide") type = "wide";
-      else if (c && last !== "triple" && (tier(a) + tier(b) + tier(c) <= 3 || last === "half")) type = "triple";
-      else if (last !== "half" && tier(a) >= 1 && tier(b) >= 1) type = "half";
-      else if (c) type = "triple";
-      else type = "half";
-      if (type === "full") rows.push([[a, "w-full"]]);
-      else if (type === "wide") {
-        const aWide = weight(a) >= weight(b);
-        rows.push([[a, aWide ? "w-wide" : "w-third"], [b, aWide ? "w-third" : "w-wide"]]);
-      } else if (type === "half") rows.push([[a, "w-half"], [b, "w-half"]]);
-      else rows.push([[a, "w-third"], [b, "w-third"], [c, "w-third"]]);
-      i += rows[rows.length - 1].length;
-      last = type;
-    }
-    return rows;
-  }
+  // The wire and the remaining must-reads are masonry: cards keep their own height
+  // and are dropped into the shortest column (see layoutMasonry), so there are no
+  // gaps under short stories and expanding one card never disturbs its neighbours.
+  const WIRE_INITIAL = 9;
   function wireSection(items) {
-    let shown = 0;
-    const cards = wireRows(items).map((row) => {
-      const deferred = shown >= WIRE_INITIAL;
-      shown += row.length;
-      return row.map(([[s, n], kind]) => story(s, n, kind).replace('class="story', `class="${deferred ? "deferred " : ""}story`)).join("");
-    }).join("");
-    const later = (cards.match(/class="deferred story/g) || []).length;
+    const cards = items.map(([s, n], i) => story(s, n, "w-card").replace('class="story', `class="${i >= WIRE_INITIAL ? "deferred " : ""}story`)).join("");
+    const later = Math.max(0, items.length - WIRE_INITIAL);
     return `<section data-section><div class="sec-head"><h2>The Wire</h2><span class="line"></span><span class="note">everything else worth your time</span></div>
-      <div class="grid-wire">${cards}</div>
+      <div class="grid-wire masonry" data-cols="3">${cards}</div>
       ${later ? `<div class="more-wrap"><button class="act more-btn" data-act="more-wire">More from the wire <b>+${later}</b></button></div>` : ""}</section>`;
   }
+
+  // columns for the remaining must-reads: 3 only when the rows fill exactly
+  const featCols = (n) => (n <= 1 ? 1 : n % 3 === 0 ? 3 : 2);
 
   function editionBody(ed) {
     const [lead, ...rest] = ed.stories;
@@ -390,7 +355,7 @@
       ${features.length ? `<section data-section><div class="sec-head"><h2>Must-reads</h2><span class="line"></span><span class="note">${features.length} picks</span></div>
         <div class="grid-feature">
           ${story(features[0][0], features[0][1], "feature-hero")}
-          ${features.length > 1 ? `<div class="feature-rest">${features.slice(1).map(([s, n]) => story(s, n, "feature-rest")).join("")}</div>` : ""}
+          ${features.length > 1 ? `<div class="feature-rest masonry" data-cols="${featCols(features.length - 1)}">${features.slice(1).map(([s, n]) => story(s, n, "feature-rest")).join("")}</div>` : ""}
         </div></section>` : ""}
       ${wire.length ? wireSection(wire) : ""}
       ${briefs.length ? `<section data-section><div class="sec-head"><h2>In Brief</h2><span class="line"></span><span class="note">quick hits, one tap to expand</span></div>
@@ -468,7 +433,18 @@
     app.innerHTML = topbar() + (ed ? ticker(ed.stories) : "") + masthead(ed) + (ed ? editionBody(ed) : awaiting()) + footer() + overlays();
     state.cursor = -1;
 
-    const frame = (img) => { if (img.naturalWidth && img.naturalWidth < 700) img.closest("figure").classList.add("logo"); };
+    const frame = (img) => {
+      const fig = img.closest("figure");
+      if (!img.naturalWidth) return;
+      if (img.naturalWidth < 700) { fig.classList.add("logo"); return; }
+      const box = fig.getBoundingClientRect();
+      if (!box.width || !box.height) return;
+      const a = img.naturalWidth / img.naturalHeight, b = box.width / box.height;
+      if (1 - Math.min(a, b) / Math.max(a, b) > 0.14) {
+        fig.style.setProperty("--src", `url("${img.currentSrc.replace(/"/g, "%22")}")`);
+        fig.classList.add("fit");
+      }
+    };
     app.querySelectorAll("figure img").forEach((img) => (img.complete ? frame(img) : img.addEventListener("load", () => frame(img))));
     app.querySelectorAll("img").forEach((img) => img.addEventListener("error", () => {
       const fig = img.closest("figure");
@@ -478,8 +454,42 @@
     }));
     requestAnimationFrame(() => app.querySelectorAll(".funnel-bar i").forEach((i) => { i.style.width = i.dataset.w + "%"; }));
     applyFilters();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutAll);
     onScroll();
+    pinSide();
   }
+  // a sidebar taller than the window pins by its bottom edge so all of it is reachable
+  function pinSide() {
+    const side = app.querySelector(".front > .side");
+    if (side) side.style.setProperty("--side-top", Math.min(72, innerHeight - side.offsetHeight - 20) + "px");
+  }
+  addEventListener("resize", pinSide);
+
+  // Masonry: n columns, each card goes to the currently shortest one. Placement is
+  // decided here, not by CSS columns, so a card never hops columns when it expands.
+  // Cards stay in rank order, so the first row reads 1, 2, 3 left to right.
+  function masonryCols(grid) {
+    const max = +grid.dataset.cols || 3;
+    return innerWidth <= 720 ? 1 : innerWidth <= 1180 ? Math.min(2, max) : max;
+  }
+  function layoutMasonry(grid) {
+    if (!grid._cards) grid._cards = [...grid.querySelectorAll(".story")];
+    const n = masonryCols(grid);
+    const cols = Array.from({ length: n }, () => { const c = document.createElement("div"); c.className = "mcol"; return c; });
+    grid.replaceChildren(...cols);
+    grid.dataset.laid = n;
+    grid._cards.forEach((card) => {
+      const target = card.hidden || getComputedStyle(card).display === "none"
+        ? cols[0]
+        : cols.reduce((best, c) => (c.offsetHeight < best.offsetHeight ? c : best), cols[0]);
+      target.appendChild(card);
+    });
+  }
+  const layoutAll = () => app.querySelectorAll(".masonry").forEach(layoutMasonry);
+  addEventListener("resize", () => {
+    const changed = [...app.querySelectorAll(".masonry")].some((g) => masonryCols(g) !== +g.dataset.laid);
+    if (changed) layoutAll();
+  });
 
   function applyFilters() {
     const cards = app.querySelectorAll(".story");
@@ -507,6 +517,7 @@
     if (status) status.textContent = state.topic || state.signal ? `showing ${shown} of ${cards.length}` : "";
     const empty = document.getElementById("empty-filter");
     if (empty) empty.classList.toggle("on", cards.length > 0 && shown === 0);
+    layoutAll();
   }
 
   async function loadEdition(date, push) {
@@ -532,7 +543,7 @@
   }
 
   /* ---------- interaction ---------- */
-  const visibleCards = () => [...app.querySelectorAll(".story:not([hidden])")].filter((c) => c.offsetParent);
+  const visibleCards = () => [...app.querySelectorAll(".story:not([hidden])")].filter((c) => c.offsetParent).sort((a, b) => a.dataset.n - b.dataset.n);
   function focusCard(i) {
     const cards = visibleCards();
     if (!cards.length) return;
@@ -608,6 +619,7 @@
       case "more-wire":
         app.querySelectorAll(".grid-wire .deferred").forEach((c) => c.classList.remove("deferred"));
         act.closest(".more-wrap").remove();
+        layoutAll();
         break;
       case "top": window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); break;
     }
