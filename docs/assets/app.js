@@ -419,9 +419,9 @@
         </div>
         <div><h4>Take it with you</h4><ul>
           <li><a href="feed.xml">RSS feed</a></li>
-          <li><a href="latest.md">Latest edition as Markdown</a></li>
+          <li><a href="latest.md">Latest edition as Markdown (readable)</a></li>
           <li><a href="latest.json">Latest edition as JSON</a></li>
-          ${src ? `<li>${ext(src, "This edition's source file ↗")}</li>` : ""}
+          ${src ? `<li>${ext(src, "This edition's raw source (Markdown) ↗")}</li>` : ""}
         </ul></div>
         <div><h4>How it works</h4><ul>
           <li>Pulls ${esc(state.edition && state.edition.stats ? state.edition.stats.sources_total : "every")} sources overnight</li>
