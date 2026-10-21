@@ -1,7 +1,7 @@
 {
  "count": 29,
  "latest": "2026-10-21",
- "archive_days": 30,
+ "archive_days": 120,
  "editions": [
   {
    "date": "2026-10-21",

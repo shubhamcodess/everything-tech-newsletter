@@ -493,6 +493,18 @@ figure.shot::after { content: attr(data-src); position: absolute; right: 8px; bo
 .ed-card .top { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
 .ed-card .top b { color: var(--hot); font-weight: 700; }
 .ed-card .lead-line { margin: 8px 0 0; font-family: var(--font-display); font-weight: 700; font-size: 17px; line-height: 1.25; }
+.month-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 22px; border-bottom: 1px solid var(--line); }
+.month-nav .tb-btn { font-size: 20px; line-height: 1; padding: 6px 14px; }
+.month-now { flex: 1; text-align: center; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+.drawer .list { gap: 8px; }
+.month-head { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 2px; background: none; border: 0; border-bottom: 1px solid var(--line);
+  font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--ink); text-align: left; cursor: pointer; }
+.month-head:hover { color: var(--accent); }
+.month-head .m-count { margin-left: auto; font-family: var(--font-mono); font-weight: 500; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.month-head .chev { width: 8px; height: 8px; flex: none; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform .15s; }
+.month-head[aria-expanded="true"] .chev { transform: rotate(45deg); }
+.month-body { display: flex; flex-direction: column; gap: 14px; padding: 14px 0 10px; }
+.month-body[hidden] { display: none; }
 .drawer .foot { margin-top: auto; padding: 14px 22px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); }
 
 .dialog { position: fixed; z-index: 80; left: 50%; top: 50%; transform: translate(-50%, -46%); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; width: min(520px, 92vw); padding: 24px 26px; }
