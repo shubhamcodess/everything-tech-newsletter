@@ -27,7 +27,9 @@ def main():
         except edition_md.ParseError as exc:
             errors.append(f"editions/{date}/edition.md: {exc}")
             continue
-        errors += validate_edition({**edition, "date": date, "topics": []}, where=f"editions/{date}")
+        if edition.get("date") != date:
+            errors.append(f"editions/{date}/edition.md: front matter date {edition.get('date')!r} doesn't match the folder")
+        errors += validate_edition(edition, where=f"editions/{date}")
 
     with tempfile.TemporaryDirectory() as tmp:
         shutil.copytree(os.path.join(ROOT, "docs"), os.path.join(tmp, "before"))
