@@ -1,201 +1,44 @@
-<div align="center">
+[![EverythingTech: a daily tech newspaper, shown on desktop and phone](docs/assets/social-card.png)](https://shubhamcodess.github.io/everything-tech-newsletter/)
 
-# ⚡ EverythingTech
-### all at once.
+# EverythingTech
 
-<a href="https://shubhamcodess.github.io/everything-tech-newsletter/"><img src="https://img.shields.io/badge/live%20site-visit-bef264?style=for-the-badge&labelColor=16181f" alt="Live site"></a>
-<a href="https://github.com/shubhamcodess/everything-tech-newsletter/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/shubhamcodess/everything-tech-newsletter/ci.yml?branch=main&style=for-the-badge&label=CI&labelColor=16181f" alt="CI"></a>
-<a href="https://github.com/shubhamcodess/everything-tech-newsletter/actions/workflows/auto-merge-routine.yml"><img src="https://img.shields.io/github/actions/workflow/status/shubhamcodess/everything-tech-newsletter/auto-merge-routine.yml?style=for-the-badge&label=auto-merge&labelColor=16181f" alt="Auto-merge"></a>
-<a href="https://github.com/shubhamcodess/everything-tech-newsletter/deployments"><img src="https://img.shields.io/github/deployments/shubhamcodess/everything-tech-newsletter/github-pages?style=for-the-badge&label=pages&labelColor=16181f" alt="GitHub Pages deploy"></a>
-<br>
-<a href="https://github.com/shubhamcodess/everything-tech-newsletter/commits/main"><img src="https://img.shields.io/github/last-commit/shubhamcodess/everything-tech-newsletter?style=flat-square&labelColor=16181f&color=5eead4" alt="Last commit"></a>
-<a href="https://github.com/shubhamcodess/everything-tech-newsletter/stargazers"><img src="https://img.shields.io/github/stars/shubhamcodess/everything-tech-newsletter?style=flat-square&labelColor=16181f&color=fbbf24" alt="Stars"></a>
-<a href="https://github.com/shubhamcodess/everything-tech-newsletter/fork"><img src="https://img.shields.io/github/forks/shubhamcodess/everything-tech-newsletter?style=flat-square&labelColor=16181f&color=7aa2ff" alt="Forks"></a>
-<a href="https://code.claude.com/docs/en/routines"><img src="https://img.shields.io/badge/built%20with-Claude%20Code-ff6ec7?style=flat-square&labelColor=16181f" alt="Built with Claude Code"></a>
-<img src="https://img.shields.io/badge/sources-47-bef264?style=flat-square&labelColor=16181f" alt="47 sources">
-<img src="https://img.shields.io/badge/API%20keys-none-5eead4?style=flat-square&labelColor=16181f" alt="No API keys">
+*all at once. A daily tech newspaper, over your morning coffee.*
 
-<img src="assets/preview.png" alt="EverythingTech — a daily tech newspaper" width="760">
+[![Read today's paper](https://img.shields.io/badge/read-today's%20paper-bef264?style=for-the-badge&labelColor=16181f)](https://shubhamcodess.github.io/everything-tech-newsletter/) ![45+ sources](https://img.shields.io/badge/sources-45%2B-5eead4?style=for-the-badge&labelColor=16181f) ![Updated daily](https://img.shields.io/badge/updated-daily%2008%3A30%20IST-ff6ec7?style=for-the-badge&labelColor=16181f) ![No ads](https://img.shields.io/badge/ads-none-7aa2ff?style=for-the-badge&labelColor=16181f)
 
-</div>
+**Every tech story worth your time, on one page, every morning.** EverythingTech reads 45+ trusted sources overnight, merges the duplicates, picks the stories that matter and rewrites each one in plain words from the full article. You get a front page to read over coffee, or to skim in 60 seconds.
 
-A daily tech newspaper with no human editor. Python pulls fresh articles from
-47 free sources, groups duplicate coverage, and fetches the full text of the
-stories that matter. A scheduled [Claude Code routine](https://code.claude.com/docs/en/routines)
-picks, ranks, and writes each one up from the actual article: a headline, a
-dek, a few real paragraphs, and takeaways. GitHub Pages serves it. No server,
-no database, no API key.
+## Preview
+
+| On your desk | In your pocket |
+|:---:|:---:|
+| ![The front page and The Wire on desktop](assets/screenshots/desk.png) | ![The same paper on a phone](assets/screenshots/mobile.png) |
+
+<sub>The edition of 1 October 2026.</sub>
+
+## What you get
+
+- **The 60-second Brief.** The day in five lines, before you read anything else.
+- **A real front page.** One lead story, up to six must-reads, then the wire and the quick hits, so you always know what matters most.
+- **Written from the source.** Every story is built from the full article, not a headline or a feed blurb, and padded or copied text never makes it onto the page.
+- **No repeats.** One story covered by five outlets appears once, crediting all five, and stories that already ran are filtered out so the paper does not repeat itself.
+- **Find your topic.** Filter by AI, Dev Tools, Languages, Open Source, Startups, Infra, Security or Engineering, or by how important a story is.
+- **Easy on the eyes.** Dark and light themes, keyboard shortcuts for the quick readers, and a layout that works as well on a phone as on a desktop.
+- **Never lose a day.** Browse the archive month by month and jump to any past edition.
+- **Read it your way.** On the web, in any RSS reader, or as a Markdown file to keep.
 
 ## How it works
 
-```
-┌──────────────────────────────────────────────────────┐
-│                      47 sources                      │
-│              RSS · APIs · HTML scrapes               │
-└──────────────────────────────────────────────────────┘
-                            │  fetch_all.py
-                            ▼
-┌──────────────────────────────────────────────────────┐
-│  build_candidates.py -> data/candidates.md (~14K tk) │
-│  drop stale / seen / junk · cluster same-story news  │
-└──────────────────────────────────────────────────────┘
-                            │  routine picks + ranks
-                            ▼
-┌──────────────────────────────────────────────────────┐
-│  fetch_articles.py -> data/articles.md   (~19K tk)   │
-│  full article text, fallback to other outlets        │
-└──────────────────────────────────────────────────────┘
-                            │  routine writes data/draft.md
-                            ▼
-┌──────────────────────────────────────────────────────┐
-│  publish_edition.py                                  │
-│  validate prose · fill links/authors/images          │
-│  -> editions/<date>/edition.md  (the durable record) │
-└──────────────────────────────────────────────────────┘
-                            │  build_site.py
-                            ▼
-┌──────────────────────────────────────────────────────┐
-│  docs/data/*.json + feed.xml  ──►  one template      │
-│  (docs/assets) renders today and every archive date  │
-└──────────────────────────────────────────────────────┘
-                            │  commit + push (or PR -> auto-merge)
-                            ▼
-┌──────────────────────────────────────────────────────┐
-│          GitHub Pages  (serves main:/docs)           │
-└──────────────────────────────────────────────────────┘
-```
+![How a day's paper is made: collect, sort, write, check, publish](assets/pipeline.png)
 
-Scripts do everything mechanical; the LLM only picks, ranks, and writes. It
-never writes HTML: each edition is a Markdown file, and one client-side
-template draws every date from it. Change the design once and every edition,
-today's and archived, changes with it. Its instructions live in
-[`CLAUDE.md`](CLAUDE.md), versioned like any other code.
+Every morning the paper is built in five steps: collect, sort, write, check, publish. Nobody has to press a button, and nothing is shown until it has passed the checks.
 
-- **Written from the source.** Full article text, not a feed blurb, and a validator rejects copied sentences, filler, and cut-off prose.
-- **Deduped.** One story covered by five outlets shows once, crediting all five.
-- **Ranked.** The lead, must-reads, and the wire, plus a 60-second Brief.
-- **Readable.** Night and day themes, topic and signal filters, keyboard shortcuts (`?`), and a live ticker.
-- **Portable.** Every edition also comes as [JSON](https://shubhamcodess.github.io/everything-tech-newsletter/latest.json) and [RSS](https://shubhamcodess.github.io/everything-tech-newsletter/feed.xml).
-- **Self-pruning archive.** The last 120 days (`archive_days` in settings); older editions stay in git history.
+## Read it
 
-## Fork it and make it yours
-
-You'll need a Claude plan that includes [routines](https://code.claude.com/docs/en/routines)
-(Pro, Max, Team, or Enterprise) and a GitHub account.
-
-**1. Fork and reset.** Fork this repo, clone it, then start clean:
-
-```bash
-./scripts/reset_for_fork.sh    # empty archive, no remembered stories
-```
-
-**2. Make it yours.** Name, tagline, curator links and colours live in [`config/site.json`](config/site.json).
-Topics go in [`config/interests.json`](config/interests.json), and edition size in [`config/settings.json`](config/settings.json). Then rebuild the site data:
-
-```bash
-python scripts/build_site.py
-```
-
-**3. Turn on GitHub Pages.** Repo **Settings → Pages → Deploy from a branch → `main` / `/docs`**.
-([Pages docs](https://docs.github.com/en/pages))
-
-**4. Two repo settings for the auto-merge handoff.** The routine can't always push straight to a protected `main`,
-so it opens a PR and [`auto-merge-routine.yml`](.github/workflows/auto-merge-routine.yml) merges it.
-- **Settings → General → Pull Requests → Allow auto-merge**
-- **Settings → Branches → add a rule for `main` → Require status checks → `validate`**
-  ([protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches))
-
-**5. Create the routine** at [claude.ai/code/routines/new](https://claude.ai/code/routines/new):
-
-| Field | Value |
-|---|---|
-| Prompt | the text in [`ROUTINE_PROMPT.md`](ROUTINE_PROMPT.md) |
-| Model | Sonnet for the best writing; Haiku works |
-| Repository | your fork |
-| Environment | **Network access → Full** (it reads articles on any site), or **Custom** with the list in [`SETUP.md`](SETUP.md#custom-allowed-domains) ([why](https://code.claude.com/docs/en/cloud-environments#network-access)) |
-| Trigger | Schedule → Daily → your time |
-| Connectors | none |
-
-**6. Run it.** Click **Run now**, watch the session, then check your Pages URL. Details and troubleshooting: [`SETUP.md`](SETUP.md).
-
-## Configuration
-
-Edit, commit, push. The next run picks it up.
-
-| File | Controls |
-|---|---|
-| [`config/site.json`](config/site.json) | Render config: name, tagline, curator links, theme colours, features (run `build_site.py` after) |
-| [`config/interests.json`](config/interests.json) | Topics, and what each covers |
-| [`config/settings.json`](config/settings.json) | Stories per edition, must-read cap, lookback, token budgets, archive days |
-| [`config/sources.json`](config/sources.json) | Add, remove, or disable sources; RSS needs only a `feed_url` |
-| [`docs/assets/`](docs/assets) | The one template: every edition renders through it |
-| [`CLAUDE.md`](CLAUDE.md) | The routine's step-by-step pipeline and writing rules |
-
-## The edition format
-
-An edition is a versioned contract, so any model, script or template can rely on its shape.
-
-- **Authoring format:** `editions/<date>/edition.md`, Markdown with a front-matter header. `data/draft.md` is the same format, minus the fields the scripts fill in.
-- **The contract:** [`scripts/edition_model.py`](scripts/edition_model.py) defines it as [Pydantic](https://docs.pydantic.dev) models: `DraftEdition` (what the routine writes) and `PublishedEdition` (the durable record). A draft or edition that doesn't fit is rejected with the exact field named, e.g. `stories[3].dek: must be a string of at least 40 characters`.
-- **For other languages:** [`schema/edition.schema.json`](schema/edition.schema.json) and [`schema/draft.schema.json`](schema/draft.schema.json) are generated from the models (`python scripts/export_schema.py`), so a JS front end or a structured-output API call can use the same definition.
-- **What the models don't judge:** content. Copied text, filler, cut-off sentences, unknown candidate ids and topic labels are checked in [`scripts/edition_schema.py`](scripts/edition_schema.py).
-- **Versioning:** editions carry `schema_version` in their front matter (the site JSON carries it too). Editions from before it existed have none, which means version 0; they are upgraded in memory when read and the files are never rewritten. Adding an optional field needs no bump. A change that would make an older edition invalid bumps `SCHEMA_VERSION`, adds a step to `migrate()` and a frozen sample to `tests/frozen/`.
-- **Tests:** `python -m unittest discover -s tests -t .` replays recorded validator answers (`tests/golden/`) and real old editions (`tests/frozen/`), and checks that the site data rebuilds byte for byte.
-
-## Project structure
-
-```
-.
-├── CLAUDE.md                       # the routine's pipeline + writing rules
-├── ROUTINE_PROMPT.md               # the prompt pasted into the routine
-├── SETUP.md                        # one-time setup + troubleshooting
-├── .github/workflows/
-│   ├── ci.yml                      # validates config, fetchers, editions, site data
-│   └── auto-merge-routine.yml      # merges the routine's claude/* PRs once CI passes
-├── config/
-│   ├── site.json                   # render config for the whole site
-│   ├── interests.json              # topics
-│   ├── settings.json               # edition size, budgets, windows
-│   └── sources.json                # the 47-source registry
-├── scripts/
-│   ├── fetch_all.py                # runs every fetcher -> data/raw_latest.json
-│   ├── fetch_*.py                  # RSS, HN, Reddit, arXiv, Dev.to, GitHub Trending, TLDR
-│   ├── build_candidates.py         # filter + cluster -> data/candidates.md
-│   ├── fetch_articles.py           # full text of the picks -> data/articles.md
-│   ├── publish_edition.py          # validate draft -> editions/<date>/
-│   ├── build_site.py               # editions -> docs/data, feed.xml, latest.*
-│   ├── edition_md.py               # the edition Markdown format
-│   ├── edition_model.py            # the edition contract: models + schema_version + migrate()
-│   ├── edition_schema.py           # content rules: copied text, filler, ids, topics
-│   ├── export_schema.py            # models -> schema/*.schema.json
-│   ├── validate_editions.py        # CI check
-│   └── reset_for_fork.sh           # clean slate for a fresh fork
-├── schema/                         # generated JSON Schema of the edition contract
-├── tests/                          # validator parity, old editions, versioning, site rebuild
-├── editions/
-│   └── YYYY-MM-DD/
-│       ├── edition.md              # the day's paper, self-contained
-│       ├── sources.md              # full text the stories were written from
-│       └── candidates.md           # everything that was considered
-├── data/
-│   └── seen.json                   # recently featured stories (no repeats)
-├── assets/
-│   └── preview.png                 # README banner
-└── docs/                           # GitHub Pages source (branch deploy)
-    ├── index.html                  # app shell
-    ├── assets/                     # app.css + app.js: the one template
-    ├── data/                       # site.json, index.json, <date>.json
-    ├── feed.xml                    # RSS
-    └── latest.json                 # today's edition, machine-readable
-```
+**[shubhamcodess.github.io/everything-tech-newsletter](https://shubhamcodess.github.io/everything-tech-newsletter/)**, with the [RSS feed](https://shubhamcodess.github.io/everything-tech-newsletter/feed.xml) for your reader of choice.
 
 ---
 
-<div align="center">
+**$** curated_by **Shubham Prakash** · [GitHub](https://github.com/shubhamcodess) · [LinkedIn](https://www.linkedin.com/in/shubham-prakash-dev/)
 
-**$** curated_by **Shubham Prakash**
-
-<a href="https://github.com/shubhamcodess"><img src="https://img.shields.io/badge/-shubhamcodess-16181f?style=for-the-badge&logo=github&logoColor=5eead4" alt="GitHub"></a>
-<a href="https://www.linkedin.com/in/shubham-prakash-dev/"><img src="https://img.shields.io/badge/-shubham--prakash--dev-16181f?style=for-the-badge&logo=linkedin&logoColor=7aa2ff" alt="LinkedIn"></a>
-
-</div>
+<sub>© 2026 Shubham Prakash. All rights reserved. See [LICENSE](LICENSE).</sub>
