@@ -6,7 +6,7 @@ Reads  editions/<date>/edition.md  (one per day, newest archive_days+1 kept)
 Writes docs/data/<date>.json       what the page renders, one per edition
        docs/data/index.json        the edition manifest (drives archive + prev/next)
        docs/data/site.json         the rendering config, as the page reads it
-       docs/latest.md, docs/latest.json, docs/feed.xml
+       docs/latest.json, docs/feed.xml
 
 The page itself (docs/index.html + docs/assets/) is a single template that
 renders whichever date is requested, so today's edition and every archived
@@ -116,12 +116,11 @@ def main():
     with open(os.path.join(DATA, "site.json"), "w") as f:
         json.dump(site, f, ensure_ascii=False, indent=1)
 
-    for name in ("latest.md", "latest.json", "feed.xml"):
+    for name in ("latest.json", "feed.xml"):
         if not latest and os.path.exists(os.path.join(DOCS, name)):
             os.remove(os.path.join(DOCS, name))
     if latest:
         edition, path = latest
-        shutil.copy(path, os.path.join(DOCS, "latest.md"))
         shutil.copy(os.path.join(DATA, f"{edition['date']}.json"), os.path.join(DOCS, "latest.json"))
         with open(os.path.join(DOCS, "feed.xml"), "w") as f:
             f.write(render_rss(edition, site))
