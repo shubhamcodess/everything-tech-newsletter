@@ -28,6 +28,8 @@
   const pad = (n, w) => String(n).padStart(w || 2, "0");
   const parseDate = (d) => { const [y, m, day] = d.split("-").map(Number); return new Date(y, m - 1, day); };
   const longDate = (d) => parseDate(d).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const monthOf = (d) => d.slice(0, 7);
+  const monthLabel = (ym) => parseDate(`${ym}-01`).toLocaleDateString("en-GB", { month: "long", year: "numeric" });
   const shortDate = (d) => parseDate(d).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
   const words = (s) => (String(s || "").match(/\S+/g) || []).length;
   const fmtMinutes = (m) => (m >= 60 ? `${Math.floor(m / 60)}h ${pad(Math.round(m % 60))}m` : `${Math.round(m)} min`);
@@ -401,17 +403,89 @@
     </div></footer>`;
   }
 
+  // ---- archive drawer: editions grouped by month, collapsible, with a month navigator.
+  // The choices (which months are open, which month the navigator is on) live here, not in
+  // the DOM, so they survive the page re-rendering when you open another edition.
+  const drawerUi = { open: new Set(), nav: "" };
+  const viewedMonth = () => monthOf(state.date || (state.index && state.index.latest) || "");
+  const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function archiveMonths() {
+    // newest month first, newest edition first within it
+    const groups = [];
+    for (const e of [...state.index.editions].sort((a, b) => b.date.localeCompare(a.date))) {
+      const ym = monthOf(e.date);
+      const last = groups[groups.length - 1];
+      if (last && last.ym === ym) last.editions.push(e); else groups.push({ ym, editions: [e] });
+    }
+    return groups;
+  }
+  const editionCard = (e) => `<a class="ed-card box${e.date === state.date ? " current" : ""}" href="${esc(editionUrl(e.date))}" data-date="${esc(e.date)}">
+          <div class="top"><span>${esc(longDate(e.date))}</span><b>No. ${pad(e.edition, 3)}</b></div>
+          <p class="lead-line">${esc(e.lead)}</p>
+          <div class="top" style="margin-top:8px"><span>${esc(e.stories)} stories · ${esc(e.must_read)} must-read</span>${e.date === state.index.latest ? "<b>today</b>" : ""}</div></a>`;
+  function monthSection(m) {
+    const open = drawerUi.open.has(m.ym);
+    const n = m.editions.length;
+    return `<section class="month" data-month="${m.ym}">
+      <h3><button class="month-head" type="button" data-act="month-toggle" data-month="${m.ym}" aria-expanded="${open}" aria-controls="m-${m.ym}">
+        <span class="chev" aria-hidden="true"></span><span class="m-name">${esc(monthLabel(m.ym))}</span><span class="m-count">${n} edition${n === 1 ? "" : "s"}</span></button></h3>
+      <div class="month-body" id="m-${m.ym}"${open ? "" : " hidden"}>${m.editions.map(editionCard).join("")}</div></section>`;
+  }
+  const monthNav = (months) => !months.length ? "" : `<div class="month-nav" role="group" aria-label="Archive months">
+        <button class="tb-btn" type="button" data-act="month-prev" id="month-prev">‹</button>
+        <span class="month-now" id="month-now" aria-live="polite"></span>
+        <button class="tb-btn" type="button" data-act="month-next" id="month-next">›</button></div>`;
+
+  function updateMonthNav() {
+    const months = archiveMonths();
+    const i = months.findIndex((m) => m.ym === drawerUi.nav);
+    const older = months[i + 1], newer = months[i - 1];
+    const now = document.getElementById("month-now"), prev = document.getElementById("month-prev"), next = document.getElementById("month-next");
+    if (!now || i < 0) return;
+    now.textContent = monthLabel(drawerUi.nav);
+    prev.disabled = !older;
+    next.disabled = !newer;
+    prev.setAttribute("aria-label", older ? `Older month: ${monthLabel(older.ym)}` : "No older months");
+    next.setAttribute("aria-label", newer ? `Newer month: ${monthLabel(newer.ym)}` : "No newer months");
+  }
+  function setMonthOpen(ym, open) {
+    if (open) drawerUi.open.add(ym); else drawerUi.open.delete(ym);
+    const head = app.querySelector(`.month-head[data-month="${ym}"]`), body = document.getElementById(`m-${ym}`);
+    if (head) head.setAttribute("aria-expanded", String(open));
+    if (body) body.hidden = !open;
+  }
+  function focusMonth(ym, scroll = true) {
+    drawerUi.nav = ym;
+    setMonthOpen(ym, true);
+    updateMonthNav();
+    const list = app.querySelector("#drawer .list"), section = app.querySelector(`.month[data-month="${ym}"]`);
+    if (scroll && list && section) {
+      const top = section.getBoundingClientRect().top - list.getBoundingClientRect().top + list.scrollTop;
+      list.scrollTo({ top, behavior: reducedMotion() ? "auto" : "smooth" });
+    }
+  }
+  function stepMonth(direction) {   // +1 older, -1 newer; stops at the ends
+    const months = archiveMonths();
+    const target = months[months.findIndex((m) => m.ym === drawerUi.nav) + direction];
+    if (target) focusMonth(target.ym);
+  }
+  const drawerIsOpen = () => !!app.querySelector("#drawer.on");
+
   function overlays() {
     const eds = state.index.editions;
+    const months = archiveMonths();
+    const viewed = viewedMonth();
+    if (viewed) drawerUi.open.add(viewed);
+    drawerUi.nav = months.some((m) => m.ym === viewed) ? viewed : (months[0] || {}).ym || "";
     const shortcuts = [["j / k", "next / previous story"], ["o", "open story at source"], ["e", "expand story"], ["c", "copy link to story"],
-      ["[ / ]", "older / newer edition"], ["a", "archive"], ["t", "day / night theme"], ["esc", "close, clear filters"], ["?", "this help"]];
+      ["[ / ]", "older / newer edition"], ["a", "archive"], ["← / →", "in the archive: older / newer month"],
+      ["t", "day / night theme"], ["esc", "close, clear filters"], ["?", "this help"]];
     return `<div class="scrim" data-act="close"></div>
       <aside class="drawer" id="drawer" aria-label="Archive" aria-hidden="true">
         <header><h2>Archive</h2><button class="tb-btn" data-act="close">Close ✕</button></header>
-        <div class="list">${eds.map((e) => `<a class="ed-card box${e.date === state.date ? " current" : ""}" href="${esc(editionUrl(e.date))}" data-date="${esc(e.date)}">
-          <div class="top"><span>${esc(longDate(e.date))}</span><b>No. ${pad(e.edition, 3)}</b></div>
-          <p class="lead-line">${esc(e.lead)}</p>
-          <div class="top" style="margin-top:8px"><span>${esc(e.stories)} stories · ${esc(e.must_read)} must-read</span>${e.date === state.index.latest ? "<b>today</b>" : ""}</div></a>`).join("")}</div>
+        ${monthNav(months)}
+        <div class="list">${months.map(monthSection).join("")}</div>
         <div class="foot">${eds.length} edition${eds.length === 1 ? "" : "s"} so far. Past papers stay here for ${esc(state.index.archive_days || 30)} days, so pour another coffee and catch up.</div>
       </aside>
       <div class="dialog box" id="keys" role="dialog" aria-label="Keyboard shortcuts"><h2>Keyboard shortcuts</h2>
@@ -455,6 +529,7 @@
     requestAnimationFrame(() => app.querySelectorAll(".funnel-bar i").forEach((i) => { i.style.width = i.dataset.w + "%"; }));
     applyFilters();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutAll);
+    updateMonthNav();
     onScroll();
     pinSide();
   }
@@ -648,6 +723,7 @@
     el.classList.add("on");
     el.setAttribute("aria-hidden", "false");
     app.querySelector(".scrim").classList.add("on");
+    if (id === "drawer" && viewedMonth()) focusMonth(viewedMonth());
   }
   function closeOverlays() {
     let closed = false;
@@ -679,6 +755,14 @@
       case "expand": toggleExpand(card); break;
       case "copy": copyLink(card); break;
       case "archive": openOverlay("drawer"); break;
+      case "month-toggle": {
+        const ym = act.dataset.month, open = !drawerUi.open.has(ym);
+        setMonthOpen(ym, open);
+        if (open) { drawerUi.nav = ym; updateMonthNav(); }
+        break;
+      }
+      case "month-prev": stepMonth(1); break;
+      case "month-next": stepMonth(-1); break;
       case "keys": openOverlay("keys"); break;
       case "how": openOverlay("how"); break;
       case "theme": toggleTheme(); break;
@@ -708,6 +792,10 @@
       case "[": if (i >= 0 && i < eds.length - 1) go(eds[i + 1].date); break;
       case "]": if (i > 0) go(eds[i - 1].date); break;
       case "a": openOverlay("drawer"); break;
+      case "ArrowLeft": case "ArrowRight":
+        if (!drawerIsOpen()) return;   // arrows only mean something inside the archive
+        stepMonth(ev.key === "ArrowLeft" ? 1 : -1);
+        break;
       case "t": toggleTheme(); break;
       case "?": openOverlay("keys"); break;
       case "Escape":
