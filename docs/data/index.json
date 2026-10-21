@@ -1,8 +1,15 @@
 {
- "count": 28,
- "latest": "2026-10-20",
+ "count": 29,
+ "latest": "2026-10-21",
  "archive_days": 30,
  "editions": [
+  {
+   "date": "2026-10-21",
+   "edition": 29,
+   "stories": 29,
+   "must_read": 6,
+   "lead": "Eight intermediate CA keys compromised; Internet's trust infrastructure under siege"
+  },
   {
    "date": "2026-10-20",
    "edition": 28,
