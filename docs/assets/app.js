@@ -56,6 +56,7 @@
     moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
     rss: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor"/></svg>',
     github: '<svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.27 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>',
+    download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>',
     up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
     coffee: '<svg class="coffee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="steam s1" d="M8 3c-.6 1 .6 2 0 3"/><path class="steam s2" d="M12 2.5c-.6 1 .6 2 0 3"/><path class="steam s3" d="M16 3c-.6 1 .6 2 0 3"/><path d="M4 9h14v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z"/><path d="M18 11h1.5a2.5 2.5 0 0 1 0 5H18"/></svg>',
     linkedin: '<svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>',
@@ -113,7 +114,7 @@
   /* ---------- routing ---------- */
   function readUrl() {
     const q = new URLSearchParams(location.search);
-    return { d: q.get("d"), t: q.get("t") || "", s: q.get("s") || "" };
+    return { d: q.get("d"), t: q.get("t") || "", s: q.get("s") || "", print: q.get("print"), theme: q.get("theme"), auto: q.get("auto"), pics: q.get("pics") };
   }
   function writeUrl(push) {
     const q = new URLSearchParams();
@@ -250,6 +251,7 @@
       <button class="tb-btn tb-top" data-act="top" title="Back to top">${ICON.up}<span class="tb-label">Top</span></button>
       <button class="tb-btn tb-how" data-act="how" title="How it works">How it works</button>
       <a class="tb-btn" href="feed.xml" title="RSS feed">${ICON.rss}<span class="tb-label">RSS</span></a>
+      ${state.edition ? `<button class="tb-btn" data-act="pdf" title="Download this edition as a PDF (p)">${ICON.download}<span class="tb-label">PDF</span></button>` : ""}
       <button class="tb-btn" id="theme-btn" data-act="theme" title="Toggle theme (t)">${themeButton()}</button>
       ${feature("keyboard_shortcuts") ? '<button class="tb-btn" data-act="keys" title="Keyboard shortcuts (?)">?</button>' : ""}
     </div></nav>`;
@@ -479,7 +481,7 @@
     if (viewed) drawerUi.open.add(viewed);
     drawerUi.nav = months.some((m) => m.ym === viewed) ? viewed : (months[0] || {}).ym || "";
     const shortcuts = [["j / k", "next / previous story"], ["o", "open story at source"], ["e", "expand story"], ["c", "copy link to story"],
-      ["[ / ]", "older / newer edition"], ["a", "archive"], ["← / →", "in the archive: older / newer month"],
+      ["[ / ]", "older / newer edition"], ["a", "archive"], ["← / →", "in the archive: older / newer month"], ["p", "download this edition as a PDF"],
       ["t", "day / night theme"], ["esc", "close, clear filters"], ["?", "this help"]];
     return `<div class="scrim" data-act="close"></div>
       <aside class="drawer" id="drawer" aria-label="Archive" aria-hidden="true">
@@ -498,6 +500,172 @@
           <span><kbd>04</kbd></span><span>Each gets written up from scratch, in plain words, with the takeaways.</span>
           <span><kbd>05</kbd></span><span>A script checks the writing, then it's printed here at ${esc(state.site.edition_time)}.</span>
         </div></div>`;
+  }
+
+  /* ---------- print view: the edition as a newspaper PDF ----------
+     ?print=1 renders the whole edition as a printable paper (assets/print.css): every story
+     open, in columns, with none of the page's controls (ticker, filters, archive, buttons).
+     The browser turns it into the PDF, which keeps text selectable and links live, and
+     fetches the images itself. The download button opens this view in a new tab. */
+  const pdfUrl = (extra) => `${location.pathname}?d=${encodeURIComponent(state.date)}&print=1&theme=${currentTheme()}${extra || ""}`;
+  function openPdf() {
+    const w = window.open(pdfUrl(), "_blank");
+    if (!w) location.href = pdfUrl();
+  }
+
+  function printByline(s) {
+    const bits = [];
+    const primary = (s.sources || [])[0];
+    if (primary) bits.push(ext(primary.url || s.url, esc(primary.name)));
+    if (s.author) bits.push(`by ${esc(s.author)}`);
+    if (s.read_minutes) bits.push(`${esc(s.read_minutes)} min original`);
+    if (s.discuss_url) {
+      const stats = [s.points ? `${s.points} pts` : "", s.comments ? `${s.comments} comments` : ""].filter(Boolean).join(" · ");
+      bits.push(ext(s.discuss_url, `${esc(stats || "discuss")} on ${esc(s.discuss_via || "discussion")}`));
+    }
+    if (s.full_text === false) bits.push("from the feed snippet");
+    return bits.length ? `<div class="p-by">${bits.map((b) => `<span>${b}</span>`).join("")}</div>` : "";
+  }
+  function printFigure(s) {
+    const src = safeUrl(s.image);
+    if (!src || !feature("images")) return "";
+    const name = ((s.sources || [])[0] || {}).name || "";
+    return `<figure class="p-shot"><img src="${esc(src)}" alt="" loading="eager" referrerpolicy="no-referrer" onerror="this.parentNode.remove()">${name ? `<figcaption>${esc(name)}</figcaption>` : ""}</figure>`;
+  }
+  function printHead(s, n) {
+    return `<div class="p-kicker"><span class="rank">No.${pad(n + 1)}</span><span class="topic">${esc(s.topic)}</span>${s.signal === "must-read" ? '<span class="p-stamp">Must-read</span>' : ""}</div>
+      <h3>${ext(s.url, esc(s.headline))}</h3>${s.dek && s.dek.trim() !== String((s.body || [])[0] || "").trim() ? `<p class="p-dek">${esc(s.dek)}</p>` : ""}${printByline(s)}`;
+  }
+  const printText = (s) => `<div class="p-body">${(s.body || []).map((p) => `<p>${md(p)}</p>`).join("")}</div>`;
+  function printExtras(s) {
+    const also = (s.sources || []).slice(1).filter((x) => safeUrl(x.url));
+    return `${s.takeaways && s.takeaways.length ? `<div class="p-take"><h4>Takeaways</h4><ul>${s.takeaways.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>` : ""}
+      ${also.length ? `<div class="p-also">Also covered by ${also.map((x) => ext(x.url, esc(x.name))).join(", ")}</div>` : ""}`;
+  }
+  // the headline block (kicker, headline, standfirst, byline, picture) is kept together so a
+  // story never starts at the foot of a column with its headline cut off from its text
+  const printStory = (s, n, image) => `<article class="p-story" style="--c:${topicColor(s.topic)}"><div class="p-head">${printHead(s, n)}${image ? printFigure(s) : ""}</div>${printText(s)}${printExtras(s)}</article>`;
+  // one set of columns for every section, with each heading spanning them: the paper flows
+  // from section to section down the page instead of restarting on a fresh page each time
+  const printSection = (title, note, items, image) => items.length
+    ? `<h2 class="p-sec-h"><span>${esc(title)}</span><i></i><small>${esc(note)}</small></h2>${items.map(([s, n]) => printStory(s, n, image)).join("")}` : "";
+
+  function printPaper(ed) {
+    const site = state.site;
+    const [lead, ...rest] = ed.stories;
+    const indexed = rest.map((s, i) => [s, i + 1]);
+    const must = indexed.filter(([s]) => s.signal === "must-read");
+    const wire = indexed.filter(([s]) => s.signal === "recommended");
+    const quick = indexed.filter(([s]) => s.signal !== "must-read" && s.signal !== "recommended");
+    const digestWords = ed.stories.reduce((a, s) => a + words(s.dek) + (s.body || []).reduce((b, p) => b + words(p), 0), 0);
+    const tz = site.timezone || "Asia/Kolkata", tzLabel = site.timezone_label || "IST";
+    let printed = site.edition_time || "";
+    try {
+      if (ed.generated_at) printed = new Date(ed.generated_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: tz }) + " " + tzLabel;
+    } catch (e) {}
+    return `<main class="paper" id="paper">
+      <header class="p-mast">
+        <div class="p-meta"><span>Vol. 1 · No. ${pad(ed.edition, 3)}</span><span>${esc(longDate(ed.date))}</span><span>Printed ${esc(printed)}</span></div>
+        <div class="p-brand">${CHIP}<span class="p-name">${esc(site.name)}<i>_</i></span></div>
+        <p class="p-tag"><b>all at once.</b> ${esc(site.tagline)}</p>
+        <div class="p-rule"></div>
+        <div class="p-stats"><span>${ed.stories.length} stories</span><span>${must.length + (lead.signal === "must-read" ? 1 : 0)} must-read</span><span>~${Math.max(1, Math.round(digestWords / 230))} min read</span></div>
+      </header>
+      <section class="p-front">
+        <div class="p-lead" style="--c:${topicColor(lead.topic)}">${printHead(lead, 0)}${printFigure(lead)}</div>
+        ${feature("brief") && (ed.brief || []).length ? `<aside class="p-brief"><h2><span>The Brief</span><small>60-second version</small></h2><ol>${ed.brief.map((b) => `<li><span>${md(b)}</span></li>`).join("")}</ol></aside>` : ""}
+      </section>
+      <div class="p-cols p-lead-body" style="--c:${topicColor(lead.topic)}">${printText(lead)}</div>
+      <div class="p-lead-extras" style="--c:${topicColor(lead.topic)}">${printExtras(lead)}</div>
+      <div class="p-cols p-sections">
+        ${printSection("Must-reads", `${must.length} pick${must.length === 1 ? "" : "s"}`, must, true)}
+        ${printSection("The Wire", "everything else worth your time", wire, false)}
+        ${printSection("In Brief", "quick hits", quick, false)}
+      </div>
+    </main>`;
+  }
+
+  function printBar(ed) {
+    const dark = currentTheme() === "dark";
+    const back = state.date === state.index.latest ? location.pathname : `?d=${encodeURIComponent(state.date)}`;
+    return `<div class="pbar" role="toolbar" aria-label="PDF options">
+      <span class="pbar-t"><b>${esc(state.site.name)}</b> · PDF · ${esc(longDate(ed.date))}</span>
+      <span class="sp"></span>
+      <span class="plabel">Paper</span>
+      <div class="pseg" role="group" aria-label="Paper"><button type="button" data-pact="dark" aria-pressed="${dark}">Night</button><button type="button" data-pact="light" aria-pressed="${!dark}">Day</button></div>
+      <span class="plabel">Pictures</span>
+      <div class="pseg" role="group" aria-label="Pictures"><button type="button" data-ppics="1" aria-pressed="${!state.noPics}">On</button><button type="button" data-ppics="0" aria-pressed="${!!state.noPics}">Off</button></div>
+      <button type="button" class="pbtn pbtn-main" data-pact="print">${ICON.download}<span>Save as PDF</span></button>
+      <a class="pbtn" href="${esc(back)}">Back</a>
+    </div>`;
+  }
+
+  // page numbers and the running footer live in the page margins; their colour has to be
+  // literal (margin boxes can't read the theme), so this is rewritten when the paper changes
+  function printPageStyle(ed) {
+    let el = document.getElementById("page-style");
+    if (!el) { el = document.createElement("style"); el.id = "page-style"; document.head.appendChild(el); }
+    const dark = currentTheme() === "dark";
+    const ink = dark ? "#9097a6" : "#62656f";
+    const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || (dark ? "#16181f" : "#fbf9f4");
+    const by = ((state.site.curator || {}).name || "").replace(/["\\]/g, "");
+    const box = `font-family:"JetBrains Mono",ui-monospace,monospace;font-size:6.5pt;letter-spacing:.08em;text-transform:uppercase;color:${ink};`;
+    el.textContent = `@page{size:A4;margin:13mm 12mm 17mm;background:${bg};` +
+      `@bottom-left{content:"${state.site.name} · ${shortDate(ed.date)}";${box}vertical-align:top;padding-top:4mm}` +
+      `@bottom-center{content:"${by ? "Curated by " + by : ""}";${box}vertical-align:top;padding-top:4mm}` +
+      `@bottom-right{content:"Page " counter(page) " of " counter(pages);${box}vertical-align:top;padding-top:4mm}}`;
+  }
+  function setPaper(theme) {
+    document.documentElement.dataset.theme = theme;
+    document.querySelectorAll("[data-pact=dark],[data-pact=light]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.pact === theme)));
+    printPageStyle(state.edition);
+    const q = new URLSearchParams(location.search);
+    q.set("theme", theme);
+    history.replaceState(null, "", location.pathname + "?" + q);
+  }
+  function setPictures(on) {
+    state.noPics = !on;
+    document.documentElement.classList.toggle("no-pics", !on);
+    document.querySelectorAll("[data-ppics]").forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.ppics === "1") === on)));
+    const q = new URLSearchParams(location.search);
+    if (on) q.delete("pics"); else q.set("pics", "0");
+    history.replaceState(null, "", location.pathname + "?" + q);
+  }
+  app.addEventListener("click", (ev) => {
+    const pics = ev.target.closest("[data-ppics]");
+    if (pics) { setPictures(pics.dataset.ppics === "1"); return; }
+    const b = ev.target.closest("[data-pact]");
+    if (!b) return;
+    if (b.dataset.pact === "print") window.print();
+    else setPaper(b.dataset.pact);
+  });
+
+  // wait for fonts and images so the print dialog opens on a finished page
+  async function printReady(ms) {
+    const settled = Promise.all([
+      document.fonts && document.fonts.ready,
+      ...[...document.images].map((im) => (im.complete ? 0 : new Promise((r) => { im.onload = im.onerror = r; }))),
+    ]);
+    await Promise.race([settled, new Promise((r) => setTimeout(r, ms))]);
+  }
+  async function bootPrint(u) {
+    state.print = true;
+    document.documentElement.classList.add("print-mode");
+    document.documentElement.dataset.theme = u.theme === "light" || u.theme === "dark" ? u.theme : currentTheme();
+    await new Promise((done) => {
+      const l = document.createElement("link");
+      l.rel = "stylesheet"; l.href = "assets/print.css?v=19"; l.onload = l.onerror = done;
+      document.head.appendChild(l);
+    });
+    state.noPics = u.pics === "0";
+    document.documentElement.classList.toggle("no-pics", state.noPics);
+    state.date = u.d && state.index.editions.some((e) => e.date === u.d) ? u.d : state.index.latest;
+    state.edition = await getJSON(`data/${state.date}.json`);
+    document.title = `${state.site.name}-${state.date}`;
+    app.innerHTML = printBar(state.edition) + printPaper(state.edition);
+    printPageStyle(state.edition);
+    await printReady(8000);
+    if (u.auto === "1") setTimeout(() => window.print(), 250);
   }
 
   /* ---------- render ---------- */
@@ -774,12 +942,13 @@
         layoutAll();
         break;
       case "download-md": ev.preventDefault(); downloadMarkdown(); break;
+      case "pdf": openPdf(); break;
       case "top": window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); break;
     }
   });
 
   document.addEventListener("keydown", (ev) => {
-    if (!state.site || !feature("keyboard_shortcuts")) return;
+    if (!state.site || state.print || !feature("keyboard_shortcuts")) return;
     if (ev.metaKey || ev.ctrlKey || ev.altKey || /INPUT|TEXTAREA|SELECT/.test(ev.target.tagName)) return;
     const eds = state.index ? state.index.editions : [];
     const i = eds.findIndex((e) => e.date === state.date);
@@ -797,6 +966,7 @@
         stepMonth(ev.key === "ArrowLeft" ? 1 : -1);
         break;
       case "t": toggleTheme(); break;
+      case "p": if (state.edition) openPdf(); break;
       case "?": openOverlay("keys"); break;
       case "Escape":
         if (!closeOverlays() && (state.topic || state.signal)) { state.topic = state.signal = ""; writeUrl(false); applyFilters(); }
@@ -828,6 +998,7 @@
       state.index = index;
       applyThemeConfig(site);
       const u = readUrl();
+      if (u.print) { await bootPrint(u); return; }
       state.topic = u.t;
       state.signal = u.s;
       await loadEdition(u.d || index.latest || null);

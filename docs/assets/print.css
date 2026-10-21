@@ -1,0 +1,123 @@
+/* EverythingTech -- the printable edition (?print=1), the source of the PDF.
+   Loaded only for that view, so printing the normal page is unaffected.
+   It reuses the site's night and day tokens; only the paper tones are set here.
+   Everything that is controls rather than content (ticker, filters, archive, buttons,
+   the machine room) is simply not rendered. */
+
+html.print-mode { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.print-mode body { font-size: 10pt; line-height: 1.45; background: #0d0f14; }
+.print-mode[data-theme="light"] body { background: #cfc9b9; }
+.print-mode body::before, .print-mode #progress, .print-mode #toast { display: none; }
+.print-mode * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+/* paper tones: night is the site's graphite; day is a near-white newsprint, lighter than
+   the on-screen cream so it prints like paper */
+.print-mode[data-theme="light"] {
+  --bg: #fbf9f4; --bg-2: #f3efe5; --surface: #f4f0e6; --surface-2: #ece6d8;
+  --line: #d8cfbd; --line-strong: #8b8576;
+}
+
+/* ---------- screen only: the toolbar and the sheet ---------- */
+.pbar {
+  position: sticky; top: 0; z-index: 50; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px;
+  padding: 10px 20px; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line); font: 500 12px var(--font-mono); letter-spacing: .04em; color: var(--ink-2);
+}
+.pbar b { color: var(--ink); }
+.pbar .sp { flex: 1; }
+.pseg { display: inline-flex; border: 1.5px solid var(--line-strong); }
+.pseg button { padding: 7px 14px; background: none; border: 0; cursor: pointer; font: inherit; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); }
+.pseg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.pbtn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border: 1.5px solid var(--line-strong); background: none; color: var(--ink-2);
+  font: inherit; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; cursor: pointer; }
+.pbtn svg { width: 15px; height: 15px; }
+.pbtn-main { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+
+.paper {
+  box-sizing: border-box; width: 210mm; margin: 28px auto 60px; padding: 13mm 12mm 17mm;
+  background: var(--bg); color: var(--ink); font-family: var(--font-body);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, .5);
+}
+@media screen and (max-width: 860px) {
+  .paper { width: auto; margin: 0; padding: 16px; box-shadow: none; }
+  .p-cols { column-count: 1 !important; }
+  .p-front { grid-template-columns: 1fr !important; }
+}
+
+/* ---------- masthead ---------- */
+.p-meta { display: flex; justify-content: space-between; gap: 6mm; padding-bottom: 2.6mm; border-bottom: .5pt solid var(--line-strong);
+  font: 500 6.6pt var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.p-brand { display: flex; align-items: center; justify-content: center; gap: 3.5mm; margin-top: 5mm; }
+.p-brand .chip { width: 10.5mm; height: 10.5mm; animation: none; flex: none; }
+.p-name { font: 800 39pt/1 var(--font-display); letter-spacing: -.035em; color: var(--ink); }
+.p-name i { font-style: normal; color: var(--pink); }
+.p-tag { margin: 2.4mm 0 3.6mm; text-align: center; font-style: italic; font-size: 10.5pt; color: var(--ink-2); }
+.p-tag b { font-weight: 400; color: var(--cyan); }
+.p-rule { height: 1.1mm; border-top: 1.6pt solid var(--ink); border-bottom: .5pt solid var(--ink); }
+.p-stats { display: flex; justify-content: center; gap: 7mm; padding: 2mm 0; border-bottom: .5pt solid var(--ink);
+  font: 500 6.6pt var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- front: the lead beside the Brief ---------- */
+.p-front { display: grid; grid-template-columns: 1.55fr 1fr; gap: 8mm; margin-top: 6mm; align-items: start; }
+.p-lead h3 { font-size: 26pt; line-height: 1.04; letter-spacing: -.03em; margin: 0 0 2.4mm; }
+.p-lead .p-dek { font-size: 11.4pt; line-height: 1.36; margin-bottom: 2.4mm; }
+.p-lead .p-shot { margin-top: 3mm; }
+.p-brief { border: .8pt solid var(--ink); background: var(--surface); padding: 3.6mm 4.2mm; }
+.p-brief h2 { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 1.2mm; padding-bottom: 1.6mm; border-bottom: 1pt solid var(--ink);
+  font: 800 12.5pt/1 var(--font-display); letter-spacing: -.02em; }
+.p-brief h2 small { font: 500 5.6pt var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.p-brief ol { margin: 0; padding: 0; list-style: none; counter-reset: b; }
+.p-brief li { counter-increment: b; display: grid; grid-template-columns: 6mm 1fr; padding: 1.9mm 0; border-bottom: .4pt dashed var(--line); font-size: 8.5pt; line-height: 1.36; }
+.p-brief li:last-child { border-bottom: 0; }
+.p-brief li::before { content: counter(b, decimal-leading-zero); font: 700 6.4pt/2.2 var(--font-mono); color: var(--pink); }
+
+/* ---------- columns and sections ---------- */
+.p-cols { column-count: 2; column-gap: 8mm; column-rule: .4pt dashed var(--line-strong); }
+.p-lead-body { margin-top: 5mm; }
+.p-lead-extras { margin-top: 1mm; }
+.p-lead-extras .p-take { margin-top: 3mm; }
+.p-head { break-inside: avoid; }
+.p-sections { margin-top: 2mm; }
+.p-sec-h { column-span: all; display: flex; align-items: baseline; gap: 3mm; margin: 6mm 0 4mm; break-after: avoid;
+  font: 800 15pt/1 var(--font-display); letter-spacing: -.02em; }
+.p-sec-h i { flex: 1; border-top: .5pt solid var(--line-strong); align-self: center; }
+.p-sec-h small { font: 500 6.2pt var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- a story: the same shape everywhere ---------- */
+.p-story { margin: 0 0 5mm; --c: var(--cyan); }
+.p-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 1.4mm 2.6mm; margin-bottom: 1.6mm; break-after: avoid;
+  font: 700 6.2pt var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.p-kicker .rank { color: var(--muted); font-weight: 500; }
+.p-kicker .topic { color: var(--c); display: inline-flex; align-items: center; gap: 1.2mm; }
+.p-kicker .topic::before { content: ""; width: 1.7mm; height: 1.7mm; background: var(--c); }
+.p-stamp { padding: .15mm 1.2mm; border: .7pt solid var(--pink); color: var(--pink); }
+.p-story h3 { margin: 0 0 1.4mm; font: 800 12.4pt/1.14 var(--font-display); letter-spacing: -.02em; color: var(--ink); break-after: avoid; }
+.p-story h3 a, .p-by a, .p-also a { color: inherit; text-decoration: none; }
+.p-dek { margin: 0 0 1.8mm; font-style: italic; font-size: 9.5pt; line-height: 1.38; color: var(--ink-2); break-after: avoid; }
+.p-by { display: flex; flex-wrap: wrap; margin: 0 0 2mm; padding: 1.3mm 0; border-top: .4pt dashed var(--line); border-bottom: .4pt dashed var(--line);
+  font: 500 6pt/1.55 var(--font-mono); letter-spacing: .03em; color: var(--muted); break-after: avoid; }
+.p-by span:not(:last-child)::after { content: "\00a0·\00a0"; }
+.p-body p { margin: 0 0 1.6mm; font-size: 9pt; line-height: 1.42; text-align: justify; hyphens: auto; orphans: 3; widows: 3; }
+.p-body p:last-child { margin-bottom: 0; }
+.p-lead-body .p-body p:first-child::first-letter { float: left; margin: .3mm 1.4mm 0 0; font: 800 26pt/.8 var(--font-display); color: var(--c); }
+.p-take { margin: 2.2mm 0 0; padding: 2mm 3mm; background: var(--surface); border-left: 1.2pt solid var(--c); break-inside: avoid; }
+.p-take h4 { margin: 0 0 1mm; font: 700 5.8pt var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+.p-take ul { margin: 0; padding: 0; list-style: none; }
+.p-take li { margin: 0 0 .7mm; padding-left: 3mm; position: relative; font-size: 8.3pt; line-height: 1.36; }
+.p-take li::before { content: "\25B8"; position: absolute; left: 0; color: var(--c); }
+.p-also { margin-top: 1.6mm; font: 500 5.8pt var(--font-mono); letter-spacing: .03em; color: var(--muted); }
+.p-shot { position: relative; margin: 0 0 2.4mm; aspect-ratio: 16 / 9; overflow: hidden; border: .5pt solid var(--line-strong); background: var(--surface-2); break-inside: avoid; }
+.p-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.p-shot figcaption { position: absolute; right: 1mm; bottom: 1mm; padding: .3mm 1.3mm; background: var(--bg); color: var(--muted);
+  font: 500 4.8pt var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+
+.no-pics .p-shot { display: none; }
+.plabel { font: 500 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- print ---------- */
+@media print {
+  html.print-mode, .print-mode body { background: var(--bg) !important; }
+  .pbar { display: none !important; }
+  .paper { width: auto; margin: 0; padding: 0; box-shadow: none; }
+  a { text-decoration: none; }
+}

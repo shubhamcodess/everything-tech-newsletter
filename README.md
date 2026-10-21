@@ -26,6 +26,7 @@
 - **Easy on the eyes.** Dark and light themes, keyboard shortcuts for the quick readers, and a layout that works as well on a phone as on a desktop.
 - **Never lose a day.** Browse the archive month by month and jump to any past edition.
 - **Read it your way.** On the web, in any RSS reader, or as a Markdown file to keep.
+- **Take it with you.** One tap on the download arrow turns the day's paper into a clean, print-ready PDF in night or day paper, with every story in full.
 
 ## How it works
 
