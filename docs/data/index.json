@@ -1,8 +1,15 @@
 {
- "count": 29,
- "latest": "2026-10-21",
+ "count": 30,
+ "latest": "2026-10-22",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-10-22",
+   "edition": 30,
+   "stories": 24,
+   "must_read": 6,
+   "lead": "Critical PHP flaws let attackers run code on 70% of the web—patching began immediately"
+  },
   {
    "date": "2026-10-21",
    "edition": 29,
