@@ -1,8 +1,15 @@
 {
- "count": 32,
- "latest": "2026-10-24",
+ "count": 33,
+ "latest": "2026-10-25",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-10-25",
+   "edition": 33,
+   "stories": 13,
+   "must_read": 4,
+   "lead": "Brotli decoder bug CVE-2026-111497 now reaches HTTP stacks beyond Node.js, with a 9.2 score"
+  },
   {
    "date": "2026-10-24",
    "edition": 32,

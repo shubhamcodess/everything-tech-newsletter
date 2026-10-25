@@ -1,0 +1,314 @@
+---
+date: 2026-10-25
+edition: 33
+schema_version: 1
+generated_at: 2026-10-25T04:57:51+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 400
+candidates: 153
+full_text: 13
+---
+
+# The Brief
+
+- Security takes the day. A Brotli decoder bug now reaches HTTP stacks well beyond Node.js, and India's government sites are still serving certificates that eMudhra revoked less than a week ago.
+- Google is making two quiet changes that matter more than their headlines: Android attaches your SIM number to every Google account by default, and its OAuth platform now binds refresh tokens to a key.
+- AI tooling is getting more concrete. Gemini 4 Argon made two accepted speedups to Google's own agent framework, Google's Data Agent Kit went GA with its real control in IAM, and a study finds two leading models pick opposite parties in forced election answers.
+- Infrastructure and tooling teams have their own wins: Cloudflare trimmed more than 100 TB of load-balancer memory, systemd accepts Rust for its leaf programs, and Linux 7.4 cuts a boot-time memory retrieval from minutes to milliseconds.
+
+# Stories
+
+## Brotli decoder bug CVE-2026-111497 now reaches HTTP stacks beyond Node.js, with a 9.2 score
+- ids: 8
+- topic: Security
+- signal: must-read
+- url: https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497
+- event: brotli decoder node2shell cve
+- original title: Node2Shell evolves to HTTP2Shell, blast radius affects many HTTP libs and apps
+- source: aikido.dev | https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497 | via Hacker News
+- author: Dania Durnas
+- image: https://cdn.prod.website-files.com/642adcaf364024654c71df23/6adbe4dc7746ea7df4365811_Node-JS_OG.jpg
+- read: 11 min
+- discuss: https://news.ycombinator.com/item?id=50219177 | Hacker News | 294 points | 140 comments
+- full text: yes
+
+> The fix went into Brotli's source in February, but no release carried it until now, and patches for Node.js, Python and Envoy are arriving.
+
+Node.js disclosed the bug on October 21 as node2shell, and Python packages were confirmed vulnerable the following day. By Friday it was clear that the same flaw, now tracked as CVE-2026-111497, affects other major languages and HTTP services, and not every project has a patch yet. The flaw is an out-of-bounds write in Google's Brotli decoder across versions 1.0.3 through 1.2.0. A remote, unauthenticated attacker can send a crafted Brotli stream to corrupt memory, leak data, crash the process or run code, and the CVSS v4 score is 9.2.
+
+The mechanism is a decoder that keeps accepting input it should reject. The extra bytes overflow a small working buffer, and the damage can be steered toward attacker-chosen code. OpenAI found the problem in February and classed it as unauthenticated code execution reachable from either end of a connection, so a hostile server can compromise a client that accepts compressed responses. The root-cause fix landed in Brotli's source that month, but nobody recognized it as a security fix at the time.
+
+The practical list is short. Patches are out for libbrotli, Python, C++, Node.js and bun, and more are on the way. Apache and Nginx do not decode Brotli by default, which narrows the exposure for many web servers.
+
+**Takeaways**
+- Check whether any service decodes Brotli through a library dependency, and upgrade it to a patched release as soon as one ships.
+- Where no patch exists yet, disable Brotli request or response decoding until one does.
+
+## 894 Indian government domains still serve certificates eMudhra revoked on October 19
+- ids: 30
+- topic: Security
+- signal: must-read
+- url: https://captnemo.in/blog/2026/10/23/emsign-revoked-gov-in/
+- event: emudhra revoked certificates government sites
+- original title: Indian government sites are serving revoked eMudhra certificates
+- source: captnemo.in | https://captnemo.in/blog/2026/10/23/emsign-revoked-gov-in/ | via Lobsters
+- author: Nemo
+- image: https://captnemo.in/img/favicon.png
+- read: 3 min
+- full text: yes
+
+> Since our October 23 report on eMudhra leaving the TLS business, a detailed audit shows the revocations are not reaching many official sites, and browsers disagree on what to block.
+
+Eight eMudhra intermediate CAs under the emSign G3 root turned out to hold keys anyone could recover, and eMudhra revoked them on October 18. Both Mozilla and Chrome have moved to distrust that G3 root. Two days later eMudhra revoked 9,356 certificates on its unaffected RSA hierarchy, marking them superseded, after finding that they lacked a certificate-type policy OID its own policy requires. India's IT ministry said on October 21 that the impact had been limited and brief. The author of the audit disputes both points: the flawed keys were generated in April 2025, and eMudhra estimates about 30,000 certificates under its G3 intermediates need migration.
+
+The government problem is the most concrete part. The audit lists 2,976 government domains on certificates eMudhra revoked. Of those, 894 still present the revoked certificate, while 810 now use a replacement. The affected list includes STPI, Bhashini, UIDAI, and the Controller of Certifying Authorities' India PKI site. The Controller regulates eMudhra's CA business in India, so its own site serving a revoked certificate is awkward.
+
+Whether a user sees a problem depends on the browser. Firefox uses CRLite, which covers every revocation, and refuses to load these sites. Chrome's CRLSet does not list these certificates, so Chrome, Edge and Android load them, and Safari on iOS checks OCSP only for EV certificates.
+
+**Takeaways**
+- If you run internal tools that trust Indian government sites, test them in Firefox and Chrome separately, since revocation handling differs between them.
+- Check any eMudhra-issued certificate on your own infrastructure against the revoked list before relying on it.
+
+## Android quietly attaches your SIM number to every Google account, and you have to turn it off
+- ids: 81
+- topic: Security
+- signal: must-read
+- url: https://www.engadget.com/2292018/google-quietly-linking-phone-number-to-android-accounts/
+- event: android phone number google accounts
+- original title: Google is quietly linking your phone number to other Android accounts
+- source: Engadget | https://www.engadget.com/2292018/google-quietly-linking-phone-number-to-android-accounts/
+- author: Luke James
+- image: https://www.engadget.com/img/gallery/google-is-quietly-linking-your-phone-number-to-other-android-accounts/l-intro-1792517776.jpg
+- read: 3 min
+- full text: yes
+
+> Verification has been on by default since September 2025, so every account on the phone, including new ones, now inherits the SIM's number.
+
+Android phones attach the SIM's number to every signed-in Google account on the device. Google verifies the number automatically during setup, and its documentation says verification enables account recovery and RCS messaging. Google's support page says the link covers existing and future accounts, so a new account picks up every number on the phone, and swapping SIMs adds the new number to every account. Google and carriers re-verify the numbers periodically, which can incur carrier charges.
+
+The setting also turns on Better sharing for one signed-in account, and phone-number sign-in, lost-device finding, emergency location and Quick Share all depend on a verified number. Google introduced Sign in with Mobile Number in October 2025, and its help pages describe a Better ads and Google services setting that uses a phone number across Google services. Google has not said which ads setting applies to numbers attached automatically, which is the part most users would want answered.
+
+**Takeaways**
+- Turn off automatic verification in Settings, then Google, All services, Privacy and security, Phone number verification.
+- Check every Google account on a shared or work phone, since each one inherits the same number.
+
+## Gemini 4 Argon made two accepted speedups to Google's 200,000-line ADK during an 11-hour unattended run
+- ids: 10
+- topic: AI
+- signal: must-read
+- url: https://www.infoq.com/news/2026/10/google-argon-optimizes-adk/
+- event: gemini argon adk performance optimization
+- original title: Google Optimizes Agent Development Kit's 200K-line Python Codebase Overnight with Gemini 4 Argon
+- source: InfoQ | https://www.infoq.com/news/2026/10/google-argon-optimizes-adk/
+- author: Sergio De Simone
+- image: https://res.infoq.com/news/2026/10/google-argon-optimizes-adk/en/headerimage/functiongemma-1792855681633.jpeg
+- read: 3 min
+- full text: yes
+
+> Two accepted changes made long-session preparation about 40% cheaper and imports 21% faster, and the agent ran the full test suite before finishing.
+
+Google used Gemini 4 Argon, running in Antigravity, on its Agent Development Kit repository, a codebase of more than 200,000 lines across about 800 files with nearly 17,000 unit tests. Google says the goal was to test whether a model can understand an existing codebase, which it considers a harder task than building an app from an empty folder. Engineers first wrote repository-specific guidance as .agents/skills files, which the agent loaded selectively to keep its context small, and they used a /goal prompt so the objective survived context compaction.
+
+Of the optimizations the agent proposed, two were accepted. One filters session events before copying session history. The other adds lazy loading so heavy packages are imported only when needed. Measured against the baseline, long sessions prepare about 40% faster and cold imports come in 21% quicker. Google's logs show the agent read the guidelines, set performance baselines, reviewed its own changes and ran the full unit suite before finishing. The point Google makes is cross-module work: tracing callers, mock targets and shared references across dozens of files is what a profiler cannot do.
+
+**Takeaways**
+- Before asking an agent to optimize a large codebase, write the repository conventions into skill files, since Google's first short run was used to find out what the prompt needed.
+- Require the agent to leave the merge to a human, as Google's prompt did, and to put before and after numbers in the pull request.
+
+## Google OAuth adds DPoP so stolen refresh tokens cannot be replayed without a private key
+- ids: 28
+- topic: Security
+- signal: recommended
+- url: https://developers.googleblog.com/announcing-dpop-support-for-google-oauth-securing-refresh-tokens/
+- event: google oauth dpop refresh tokens
+- original title: Announcing DPoP Support for Google OAuth: Securing Refresh Tokens
+- source: Google Developers Blog | https://developers.googleblog.com/announcing-dpop-support-for-google-oauth-securing-refresh-tokens/
+- author: Sergei Akulich and Brian Daugherty
+- image: https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/Gemini_Generated_Image_s1iz7fs1iz.2e16d0ba.fill-1200x600.jpg
+- read: 4 min
+- full text: yes
+
+> Google now binds refresh tokens to a client-generated keypair, leaving short-lived access tokens as ordinary bearer tokens to keep high-volume APIs fast.
+
+Google's OAuth platform now supports DPoP, the proof-of-possession profile in RFC 9449, for refresh tokens. Bearer tokens are vulnerable to infostealer malware and adversary-in-the-middle attacks, since whoever holds a stolen token can use it. With DPoP, a token is tied to an asymmetric keypair that the client creates, so a stolen token cannot be replayed without the private key. Google chose to apply DPoP only to refresh tokens, because they are the long-lived credentials that enable persistent impersonation, while access tokens stay standard bearer tokens to avoid per-request signing on high-QPS APIs.
+
+Adopting it takes work. Clients must generate keys, handle timestamps and nonces, construct the htm, htu, iat and jti claims, and build the DPoP proof JWT. Google also uses DPoP in Workspace Context-Aware Access to validate agent identities on its Gemini Enterprise Agent Platform. The approach works at the HTTP header level, which avoids the problem of mTLS being terminated at cloud load balancers.
+
+**Takeaways**
+- If your app stores Google refresh tokens in a browser or on a device, plan the key storage work now, since DPoP adds it to the client.
+
+## Cloudflare cut more than 100 TB of load-balancer memory by trimming its consistent-hash rings
+- ids: 20
+- topic: Infra
+- signal: recommended
+- url: https://www.infoq.com/news/2026/10/cloudflare-hashing-optimization/
+- event: cloudflare pingora consistent hashing memory
+- original title: Cloudflare Reclaims 100 TB of RAM by Optimizing Consistent Hashing
+- source: InfoQ | https://www.infoq.com/news/2026/10/cloudflare-hashing-optimization/
+- author: Renato Losio
+- image: https://res.infoq.com/news/2026/10/cloudflare-hashing-optimization/en/headerimage/generatedHeaderImage-1790410589563.jpg
+- read: 3 min
+- full text: yes
+
+> Cloudflare used probability analysis to reduce hashes per backend by about 90%, and rolled the new ring out beside the old one to avoid a cache flush.
+
+The company trimmed its internal load balancer's memory use by over 100 TB by tuning the Rust consistent-hashing code in pingora-ketama. Its Pingora Backend Router uses consistent hashing to spread cacheable requests across servers, and weighted servers and feature combinations required many separate hash rings, which multiplied memory use.
+
+The team used probability theory to find the minimum number of hash points that keeps the distribution accurate. Adding more hashes yielded diminishing returns, with the last 90,000 hashes improving error by only 0.7%, so cutting hashes per server by about 90% cost little accuracy. It also shrank each stored point from 8 bytes to 6 by packing the hash and server index together.
+
+The hard part was rollout. Changing the ring moves some cacheable requests to different servers, which could flush almost every cached object and spike origin traffic. Cloudflare deployed the new implementation gradually alongside the old ring to limit that churn.
+
+**Takeaways**
+- If you run your own consistent-hash ring, measure how much error you gain from each additional hash point, since the returns fall off quickly.
+
+## uv and ty now check Python scripts against their own inline dependencies in an experimental preview
+- ids: 11
+- topic: Dev Tools
+- signal: recommended
+- url: https://astral.sh/blog/uv-ty-integration
+- event: uv ty python script integration
+- original title: Bringing uv and ty together
+- source: astral.sh | https://astral.sh/blog/uv-ty-integration | via Lobsters
+- image: https://astral.sh/static/OpenGraph/Uv_Ty_Integration.png
+- read: 4 min
+- full text: yes
+
+> ty reads PEP 723 inline metadata and has uv build a separate environment for each script, so each script is type-checked against its own declared requirements.
+
+Astral has released an experimental integration between uv, its package manager, and ty, its type checker and language server. The main feature is first-class support for Python scripts that declare dependencies and Python version through PEP 723 inline metadata. uv already uses that metadata to prepare an environment when a script runs, and now ty uses it too, discovering scripts across a project and asking uv to build an environment for each one.
+
+A script's type checks therefore follow its declared requirements, even when they differ from the surrounding project. In editors, ty runs uv in the background to provide completions, hover and go-to-definition based on the script's dependencies. A new uv check command gives a unified diagnostic interface, starting with ty, and Astral plans to add Ruff to it later so linting and type checking share one command. Astral says it intends to make script support the default and to extend automatic environment setup to standard projects.
+
+**Takeaways**
+- Try the preview on a repository with standalone scripts that declare PEP 723 metadata, since those are the cases it changes most.
+
+## Grok 4.7 and GPT-6.1 Sol pick opposite parties when forced to name a midterm candidate, a study finds
+- ids: 87
+- topic: AI
+- signal: recommended
+- url: https://techcrunch.com/2026/10/24/forced-to-pick-groks-ai-model-chooses-republicans-openais-picks-democrats/
+- event: grok gpt election recommendations study
+- original title: Forced to pick, Grok’s AI model chooses Republicans. OpenAI’s picks Democrats.
+- source: TechCrunch | https://techcrunch.com/2026/10/24/forced-to-pick-groks-ai-model-chooses-republicans-openais-picks-democrats/
+- author: Rebecca Bellan
+- image: https://techcrunch.com/wp-content/uploads/2026/10/GettyImages-1777713346.jpg?resize=1200,900
+- read: 6 min
+- full text: yes
+
+> Across nearly 500 races, Grok 4.7 recommended the Republican in 92% of answers and GPT-6.1 Sol picked the Democrat in 97%, and the two agreed less than 10% of the time.
+
+Researchers at Convovo, a studio that designs conversational AI and is led by Cornell's Tapan Parikh, queried Grok and GPT through their APIs and asked each to name one candidate for nearly 500 races. Grok 4.7 backed Republicans in 92% of its answers, and GPT-6.1 Sol backed Democrats in 97%. The two models agreed less than 10% of the time. The consumer apps refused to answer the same question.
+
+OpenAI responded that the test used a developer API with a prompt that demanded a recommendation, and that ChatGPT declines to say who to vote for. SpaceXAI did not respond in time for comment. Parikh says he could jailbreak the consumer apps with simple prompts to get similar recommendations. His larger point concerns implicit values: a model's leanings can surface in more general questions about which election issues matter most, which many users are likely to ask.
+
+**Takeaways**
+- If you build products on these APIs, test them with neutral prompts about issues as well as direct candidate questions, since the study's bias showed up most clearly in the forced-choice setting.
+
+## systemd accepts Rust for its leaf programs, starting with a keyring setup tool
+- ids: 107
+- topic: Open Source
+- signal: recommended
+- url: https://www.phoronix.com/news/systemd-Merges-Rust-Programs
+- event: systemd rust support meson
+- original title: systemd Merges Support For Rust Programs
+- source: Phoronix | https://www.phoronix.com/news/systemd-Merges-Rust-Programs
+- author: Michael Larabel
+- image: https://www.phoronix.net/image.php?id=2026&image=systemd_rust_programs
+- read: 2 min
+- full text: yes
+
+> The first Rust component is systemd-keyring-setup, which enrolls X.509 certificates into kernel keyrings at boot, and the Rust support uses Meson without Cargo.
+
+systemd's Git now accepts Rust for its programs as an alternative to C, though not for the core library, which still has blockers to resolve. The first component is systemd-keyring-setup, which provisions keyrings and enrolls X.509 certificates into the kernel's dm-verity, fs-verity and BPF keyrings during boot. That code has not been merged yet, but the Rust infrastructure has landed. Rust builds through Meson without Cargo, and C linkage is required.
+
+The project is not porting existing C code. Rust support is optional and controlled by the -Drust= Meson option, which defaults to auto. Rust binaries come out slightly larger, with a test program at 32KB against 20KB for its C twin. The change is slated for systemd 263.
+
+**Takeaways**
+- If you package systemd, check whether your build toolchain will need Rust once the option defaults on in a later release.
+
+## A binary search in Linux's early boot memory allocator cuts a worst-case retrieval from 268 seconds to 50 milliseconds
+- ids: 98
+- topic: Infra
+- signal: notable
+- url: https://www.phoronix.com/news/Linux-7.4-memblock
+- event: linux memblock binary search kho
+- original title: Linux's Early Boot-Time Physical Memory Allocator Sees Big Speed-Up: ~268s To ~50ms
+- source: Phoronix | https://www.phoronix.com/news/Linux-7.4-memblock
+- author: Michael Larabel
+- image: https://www.phoronix.net/image.php?id=2026&image=linux_74_memblock
+- read: 1 min
+- full text: yes
+
+> The change replaces a linear scan in mm/memblock.c, which bogged down under heavy fragmentation from Kernel Handover, and it is queued for Linux 7.4.
+
+Linux 7.4 includes a memblock change that replaces a linear search with a binary search in the early boot-time physical memory allocator. Google engineer Tarun Sahu found the problem. The kernel's early allocator runs before the full page allocator is up, and under heavy fragmentation from Kernel Handover, which Live Update Orchestrator relies on, the linear scan slowed memory retrieval badly. The patch reports that the worst case drops from about 268 seconds to about 50 milliseconds, with complexity O(N log N) and O(N) for sequential appends.
+
+**Takeaways**
+- If you use Kernel Handover or live update, expect faster boot-time memory retrieval once you run a 7.4 kernel.
+
+## Block's Dessa voice model runs on a laptop and talks and listens at the same time, but it is not public
+- ids: 85
+- topic: AI
+- signal: notable
+- url: https://techcrunch.com/2026/10/24/blocks-new-voice-model-sounds-eerily-human/
+- event: block dessa voice model
+- original title: Block’s new voice model sounds eerily human
+- source: TechCrunch | https://techcrunch.com/2026/10/24/blocks-new-voice-model-sounds-eerily-human/
+- author: Ivan Mehta
+- image: https://techcrunch.com/wp-content/uploads/2025/07/jack-dorsey.jpg?resize=1200,822
+- read: 2 min
+- full text: yes
+
+> Dessa is a full-duplex model trained on human speech, and Block says it runs locally on a MacBook M4 Max or better.
+
+Block released Dessa, a voice model from its research lab that runs locally and is trained entirely on human speech, according to the company. Unlike most voice systems, it does not depend on a separate language model for knowledge, because Block says its knowledge comes from its conversational data. Dessa is full-duplex, so it can talk and listen simultaneously. Block says its emotional expression is built into the model rather than steered by voice tags, though it has not made clear how that works.
+
+Dessa has no public access yet. Block has asked safety researchers to test it, particularly for cases where a voice agent could trick a person on the other end. Square already uses voice AI for ordering, and a model that runs on-device could lower costs for business and consumer features.
+
+**Takeaways**
+- Watch the safety research Block requests, since its results will show whether emotional voice models can be used to deceive callers.
+
+## Swif adds Omarchy and Linux Mint device management as developers push for Linux at work
+- ids: 133
+- topic: Infra
+- signal: notable
+- url: https://thenewstack.io/linux-developer-device-management/
+- event: swif linux device management enterprise
+- original title: A few engineers asked IT for Linux. Then it spread to 200 machines.
+- source: The New Stack | https://thenewstack.io/linux-developer-device-management/
+- author: David Eastman
+- image: https://cdn.thenewstack.io/media/2026/10/60d245a1-curated-lifestyle-tkuj9o0ieyi-unsplash-scaled.jpg
+- read: 5 min
+- full text: yes
+
+> Swif says it now sets up compliance standards such as SOC 2, ISO 27001 and HIPAA in under ten minutes, though Linux Mint is not yet officially supported.
+
+Swif.ai, a platform that manages and secures employee devices, is expanding its Linux device management and compliance features. Supported distributions now run from the Debian and Ubuntu families to NixOS and Universal Blue, with Omarchy and Linux Mint added this week. Its Omarchy guide says the tested version 4.0.2 supports device enrollment, inventory, application blocking and some logging and tool policies, with limitations around login, home encryption, remote desktop and updates.
+
+The company's pitch is that enterprise IT, not Linux itself, is the obstacle. Linux Mint works today because it is built on Ubuntu, but it is not on the officially supported list, and requests for new distributions move up according to customer deployments and seat counts. Swif says onboarding now takes under 10 minutes for compliance standards.
+
+**Takeaways**
+- If you need Linux laptops in a regulated environment, check whether your distribution appears on the vendor's supported list, not just whether the device enrolls.
+
+## Instacart hires a bank to weigh its options after talks with DoorDash surface
+- ids: 84
+- topic: Startups
+- signal: notable
+- url: https://techcrunch.com/2026/10/24/instacart-reportedly-discussed-selling-itself-with-doordash-and-uber/
+- event: instacart sale talks doordash
+- original title: Instacart reportedly discussed selling itself with DoorDash and Uber
+- source: TechCrunch | https://techcrunch.com/2026/10/24/instacart-reportedly-discussed-selling-itself-with-doordash-and-uber/
+- author: Anthony Ha
+- image: https://techcrunch.com/wp-content/uploads/2022/09/instacart-logo.jpg?resize=1200,800
+- read: 1 min
+- full text: yes
+
+> The Information reports Instacart has hired an investment bank and held acquisition talks with DoorDash, while Uber reportedly walked away from its own discussions.
+
+Instacart has hired an investment bank to evaluate its options, according to The Information, and it has held acquisition talks with DoorDash. Bloomberg reports that Instacart also spoke with Uber, which reportedly walked away. Instacart has a market capitalization above $13 billion, and its stock is up 25% this year. The reports caused its shares to jump more than 9% on Friday, while Uber and DoorDash shares fell.
+
+Instacart declined to comment, and Bloomberg notes these are early discussions that may not produce a sale. A sale would come at a time when the grocery delivery market is getting more competitive.
+
+**Takeaways**
+- Watch for a definitive agreement or a statement from DoorDash before drawing conclusions, since both reports describe early talks.
