@@ -236,17 +236,17 @@ button { font: inherit; color: inherit; }
   .masthead-meta { display: grid; grid-template-columns: auto auto; justify-content: space-between; gap: 8px 14px; }
   .masthead-meta > span { white-space: nowrap; }
   .masthead-meta #clock { display: none; }
-  /* date on its own line, then the three stats as equal cells with a ✦ on each boundary */
-  .edition-line { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 0; font-size: 11.5px; letter-spacing: .05em; }
+  /* date on its own line, then the three stats with a ✦ centred in each gap */
+  .edition-line { --sep: 30px; display: grid; grid-template-columns: repeat(3, auto); justify-content: center; gap: 8px var(--sep); font-size: 11.5px; letter-spacing: .05em; }
   .edition-line > span { text-align: center; position: relative; }
   .edition-line > span:not(:only-child) { white-space: nowrap; }
   .edition-line > span:first-child { grid-column: 1 / -1; color: var(--ink); }
   .edition-line span + span::before { content: none; }
-  .edition-line > span:nth-child(n+3)::before { content: "✦"; position: absolute; left: 0; transform: translateX(-50%); margin: 0; }
+  .edition-line > span:nth-child(n+3)::before { content: "✦"; position: absolute; left: calc(var(--sep) / -2); transform: translateX(-50%); margin: 0; }
 }
 @media (max-width: 380px) {
   .masthead-meta { font-size: 11px; letter-spacing: .06em; }
-  .edition-line { font-size: 11px; letter-spacing: .03em; }
+  .edition-line { --sep: 22px; font-size: 11px; letter-spacing: .03em; }
 }
 
 /* ---------- section headings ---------- */
