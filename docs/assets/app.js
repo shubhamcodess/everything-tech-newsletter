@@ -589,14 +589,14 @@
     const dark = currentTheme() === "dark";
     const back = state.date === state.index.latest ? location.pathname : `?d=${encodeURIComponent(state.date)}`;
     return `<div class="pbar" role="toolbar" aria-label="PDF options">
-      <span class="pbar-t"><b>${esc(state.site.name)}</b> · PDF · ${esc(longDate(ed.date))}</span>
+      <span class="pbar-t"><b>${esc(state.site.name)}</b> · PDF<span class="pbar-date"> · ${esc(longDate(ed.date))}</span></span>
       <span class="sp"></span>
-      <span class="plabel">Paper</span>
-      <div class="pseg" role="group" aria-label="Paper"><button type="button" data-pact="dark" aria-pressed="${dark}">Night</button><button type="button" data-pact="light" aria-pressed="${!dark}">Day</button></div>
-      <span class="plabel">Pictures</span>
-      <div class="pseg" role="group" aria-label="Pictures"><button type="button" data-ppics="1" aria-pressed="${!state.noPics}">On</button><button type="button" data-ppics="0" aria-pressed="${!!state.noPics}">Off</button></div>
-      <button type="button" class="pbtn pbtn-main" data-pact="print">${ICON.download}<span>Save as PDF</span></button>
-      <a class="pbtn" href="${esc(back)}">Back</a>
+      <div class="pgrp"><span class="plabel">Paper</span>
+      <div class="pseg" role="group" aria-label="Paper"><button type="button" data-pact="dark" aria-pressed="${dark}">Night</button><button type="button" data-pact="light" aria-pressed="${!dark}">Day</button></div></div>
+      <div class="pgrp"><span class="plabel">Pictures</span>
+      <div class="pseg" role="group" aria-label="Pictures"><button type="button" data-ppics="1" aria-pressed="${!state.noPics}">On</button><button type="button" data-ppics="0" aria-pressed="${!!state.noPics}">Off</button></div></div>
+      <div class="pacts"><button type="button" class="pbtn pbtn-main" data-pact="print">${ICON.download}<span>Save as PDF</span></button>
+      <a class="pbtn" href="${esc(back)}">Back</a></div>
     </div>`;
   }
 

@@ -25,6 +25,7 @@ html.print-mode { -webkit-print-color-adjust: exact; print-color-adjust: exact; 
 }
 .pbar b { color: var(--ink); }
 .pbar .sp { flex: 1; }
+.pgrp, .pacts { display: contents; }
 .pseg { display: inline-flex; border: 1.5px solid var(--line-strong); }
 .pseg button { padding: 7px 14px; background: none; border: 0; cursor: pointer; font: inherit; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); }
 .pseg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
@@ -113,6 +114,26 @@ html.print-mode { -webkit-print-color-adjust: exact; print-color-adjust: exact; 
 
 .no-pics .p-shot { display: none; }
 .plabel { font: 500 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- phones (screen only, so the printed A4 is untouched) ---------- */
+@media screen and (max-width: 860px) {
+  /* meta as two rows (issue + time, then the date), brand scaled to fit the sheet */
+  .p-meta { display: grid; grid-template-columns: auto auto; justify-content: space-between; gap: 2mm 4mm; font-size: 9px; }
+  .p-meta > span { white-space: nowrap; }
+  .p-meta > span:nth-child(2) { grid-column: 1 / -1; grid-row: 2; justify-self: center; color: var(--ink-2); }
+  .p-brand { gap: clamp(8px, 2.4vw, 14px); min-width: 0; }
+  .p-brand .chip { width: clamp(28px, 8vw, 40px); height: auto; }
+  .p-name { font-size: clamp(26px, 9.6vw, 52px); min-width: 0; }
+}
+/* toolbar: labelled rows with full-width segmented controls, Save as the main action */
+@media screen and (max-width: 640px) {
+  .pbar { position: static; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 14px; align-items: center; padding: 12px 16px; }
+  .pbar-t { grid-column: 1 / -1; }
+  .pbar-date, .pbar .sp { display: none; }
+  .pseg button { flex: 1; }
+  .pacts { grid-column: 1 / -1; display: flex; gap: 10px; }
+  .pacts .pbtn-main { flex: 1; justify-content: center; }
+}
 
 /* ---------- print ---------- */
 @media print {
