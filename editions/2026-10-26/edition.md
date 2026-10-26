@@ -1,0 +1,281 @@
+---
+date: 2026-10-26
+edition: 34
+schema_version: 1
+generated_at: 2026-10-26T03:22:26+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 405
+candidates: 109
+full_text: 12
+---
+
+# The Brief
+
+- Security dominates again. PingCAP, the company behind TiDB, has a breach that its own investigators only partly confirm, and PHP's emergency fixes arrived after attackers had already started using the bug.
+- The AI results are mixed in ways that matter for buyers. A ten-year-old image model beat two frontier models on skin lesion triage, and LLM prices fell by up to 80% in three months without a clear explanation.
+- Open-source communities are fighting over AI. r/opensource tried to ban AI-made projects, while the Linux kernel removed Google's C Binder driver and reports a steady flow of AI-found race conditions.
+- Search traffic is the quiet casualty. Google's AI features have replaced the click-for-traffic deal publishers depended on.
+
+# Stories
+
+## PingCAP breach exposes customer records and source code, and the extortion group claims 10.6 TB
+- ids: 22
+- topic: Security
+- signal: must-read
+- url: https://www.infoq.com/news/2026/10/pingcap-cloud-data-breach/
+- event: pingcap tidb breach fulcrumsec
+- original title: PingCAP Breach Exposes Customer Records and Source Code
+- source: InfoQ | https://www.infoq.com/news/2026/10/pingcap-cloud-data-breach/
+- author: Renato Losio
+- image: https://res.infoq.com/news/2026/10/pingcap-cloud-data-breach/en/headerimage/generatedHeaderImage-1792787545089.jpg
+- read: 3 min
+- full text: yes
+
+> PingCAP confirmed the theft of source code and customer-related data, but its own investigators found no evidence that data stored in TiDB was touched.
+
+PingCAP now acknowledges that intruders reached its internal network and walked away with source code and customer-related data. FulcrumSec, the extortion group behind the claim, says it walked off with 10.6 TB, among it control-plane data, API keys, billing records and 413 private code repositories. None of those claims has been independently verified. The company's outside responders found no sign of commands run or lasting access on the production systems they examined, and PingCAP concedes the exported records held names, email addresses, which organizations and projects each user belonged to, and text and errors from the SQL editor.
+
+The group's claims are more specific than the company's. By its account, FulcrumSec has metadb in full, covering roughly 180,000 tenant organizations and 300,000 user records, plus 115,000 console API keypairs, more than 40,000 of which were active when access ended. It also claims roughly 1,800 external database endpoints pulled from migration jobs, among them root and admin logins for customer MySQL and Aurora hosts. The group alleges engineers pasted production customer credentials into Jira tickets and has published three logs with their tickets.
+
+Kim Barthel of 42Sec argues the real failure is narrower than a database problem: a single service-account key appears to have been the way in, and the leaked credentials are what matter to customers now.
+
+**Takeaways**
+- If you use TiDB Cloud, rotate API keypairs and any database credentials that were ever exported or pasted into tickets.
+- Search your own issue tracker for production credentials, since the alleged leak came from tickets rather than the database.
+
+## PHP patches two unauthenticated RCE bugs that attackers were already using, four days before the fixes shipped
+- ids: 13
+- topic: Security
+- signal: must-read
+- url: https://www.infoq.com/news/2026/10/php-critical-rce-patches/
+- event: php rce flaws exploitation attempt
+- original title: PHP Patches Two Critical RCE Flaws That Were Already Under Attack
+- source: InfoQ | https://www.infoq.com/news/2026/10/php-critical-rce-patches/
+- author: Steef-Jan Wiggers
+- image: https://res.infoq.com/news/2026/10/php-critical-rce-patches/en/headerimage/generatedHeaderImage-1792866020447.jpg
+- read: 4 min
+- full text: yes
+
+> Amazon logged an attack attempt on October 17, four days ahead of the fixed builds that shipped October 21.
+
+Emergency builds landed on October 21 to close CVE-2026-109618 and CVE-2026-109619, two bugs that let anonymous visitors execute code. Both are rated 9.2 under CVSS v4.0 and were nicknamed php2shell. Both are memory-safety errors during request handling: one in out-of-memory paths, the other in state that survives the memory it depends on. Sansec says the bugs exist in every unpatched PHP since 5.4. The PHP team says there is no complete mitigation for them, so updating is the only safe response.
+
+Exposure depends on how PHP is served. Apache mod_php has confirmed remote code execution for both bugs with default settings. For PHP-FPM, the session case is confirmed but no complete exploit has been shown for the out-of-memory bug. FrankenPHP is likely exposed based on source analysis alone. Attackers did not wait for the patch: Amazon Threat Intelligence found an attempt from an anonymization network dating to October 17, and Cloudflare deployed WAF rules about nine hours before release. The PHP Foundation says the disclosure fell apart. CVE identifiers circulated two days early, a researcher published a video showing a proof of concept, and Chainguard published built images containing the fix before the release, giving attackers a binary view of the patch.
+
+Some operators took their sites offline rather than wait. The Dutch national cyber security centre and the Dutch House of Representatives both pulled their websites as a precaution, while Sansec told stores they did not need to.
+
+**Takeaways**
+- Upgrade to PHP 8.5.12, 8.4.27, 8.3.36 or 8.2.35 now, and check whether your stack runs mod_php, PHP-FPM or FrankenPHP, because the exposure differs.
+- Review web server logs for requests to PHP endpoints dating from October 17, since that is the earliest known attempt.
+
+## Wyden says 350 federal web addresses, including the FBI tip line, expose visitors' site names
+- ids: 58
+- topic: Security
+- signal: recommended
+- url: https://www.techradar.com/pro/security/fbi-tip-line-and-veterans-crisis-site-among-350-federal-web-addresses-exposing-visitors-to-network-spies-senator-warns
+- event: wyden encrypted client hello federal websites
+- original title: FBI tip line and veterans crisis site among 350 federal web addresses exposing visitors to network spies, senator warns
+- source: TechRadar | https://www.techradar.com/pro/security/fbi-tip-line-and-veterans-crisis-site-among-350-federal-web-addresses-exposing-visitors-to-network-spies-senator-warns
+- author: Rahim Amir
+- image: https://cdn.mos.cms.futurecdn.net/AboNpeASJNf5nBHAARoLnF-1920-80.jpg
+- read: 6 min
+- full text: yes
+
+> Senator Ron Wyden asked CISA and OMB to require Encrypted Client Hello on federal sites and to make it a condition of federal cloud and network contracts.
+
+Senator Ron Wyden has written to CISA and the federal CIO's office asking that Encrypted Client Hello be required across federal websites. His letter attaches a list of 350 executive branch addresses that use content delivery networks but not ECH, and it asks for an unclassified response and action plan by November 20, 2026. Standard HTTPS still announces the hostname in plain text during the handshake, so an internet provider, a hostile Wi-Fi network or a compromised carrier can see that a visitor reached tips.fbi.gov even though the page content is encrypted.
+
+The list includes the FBI tip portal, the VA's veterans crisis line, and hotlines for whistleblowers and civil rights complaints. The letter says the VA's crisis service is hosted on AWS, which does not currently support ECH. ECH is most useful behind large CDNs, where many unrelated sites sit behind one address, but it only hides site names when paired with encrypted DNS. It offers no protection if the server itself is breached, and Russia already blocks it, which matters for the listed embassy pages.
+
+**Takeaways**
+- If you run a federal site behind a CDN, check whether ECH is enabled on the CDN side before the November 20 response date.
+- Treat ECH as partial protection: pair it with encrypted DNS, and do not count it as a defense against server compromise.
+
+## A ten-year-old CNN beat GPT-6 Astra and Claude Fable 5.1 on 200 biopsy-proven skin lesions, 62% to 42%
+- ids: 1
+- topic: AI
+- signal: recommended
+- url: https://lynchlab.net/llm-skin-cancer
+- event: cnn skin lesion diagnosis llm comparison
+- original title: A 10-year-old CNN outperforms frontier LLMs for skin cancer diagnosis
+- source: lynchlab.net | https://lynchlab.net/llm-skin-cancer | via Hacker News
+- author: Dr Magnus Lynch ·
+- read: 5 min
+- discuss: https://news.ycombinator.com/item?id=50233779 | Hacker News | 471 points | 216 comments
+- full text: yes
+
+> A dermatologist's test found that a fine-tuned Inception v3 named the correct diagnosis in 125 cases, while the two frontier models managed 84 and 85.
+
+A dermatologist tested GPT-6 Astra and Claude Fable 5.1 on 200 histopathology-confirmed lesions from the public MILK10k dataset. Each lesion came with a clinical close-up and a dermoscopic image. The set was balanced: 100 lesions that should not be discharged, including melanomas, basal and squamous cell carcinomas and actinic keratoses, and 100 that are safe to discharge, namely benign moles and seborrhoeic keratoses. The models got both images and nothing else, and were asked for a diagnosis from six options, a confidence, a second choice and whether the lesion could be discharged. In the author's example of a melanoma, both models called it a harmless seborrhoeic keratosis.
+
+The baseline was Inception v3, a network Google published in 2015, fine-tuned on 68,011 dermoscopic and clinical images. The test lesions and their patients were removed from its training data. It named the correct diagnosis for 125 lesions, or 62%, against 42% for each frontier model. The author chose the baseline on purpose because it is not state of the art, which is why the result is interesting. It is one dermatologist's test on one dataset, so it does not establish a general ranking of these models for clinical use.
+
+**Takeaways**
+- If you evaluate models for image triage, include a small specialized network as a baseline, since a general model can lose to it on narrow visual tasks.
+
+## From July to September, OpenAI and Anthropic cut LLM prices by up to 80%, and the timeline does not settle why
+- ids: 5
+- topic: AI
+- signal: recommended
+- url: https://minimaxir.com/2026/10/cheap-llms/
+- event: llm price cuts openai anthropic
+- original title: OpenAI and Anthropic cut their LLM prices by up to 80% within a few months. Why?
+- source: minimaxir.com | https://minimaxir.com/2026/10/cheap-llms/ | via Hacker News
+- image: https://minimaxir.com/2026/10/cheap-llms/vercel.png
+- read: 10 min
+- discuss: https://news.ycombinator.com/item?id=50236102 | Hacker News | 189 points | 215 comments
+- full text: yes
+
+> OpenAI cut GPT-5.6 Luna by 80% in July, and in September GPT-6 Sol launched at half the earlier Sol price, with a lower cache-read cost than Fable 5.1.
+
+A Hacker News post lays out the sequence of price changes across the two labs. OpenAI cut GPT-5.6 Luna by 80% at the end of July, and it cut GPT-5.6 Sol by about 20% for three months in late August. Anthropic made the temporary Sonnet 5 launch price permanent in August. Anthropic's Fable 5.1, launched September 1, kept its input and output prices but cut the cache-read price by 75%. Then OpenAI launched GPT-6 Sol at $2 input and $10 output per million tokens, half the earlier temporarily discounted price, and GPT-6 Luna at half the previous Luna price.
+
+The author argues that cache reads matter more than headline prices for agent work. Coding agents resend the whole conversation on each turn, so cache reads make up an estimated 96% to 99% of token spend, and a 75% cut in that rate translates to a 70% to 75% cut in the cost of running the model. The post does not establish why the labs cut prices, and the author admits the question remains open.
+
+**Takeaways**
+- Check the cache-read price for any agent workload, since that line can dominate your bill more than the input or output rate.
+
+## r/opensource bans AI-made projects and non-English posts, and a rival subreddit appears
+- ids: 79
+- topic: Open Source
+- signal: recommended
+- url: https://www.theverge.com/ai-artificial-intelligence/1018217/reddit-opensource-ai-ban
+- event: reddit opensource ai ban rules
+- original title: r/opensource just banned AI, non-English speakers, and more
+- source: The Verge | https://www.theverge.com/ai-artificial-intelligence/1018217/reddit-opensource-ai-ban
+- author: Terrence O'Brien
+- image: https://platform.theverge.com/wp-content/uploads/sites/2/2025/08/STK115_Reddit_01.jpg.webp?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200
+- read: 2 min
+- full text: yes
+
+> The moderators' new rules bar projects that use AI, are made by AI or are intended for AI, and the community says the wording is too broad.
+
+The moderators of r/opensource posted new submission rules that bar projects that use AI, were made by AI, or are intended for AI. They also require projects to be at least a year old, actively maintained and have multiple contributors, and they stopped accepting requests for maintainers or contributors. The rules effectively exclude non-English speakers, because moderators say they cannot tell AI-written text from AI-translated text and cannot verify a translation.
+
+The reaction was strong. A rival subreddit, r/trueopensource, appeared within days. A moderator said there is room for selective enforcement, for example for software that has AI-based accessibility features such as automatic captions. Critics answered that the Linux kernel now contains some AI-generated code, so the rule could reach major projects.
+
+**Takeaways**
+- If you post projects to r/opensource, check the current rules first, since the new text covers AI use, project age and language.
+
+## Linux 7.4 removes Google's C Binder driver, leaving the Rust Binder as the Android IPC path
+- ids: 94
+- topic: Open Source
+- signal: recommended
+- url: https://www.phoronix.com/news/Linux-7.4-Char-Misc
+- event: linux binder rust removal
+- original title: Google's C Binder Driver Removed With Rust Binder Ready For "Few Billion Devices"
+- source: Phoronix | https://www.phoronix.com/news/Linux-7.4-Char-Misc
+- author: Michael Larabel
+- image: https://www.phoronix.net/image.php?id=2026&image=binder_deleted
+- read: 1 min
+- full text: yes
+
+> Linus Torvalds merged the char/misc changes for Linux 7.4, which remove the C Binder driver and leave Rust Binder as the sole focus going forward.
+
+Linus Torvalds merged the char/misc pull for Linux 7.4 on Saturday, and its most notable change is removing Google's C Binder driver. Rust Binder, which Google developed, is now the only Binder driver the team will maintain. The C version had grown complex over Android's history and was hard to maintain. The Rust driver is the earliest prominent Rust kernel driver, and it now matches the C version's features and outperforms it in some tests. Greg Kroah-Hartman said the Rust version is stable and will ship on a few billion devices.
+
+**Takeaways**
+- If you carry out-of-tree Binder patches, port them to the Rust driver before you update to 7.4.
+
+## Google's AI search features have broken the click-for-traffic deal that publishers depended on
+- ids: 80
+- topic: AI
+- signal: recommended
+- url: https://www.theverge.com/column/1017983/google-ai-search-online-publishing
+- event: google ai overviews publishers traffic
+- original title: Google’s AI search changes upended online publishing
+- source: The Verge | https://www.theverge.com/column/1017983/google-ai-search-online-publishing
+- author: Emma Roth
+- image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/STK414_STK480_AI_DIS_MISINFO_CVIRGINIA_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200
+- read: 6 min
+- full text: yes
+
+> Google's AI Overviews and AI Mode now answer queries directly, and publishers that used to rank at the top are being replaced by summaries.
+
+For years, publishers filled Google's index with content, and Google sent them traffic in return. Google's 2024 AI Overviews changed that by placing an AI summary above the results, with sources below it that few users click. Press Gazette found AI Overviews on almost a quarter of news searches in May 2024, and by August they were displacing publishers that had held the top spots for certain queries. The News/Media Alliance called the change catastrophic for web traffic. In May 2025 Google added AI Mode, a chatbot-style interface that summarizes results, which The Verge describes as a step toward a search engine that no longer sends users to outside sites.
+
+**Takeaways**
+- If you publish on the web, break your search referrals down by query type to find where AI summaries have replaced your rankings.
+
+## Google open-sources ML Drift, a cross-platform GPU engine behind LiteRT, under Apache 2.0
+- ids: 15
+- topic: AI
+- signal: notable
+- url: https://www.infoq.com/news/2026/10/google-ml-drift/
+- event: google ml drift gpu engine
+- original title: Google ML Drift Accelerates On-Device AI Inference Across Diverse GPUs
+- source: InfoQ | https://www.infoq.com/news/2026/10/google-ml-drift/
+- author: Sergio De Simone
+- image: https://res.infoq.com/news/2026/10/google-ml-drift/en/headerimage/gemini-agentic-vision-1792946554031.jpg
+- read: 3 min
+- full text: yes
+
+> Google says ML Drift already runs on millions of devices through Chrome, YouTube Shorts and Photos, and its benchmark shows 12% less memory overhead than llama.cpp and MLX LM.
+
+Google has released ML Drift, an Apache 2.0 GPU compute engine for on-device inference. It is the core GPU engine behind LiteRT and supports OpenGL ES, OpenCL, Metal and WebGPU. On Windows and Linux it runs through Dawn, Chromium's WebGPU implementation, while macOS keeps a native Metal backend. The engine adds unified shaders, extensible custom operations and hardware-specific tuning for Arm, Intel and Qualcomm GPUs.
+
+Google's numbers come from Gemma models on developer workstations, where it reports 12% lower memory overhead than llama.cpp and MLX LM. Inside its own apps it reports gains such as up to 40% lower frame latency for segmentation effects in YouTube Shorts, and 30% lower latency for face and style effects in Snapchat.
+
+**Takeaways**
+- Re-run the memory comparison on your own device mix, since Google's workstation benchmark does not cover phones.
+
+## Valkey 9.2's LZ4 RDB setting shrinks structured data by 80%, but barely helps random tokens
+- ids: 42
+- topic: Infra
+- signal: notable
+- url: https://dev.to/alexgeorgiev17/valkey-92s-new-rdbcompression-lz4-setting-cuts-a-1m-row-rdb-from-178mb-to-35mb-1cje
+- event: valkey rdbcompression lz4 benchmark
+- original title: Valkey 9.2's new rdbcompression lz4 setting cuts a 1M-row RDB from 178MB to 35MB
+- source: Dev.to | https://dev.to/alexgeorgiev17/valkey-92s-new-rdbcompression-lz4-setting-cuts-a-1m-row-rdb-from-178mb-to-35mb-1cje
+- author: Alex Georgiev
+- image: https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2Fj811w72by0px4w337mu6.png
+- read: 7 min
+- full text: yes
+
+> On a million user-profile records, whole-stream LZ4 cut the RDB file from 178MB to 35MB, while the same setting saved only 4.7% on random 32-byte hex tokens.
+
+Valkey 9.2.0-rc1 adds rdbcompression lz4, which compresses the whole RDB stream rather than each string value. The author tested it against the default LZF scheme, which compresses one value at a time and so cannot find repetition across records. On a million small JSON documents, LZF saved 1.5%, and LZ4 cut the file to 35.4MB, about 80% below the default, for roughly 6% more CPU than LZF. On 200,000 synthetic log lines the cut was 81%. On 200,000 random hex tokens, LZ4 saved 4.7% while adding about 35% wall-clock time over LZF. The release candidate came out September 16, with general availability planned for mid-November.
+
+**Takeaways**
+- Test rdbcompression lz4 on a copy of your own dataset before turning it on, since random tokens and session IDs get little benefit.
+
+## Linux 7.4 sound pull reports a steady flow of AI-found race conditions and deprecates OSS sequencer emulation
+- ids: 77
+- topic: Open Source
+- signal: notable
+- url: https://www.phoronix.com/news/Linux-7.4-Sound
+- event: linux 7.4 sound alsa patches
+- original title: Linux 7.4 Sound Changes Merged: "The AI Flood Continues"
+- source: Phoronix | https://www.phoronix.com/news/Linux-7.4-Sound
+- author: Michael Larabel
+- image: https://www.phoronix.net/image.php?id=ryzen-thinkpad-zen2-zen4&image=ryzen_thinkpad_2
+- read: 2 min
+- full text: yes
+
+> Takashi Iwai, the sound subsystem maintainer, says AI agents are both writing patches and finding kernel bugs, and the pull includes race fixes in ALSA core and JACK.
+
+The Linux 7.4 sound pull opened with SUSE's Takashi Iwai observing that AI-made patches keep arriving, from agents writing fixes and from agents finding new bugs. The changes include hardening ALSA core code against race conditions, a buffer leak fix in compression offload, race fixes in JACK, and the usual C fixes. The OSS sequencer emulation is marked deprecated for 7.4. Hardware additions include compressed playback on SOF IPC4 for Intel Tiger Lake and newer, AMD ACP 7.0 and 7.F sound IP for upcoming Zen 6 platforms, several new codec drivers and a Qualcomm driver for the Shikra platform.
+
+**Takeaways**
+- If you depend on OSS sequencer emulation, check the replacement path before you move to 7.4, since the subsystem now marks it deprecated.
+
+## Apollo's chief economist finds flat margins and revenue per worker outside the megacaps, and no AI productivity gain
+- ids: 70
+- topic: Startups
+- signal: notable
+- url: https://techcrunch.com/2026/10/25/ai-delivers-zero-financial-payoff-to-most-companies-according-to-apollo-economist/
+- event: apollo slok megacap index ai
+- original title: AI delivers ‘zero financial payoff’ to most companies, Apollo economist says
+- source: TechCrunch | https://techcrunch.com/2026/10/25/ai-delivers-zero-financial-payoff-to-most-companies-according-to-apollo-economist/
+- author: Anthony Ha
+- image: https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-1308803174.jpg?resize=1200,800
+- read: 1 min
+- full text: yes
+
+> Torsten Slok's analysis of the S&P 493, the index minus seven megacaps, finds profit margins and revenue per worker flat, with no sign AI is raising productivity.
+
+Apollo Global Management's chief economist, Torsten Slok, looked at the S&P 493, the S&P 500 without Alphabet, Amazon, Apple, Meta, Microsoft, Nvidia and Tesla. He found profit margins and revenue per worker flat and no evidence that AI is improving productivity there. He argues that corporate America has not converted cheaper intelligence into higher revenue or margins, because business decisions depend on judgment, accountability and trust, which AI does not supply. Recent studies have also found little productivity gain from AI.
+
+**Takeaways**
+- Compare revenue per employee in your own business before and after an AI rollout, since that is the measure Slok uses.

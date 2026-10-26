@@ -1,8 +1,15 @@
 {
- "count": 33,
- "latest": "2026-10-25",
+ "count": 34,
+ "latest": "2026-10-26",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-10-26",
+   "edition": 34,
+   "stories": 12,
+   "must_read": 2,
+   "lead": "PingCAP breach exposes customer records and source code, and the extortion group claims 10.6 TB"
+  },
   {
    "date": "2026-10-25",
    "edition": 33,
