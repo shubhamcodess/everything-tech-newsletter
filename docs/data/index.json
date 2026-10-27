@@ -1,8 +1,15 @@
 {
- "count": 34,
- "latest": "2026-10-26",
+ "count": 35,
+ "latest": "2026-10-27",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-10-27",
+   "edition": 35,
+   "stories": 30,
+   "must_read": 5,
+   "lead": "Anthropic's S-1 shows over half of its $100,000-a-year customers now use both the API and a Claude app"
+  },
   {
    "date": "2026-10-26",
    "edition": 34,
