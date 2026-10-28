@@ -1,8 +1,15 @@
 {
- "count": 35,
- "latest": "2026-10-27",
+ "count": 36,
+ "latest": "2026-10-28",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-10-28",
+   "edition": 36,
+   "stories": 28,
+   "must_read": 5,
+   "lead": "A 9.5-severity UEFI firmware flaw has public patch code before most servers can be updated"
+  },
   {
    "date": "2026-10-27",
    "edition": 35,
