@@ -138,41 +138,19 @@ something to act on.
    paragraphs; rewrite the sentence, don't just tweak a word to dodge
    the check.
 
-8. **Deliver via branch + pull request. Never push to `main`.** Do these
-   sub-steps in order, running each command exactly as written (replace
-   `YYYY-MM-DD` with today's date, the same date `publish_edition.py`
-   used):
-
-   a. Run `git branch --show-current`.
-      - If the name starts with `claude/`, stay on it.
-      - If it is `main` or anything else, run
-        `git checkout -b claude/digest-YYYY-MM-DD`.
-      The `claude/` prefix is required: the auto-merge workflow ignores
-      any other branch name.
-
-   b. Run `git add editions docs data/seen.json`
-      (the other `data/` files are gitignored; don't add them).
-
-   c. Run `git commit -m "digest: YYYY-MM-DD"`.
-      If it says "nothing to commit", skip to step 9 and say
-      "no changes to publish" in the summary.
-
-   d. Run `git push -u origin HEAD`.
-      Only if it fails with a network error, retry up to 4 times, waiting
-      2s, 4s, 8s, 16s. If it is rejected for any other reason, do NOT
-      try pushing to `main`; stop and report the error in step 9.
-
-   e. Open the PR. Run
-      `gh pr create --base main --head "$(git branch --show-current)" --title "digest: YYYY-MM-DD" --body "Automated daily digest."`
-      - If it says a PR already exists for this branch, that is fine.
-        Run `gh pr view --json url -q .url` and use that.
-      - If `gh` fails for another reason, report the exact error in
-        step 9. Do not work around it.
-
-   f. Stop. `.github/workflows/auto-merge-routine.yml` merges the PR once
-      CI passes and Pages redeploys on its own. Do NOT merge the PR
-      yourself, do NOT wait for CI, do NOT push to `main`, do NOT
-      force-push.
+8. Deliver by pull request. Never push to `main`.
+   - Run `git branch --show-current`. If the name doesn't start with
+     `claude/`, run `git checkout -b claude/digest-YYYY-MM-DD`.
+   - Commit `editions/`, `docs/` and `data/seen.json` (the `data/`
+     scratch files are gitignored). Commit message: `digest: YYYY-MM-DD`.
+   - `git push -u origin HEAD`. Don't push to `main`; if the push fails,
+     report the error in step 9.
+   - Open the PR: `gh pr create --base main --head <branch> --title
+     "digest: YYYY-MM-DD" --body "Automated daily digest."`. You're
+     authenticated through the routine's GitHub proxy. If a PR for the
+     branch already exists, that's fine.
+   - `.github/workflows/auto-merge-routine.yml` merges it once CI passes.
+     Don't merge it yourself, don't wait for it.
 
 9. Final summary, one short line: sources ok/total, articles fetched,
    candidates, stories published (full text / snippet only), and the PR
