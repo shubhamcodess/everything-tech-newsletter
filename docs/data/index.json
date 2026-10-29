@@ -1,8 +1,15 @@
 {
- "count": 36,
- "latest": "2026-10-28",
+ "count": 37,
+ "latest": "2026-10-29",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-10-29",
+   "edition": 37,
+   "stories": 30,
+   "must_read": 5,
+   "lead": "Google's Gemini 4 Carbon leads on security and coding benchmarks, but outside users cannot use it yet"
+  },
   {
    "date": "2026-10-28",
    "edition": 36,
