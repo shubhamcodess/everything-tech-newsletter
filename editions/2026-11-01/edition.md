@@ -1,0 +1,623 @@
+---
+date: 2026-11-01
+edition: 40
+schema_version: 1
+generated_at: 2026-11-01T01:39:30+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 403
+candidates: 166
+full_text: 21
+---
+
+# The Brief
+
+- Security leads the day: a remote kernel bug in Linux's TCP handshake, an account-takeover chain in ChatGPT, an AI scanner that files only confirmed bugs, and an infostealer that asks an LLM to rank its victims.
+- Hardware and infrastructure numbers moved in both directions: Nvidia quietly cut the published bandwidth of Vera Rubin, Netflix gave some containers dedicated hosts, and Google got four TPUs running in orbit.
+- The AI money picture looks strained. OpenAI shrank its funding target, Nvidia is weighing a loan guarantee for an Anthropic data center, and Reddit's stock fell after its CEO blamed Google's AI Overviews for lower search traffic.
+- Open source is shifting. OpenSearch is losing AWS's share of contributions, Linux 7.4 reverted a bind and unbind taint after it broke VFIO passthrough, and GNOME adopted a formal RFC process.
+- Agents are moving onto physical equipment: one injected a live mouse's brain, and SETI's Allen Telescope Array now takes instructions in natural language.
+
+# Stories
+
+## Linux TCP handshake bug scores 9.8, and most distribution kernels still lack a fix
+- ids: 5
+- topic: Security
+- signal: must-read
+- url: https://atlasum.net/blog/cve-2026-98432-linux-ipv4-tcp-uaf
+- event: linux tcp handshake use after free
+- original title: TCP Use-After-Free: CVE-2026-98432 / CVSS 9.8
+- source: atlasum.net | https://atlasum.net/blog/cve-2026-98432-linux-ipv4-tcp-uaf | via Hacker News
+- author: Atlas Security et al.
+- image: https://atlasum.net/blog/cve-2026-98432-linux-ipv4-tcp-uaf/opengraph-image
+- read: 11 min
+- discuss: https://news.ycombinator.com/item?id=50319143 | Hacker News | 334 points | 157 comments
+- full text: yes
+
+> A remote, unauthenticated attacker can trigger a use-after-free in the IPv4 TCP handshake, and Anthropic says its Claude model wrote a working root exploit.
+
+Linux stable kernels received fixes on October 11 and 15 for a use-after-free in the IPv4 TCP handshake code. The kernel's own CVE Numbering Authority scores it 9.8 on CVSS 3.1, and the flaw dates back to Linux 4.4. The code runs before any application sees the incoming connection, so every server that accepts IPv4 TCP connections on an affected kernel is exposed. The upstream fix is only four lines, but the exposure is wider than the patch, because a container runs on the host's kernel and a fresh image changes nothing.
+
+Anthropic, whose researcher reported the bug, says its Claude model produced a proof-of-concept that runs commands as root on servers that have a multipath TCP listener and no credentials required. Go programs open those listeners by default, according to the Go Security Team, which makes Go services a concrete place to start looking. IPv6 connections are not affected by the main issue, according to the upstream commit message.
+
+The distribution gap is the urgent part. As of the afternoon of October 31, Ubuntu's tracker still listed its linux package as vulnerable on every supported release, with some kernels marked as work in progress and no security notice published. Red Hat rated the bug Critical on October 30 and lists RHEL 8, 9 and 10 as affected with no fix yet. Until distributions ship backported kernels, the upstream fix protects only servers whose operators build their own kernels.
+
+**Takeaways**
+- Compare your running kernel against your distribution's security tracker, not the upstream version number, because distributions backport fixes under their own version strings.
+- List any Go services that listen with multipath TCP enabled, since the Go Security Team says those listeners are open by default.
+- Treat container hosts as exposed even when the images themselves are new, because the containers share the host kernel.
+
+## ChatGPT's share feature let a single link take over the viewer's signed-in account
+- ids: 1, 2, 3
+- topic: Security
+- signal: must-read
+- url: https://www.parameter.ai/labs/we-found-a-gap-at-openai
+- event: chatgpt shared link account takeover mathlive
+- original title: Do the math: How we took over ChatGPT accounts
+- source: parameter.ai | https://www.parameter.ai/labs/we-found-a-gap-at-openai | via Hacker News
+- source: Simon Willison's Blog | https://simonwillison.net/2026/Oct/31/how-we-took-over-chatgpt-accounts/
+- source: Dev.to | https://dev.to/slabb/we-took-over-chatgpt-accounts-the-mathlive-postmessage-chain-and-the-20-line-audit-for-your-own-442c
+- author: Mukul Goyal
+- image: https://www.parameter.ai/opengraph-image.png
+- read: 11 min
+- discuss: https://news.ycombinator.com/item?id=50314699 | Hacker News | 302 points | 149 comments
+- full text: yes
+
+> The write-up says the payload could read private conversations and call ChatGPT's authenticated APIs as the victim, and OpenAI fixed it on October 26.
+
+The researchers say they turned an ordinary public ChatGPT share into JavaScript that runs as chatgpt.com inside whoever opens it. An attacker builds a malicious conversation, publishes it with the normal share feature, and sends the link. The victim does not have to install anything, join a project, paste code or open developer tools. Opening the link is the only step.
+
+The bypass started with two features that looked harmless alone. ChatGPT's HTML Preview runs in a restricted frame on a separate origin, so its code could not read the main page. A math graph in the same conversation, however, loaded the MathLive library, and that library installed a message listener on the main page for its on-screen keyboard. The researchers used the message channel to get out of the sandbox and into the signed-in session.
+
+After that, the payload had the victim's full authority. It could enumerate their chat history, pull a private conversation the attacker had no access to, ship that text to a server the attacker controls, and call ChatGPT's internal APIs under the victim's session. OpenAI patched the flaw on October 26 and rated the report P1. The excerpt does not say whether anyone exploited it before the fix.
+
+**Takeaways**
+- Audit any message listener your pages install, especially those added by third-party widgets, and check the origin of every incoming message before acting on it.
+- If you embed sandboxed previews of untrusted code, confirm that the surrounding page has no listeners reachable from inside the sandbox.
+
+## Nvidia quietly cut Vera Rubin's published bandwidth specs by 13 to 17 percent
+- ids: 89
+- topic: Infra
+- signal: must-read
+- url: https://www.techradar.com/pro/nvidia-forced-to-dial-back-key-bandwidth-targets-on-vera-rubin-hardware-tweaks-will-affect-target-specifications-for-memory-and-interconnect-fabric
+- event: nvidia vera rubin bandwidth specs cut
+- original title: Nvidia forced to dial back key bandwidth targets on Vera Rubin hardware — tweaks will affect target specifications for memory and interconnect fabric
+- source: TechRadar | https://www.techradar.com/pro/nvidia-forced-to-dial-back-key-bandwidth-targets-on-vera-rubin-hardware-tweaks-will-affect-target-specifications-for-memory-and-interconnect-fabric
+- author: Rahim Amir
+- image: https://cdn.mos.cms.futurecdn.net/MLH2WqUBs2jRD6pZ52Gdn6-1462-80.jpg
+- read: 6 min
+- full text: yes
+
+> Nvidia lowered the HBM4 and NVLink figures on its product pages in September without a press release, and the rack-level totals fell with them.
+
+The HBM4 figure Nvidia publishes for each Rubin GPU has dropped from 22 TB/s to 19.2 TB/s, roughly 13 percent lower, and the NVLink 6 figure went from 3.6 TB/s to 3 TB/s, about 17 percent lower. Capacity is still 288 GB per GPU, and the 50 PFLOPS sparse NVFP4 inference number has not moved. Nobody announced any of this. A comparison of October web pages against a June archive turned it up, and archived snapshots date the change to early September.
+
+At rack scale the drop is larger. An NVL72 system's total memory bandwidth goes from 1,580 TB/s to 1,400 TB/s, and its NVLink total falls from 260 TB/s to 216 TB/s. The two-GPU Superchip slips from 44 TB/s to 38.5 TB/s. The worst hit is the eight-GPU HGX NVL8, which gives up 26 percent of its memory bandwidth and sees HBM4 capacity drop from 2.3 TB to 2 TB. AMD's MI455X now comes out ahead on per-GPU memory bandwidth on paper, though no one has benchmarked either side.
+
+The timing makes this more than a paperwork fix. Nvidia's August results said Vera Rubin racks were already running at CoreWeave, Google Cloud and Microsoft Azure, and the fall production shipments were due to begin. That suggests the lower numbers describe hardware now shipping, not a distant target. The figures sat unnoticed on the company's site for at least six weeks, and Nvidia has not explained the change.
+
+**Takeaways**
+- If you size Rubin capacity, use benchmarked numbers from your own tests rather than the product-page figures, and keep a dated copy of any spec sheet you plan around.
+- Read the NVL8 and NVL72 cuts separately, because the eight-GPU system takes the larger hit.
+- Watch for a revised datasheet or an explanation from Nvidia, which the reporting says has not appeared.
+
+## Google's PageBreak agent has filed over 500 XSS bugs, and it only reports ones it can exploit
+- ids: 34
+- topic: Security
+- signal: must-read
+- url: https://www.infoq.com/news/2026/10/google-pagebreak-security-agent/
+- event: google pagebreak ai security agent xss
+- original title: Google Discloses PageBreak AI Security Agent That Found 500+ XSS Bugs
+- source: InfoQ | https://www.infoq.com/news/2026/10/google-pagebreak-security-agent/
+- author: Renato Losio
+- image: https://res.infoq.com/news/2026/10/google-pagebreak-security-agent/en/headerimage/generatedHeaderImage-1791008728252.jpg
+- read: 2 min
+- full text: yes
+
+> PageBreak sends a finding to product teams only after a validator reproduces the exploit against a running application, which keeps false positives near zero.
+
+Google says its PageBreak security agent, built on Gemini models, has uncovered more than 500 cross-site scripting vulnerabilities in its web applications since it entered full operation in January. The agent investigates suspected flaws on its own. It reports them only after deterministic validators confirm the exploit against a live environment, which is the design choice that keeps the false-positive rate close to zero.
+
+The validators are concrete. For XSS, that means running JavaScript; for path traversal, writing to a world-readable location; for remote code execution, triggering outbound DNS. Hypotheses that fail validation are not thrown away. Google keeps them internally to seed deeper future scans, to find gaps in its validators, and to guide new validator work. The company's own engineers concede that the validators cannot yet cover every vulnerability type, so some real bugs will be missed as false negatives.
+
+A companion write-up on Google's Bug Hunters site walks through three findings from the system: a script injection flaw, a cache poisoning bug that traces back to a misconfigured service, and a directory traversal case. The open question is how far the validator approach can stretch beyond XSS and simple path traversal, because the excerpt does not say how the validators handle more complex logic.
+
+**Takeaways**
+- If an AI scanner in your pipeline files findings, require a runnable payload for each one before it reaches a ticket queue.
+- Track which vulnerability classes your automated checks cannot validate, since those are where a scanner's misses will concentrate.
+
+## Netflix gives select Titus containers their own EC2 instance
+- ids: 58
+- topic: Infra
+- signal: must-read
+- url: https://www.infoq.com/news/2026/10/netflix-titus-kubernetes-microvm/
+- event: netflix titus single tenant vm isolation
+- original title: Netflix Titus Adds Single-Tenant VM Isolation for Containers
+- source: InfoQ | https://www.infoq.com/news/2026/10/netflix-titus-kubernetes-microvm/
+- author: Claudio Masolo
+- image: https://res.infoq.com/news/2026/10/netflix-titus-kubernetes-microvm/en/headerimage/generatedHeaderImage-1793268697529.jpg
+- read: 4 min
+- full text: yes
+
+> Netflix concluded that tuning a shared kernel narrows noisy-neighbor interference without removing it, so stateful streaming jobs can now get a host to themselves.
+
+Titus, Netflix's container platform, now has a single-tenant mode that gives one task its own right-sized EC2 instance. Application teams don't change how they deploy, because the Compute/Platform team keeps owning and patching the underlying host. Early users are streaming workloads that hold state and push heavy throughput, where a noisy neighbor can force minutes of checkpoint recovery.
+
+The reasoning is concrete. Titus runs millions of containers a week on tens of thousands of instances, and Netflix found that standard kernel controls, including cgroups, seccomp and iocost, along with traffic shaping, can't divide the last-level cache or memory bandwidth between tasks. Its HTB shaper uses a global lock, so one container flooding the host with tiny packets can eat kernel CPU and starve the rest. Pinning and eBPF detection helped but didn't close the gap. Firecracker and Kata were out because they need bare metal or nested virtualization, which wasn't ready on Netflix's instance types, and they lack GPU support. gVisor added overhead on I/O-heavy paths.
+
+The price is slower starts. A new instance takes tens of seconds to boot before the image pull can begin, and warm pools buy less here because right-sizing produces many instance shapes. Netflix holds a small warm pool for its most latency-critical launches and caps the sizes on offer. Scheduling rules keep each node to a single task, using anti-affinity, a priority class that cannot be preempted, and a node taint, and defragmentation is turned off so nothing moves a running task. Isolation is measured with a reference app run solo and again beside a "havoc" container, with throughput and tail latency compared, but no results are posted.
+
+**Takeaways**
+- If your workloads are noisy-neighbor sensitive, measure isolation the way Netflix does, with the app alone and beside a load generator, because the post gives no numbers to compare against.
+- Budget for boot time on dedicated instances, since tens of seconds before the first pull can break a latency-critical autoscaling path.
+
+## Infostealer Volta-Autodoxer uses AI to rank its victims
+- ids: 123
+- topic: Security
+- signal: recommended
+- url: https://www.wired.com/story/kernel-panic-volta-autodoxer-ai-infostealer-malware/
+- event: infostealer ai victims dossier
+- original title: Spooky New Infostealer Malware Uses AI to ‘Autodox’ Victims
+- source: Wired | https://www.wired.com/story/kernel-panic-volta-autodoxer-ai-infostealer-malware/
+- author: Lily Hay Newman and Matt Burgess
+- image: https://media.wired.com/photos/6ae4e9f503c2c36f4cfc913c/191:100/w_1280,c_limit/KernelPanic_10312026_v1.jpg
+- read: 4 min
+- full text: yes
+
+> Cisco Talos found a strain that bundles stolen data into a dossier and asks commercial LLMs to name the most valuable targets.
+
+Cisco Talos researchers found a new infostealer that the malware calls Volta internally, and they named it Volta-Autodoxer. The traditional stealing capabilities are broad. Volta collects browser-stored passwords, Microsoft OAuth tokens, cookies, payment cards and crypto wallet seed phrases, and it also takes active Discord, Telegram, Steam and Roblox sessions. A second sweep then uses the first round's findings to go deeper.
+
+The new part is the analysis step. Volta packs what it collects into a serialized dossier and sends it to a couple of LLMs, asking the model to act as an intelligence analyst and return a structured, citation-backed assessment of the victim. The model acts as a prioritization function that surfaces the highest-value targets. Talos flagged the strain with CAIRN, its new framework for identifying hacking tools that embed AI capabilities.
+
+The researchers did not check whether Volta has been deployed in real attacks, so this reporting describes capability rather than the number of infections.
+
+**Takeaways**
+- After any suspected infostealer infection, revoke Microsoft OAuth tokens and end active Discord, Telegram and game sessions, not only browser passwords.
+- On managed endpoints, watch for unexpected outbound requests to LLM APIs from processes that have no business calling them.
+
+## Netgear patches two router flaws, and one affected model has reached end of support
+- ids: 148
+- topic: Security
+- signal: recommended
+- url: https://www.zdnet.com/tech/netgear-routers-vulnerable-security-exploit/
+- event: netgear router firmware flaws patch
+- original title: Your Netgear router may be vulnerable to a security exploit – how to check and patch it
+- source: ZDNet | https://www.zdnet.com/tech/netgear-routers-vulnerable-security-exploit/
+- author: Lance Whitney
+- image: https://www.zdnet.com/wp-content/uploads/sites/3/wirelessred-GettyImages-865321186.jpg
+- read: 4 min
+- full text: yes
+
+> Both flaws need an attacker already on your network, and the RAX5 gets no fix beyond the latest firmware, so its owners need a new router.
+
+Netgear has released firmware for each affected model, and both vulnerabilities are rated medium severity. The first, CVE-2026-11732, could let an attacker on the network run unauthorized commands on the device, but only if the Block Sites feature is enabled. The second, CVE-2026-11731, lets an unauthenticated attacker on the local network view and change device details and administrative settings through the management service.
+
+The affected models are the CAX30 cable modem router, the RAX30 and the RAXE300 Tri-Band, plus the RAX5. The RAX5 has reached end of service, so the firmware now available is its last. Netgear advises those owners to move to a newer router rather than wait for another update.
+
+**Takeaways**
+- Check whether Block Sites is enabled on your router, and install the firmware first if it is.
+- Limit who can join your Wi-Fi, since both flaws require network access before they can be used.
+
+## Molly, the Signal fork, has gone three months without an update and misses a Signal fix
+- ids: 7
+- topic: Security
+- signal: notable
+- url: https://piefed.world/post/1503394
+- event: molly signal fork not updated
+- original title: Molly (Signal fork) has not been updated since 3 months and is vulnerable
+- source: piefed.world | https://piefed.world/post/1503394 | via Hacker News
+- author: Beep
+- read: 1 min
+- discuss: https://news.ycombinator.com/item?id=50314666 | Hacker News | 301 points | 177 comments
+- full text: yes
+
+> A community post says Molly last shipped on July 31 and still lacks a fix that mainline Signal received in October.
+
+A post on a community forum says Molly's most recent release was on July 31, version v8.19.2-4. It argues that the fork still contains vulnerabilities that mainline Signal patched, including an exploit disclosed in October that Signal fixed in version 8.27. The post recommends switching to mainline Signal and deleting Molly until its maintainers return to a regular update schedule. These are the poster's claims. The post does not name the exploit or provide a CVE, so the details beyond the version numbers could not be confirmed.
+
+**Takeaways**
+- Check the version and release date of any Molly build you run, and compare them against the current mainline Signal release.
+
+## Binance says 90 percent of the $6.3 billion stolen from users has been replaced
+- ids: 96
+- topic: Security
+- signal: notable
+- url: https://www.theverge.com/tech/1024091/binance-ceo-90-percent-stolen-crypto
+- event: binance stolen funds replenished withdrawals
+- original title: Binance CEO says 90 percent of stolen assets have been ‘replenished’
+- source: The Verge | https://www.theverge.com/tech/1024091/binance-ceo-90-percent-stolen-crypto
+- author: Terrence O'Brien
+- image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK428_CRYPTO_3_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200
+- read: 1 min
+- full text: yes
+
+> Binance is covering losses directly, and it plans to reopen withdrawals on Sunday, November 1, once its remaining tokens are acquired.
+
+Binance's chief executive says about 90 percent of the crypto stolen from customers in a record heist has been restored, and the company says it will cover the remaining 10 percent too. The stolen total was $6.3 billion. The company is paying the losses directly. The unrestored portion consists of what Binance calls less liquid tokens, which it says may take longer to acquire.
+
+Withdrawals are still paused. Binance said in a post on X that it is on track to reopen them within its previously stated timeframe, on Sunday, November 1, and that it will publish more once details are confirmed. The excerpt does not describe how the attackers got in, so the cause of the breach remains unexplained in what was reported.
+
+**Takeaways**
+- If you hold assets on Binance, confirm that withdrawals have reopened before moving funds, since the company targets Sunday, November 1, and has not confirmed the reopening yet.
+
+## Reddit's stock falls 29 percent as Google's AI Overviews cut its search referrals
+- ids: 106
+- topic: AI
+- signal: recommended
+- url: https://tech.slashdot.org/story/26/10/31/0458218/googles-ai-overviews-lowered-reddits-traffic-its-stock-dropped-29
+- event: reddit stock google ai overviews traffic
+- original title: Google's AI Overviews Lowered Reddit's Traffic. Its Stock Dropped 29%
+- source: Slashdot | https://tech.slashdot.org/story/26/10/31/0458218/googles-ai-overviews-lowered-reddits-traffic-its-stock-dropped-29
+- author: EditorDavid
+- full text: no
+
+> Reddit's CEO said Google search referrals fell meaningfully this quarter, and analysts downgraded the stock after a weak sales forecast.
+
+This story is built from the headline and standfirst only, because the full article could not be retrieved. Reddit's shares fell 29.22 percent on Friday, the steepest drop since its 2024 listing, after sales growth came in below the previous quarters and the company forecast weak sales for the coming quarter. Reddit's chief executive, Steve Huffman, told CNBC that search-referral traffic from Google dropped meaningfully this quarter and linked the decline to AI Overviews. Several analysts cut their ratings on the stock afterward.
+
+The read-through is for any site that depends on search referrals. The mechanism Reddit described is a summary on the results page answering the query before the visitor clicks through.
+
+**Takeaways**
+- If your site relies on Google search, split referral traffic by query type and watch for drops that line up with AI Overview rollouts.
+
+## Nvidia weighs guaranteeing Nscale's debt for an Anthropic data center in West Virginia
+- ids: 141
+- topic: Startups
+- signal: recommended
+- url: https://techcrunch.com/2026/10/30/nvidia-weighs-playing-the-cosigner-for-nscales-ai-data-center-in-west-virginia/
+- event: nvidia nscale anthropic data center guarantee
+- original title: Nvidia weighs playing the cosigner for Nscale’s AI data center in West Virginia
+- source: TechCrunch | https://techcrunch.com/2026/10/30/nvidia-weighs-playing-the-cosigner-for-nscales-ai-data-center-in-west-virginia/
+- author: Aditya Mehta
+- image: https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2235971874.jpg?resize=1200,800
+- read: 3 min
+- full text: yes
+
+> Under a residual value guarantee, Nvidia would take over the facility and find a new tenant if Nscale defaults on construction payments.
+
+Nvidia is discussing a guarantee on billions of dollars of Nscale's debt for its planned West Virginia campus, The Information reported, and Bloomberg confirmed the account. Nscale's IPO filing says Anthropic committed $44.6 billion to the first building there, a 460-megawatt structure set to run Nvidia's Vera Rubin chips. The two companies are also talking about a second building, worth roughly $45 billion.
+
+The structure matters. A residual value guarantee would let Nvidia step in if Nscale defaults on construction payments, take temporary control of the facility, and help find a buyer or new tenant. Nvidia's earlier support for cloud providers mostly covered leases and chip purchases, not construction, so this would extend its exposure into the building itself. The Information puts Nvidia's total investments and credit support to neoclouds and large customers at about $170 billion.
+
+Nscale's operating record is the counterweight. It had about 25,000 advanced AI chips running in August against a plan for nearly 500,000. Runoff from the West Virginia site has flooded nearby homes more than once, and Microsoft pulled out of a planned English site after grid power was pushed into the 2030s. Shares of CoreWeave, Nebius and IREN each fell more than 30 percent in October.
+
+**Takeaways**
+- If you have exposure to neocloud stocks, check Nscale's chip ramp against the roughly 25,000 it had running in August, since its plan calls for nearly 500,000.
+- Watch whether the guarantee closes and what terms it carries, since they will show how much construction risk the chipmaker is willing to absorb.
+
+## OpenAI cuts its funding target to $20 billion as the round stalls at $11 billion
+- ids: 100
+- topic: Startups
+- signal: recommended
+- url: https://techcrunch.com/2026/10/31/openai-reportedly-lowers-funding-target-for-new-round/
+- event: openai funding round lowered target
+- original title: OpenAI reportedly lowers funding target for new round
+- source: TechCrunch | https://techcrunch.com/2026/10/31/openai-reportedly-lowers-funding-target-for-new-round/
+- author: Anthony Ha
+- image: https://techcrunch.com/wp-content/uploads/2026/07/OpenAI-logo-green.jpg?w=1024
+- read: 1 min
+- full text: yes
+
+> The Financial Times reports the target dropped from $30 billion, while The Wall Street Journal says $11 billion is secured so far.
+
+OpenAI's latest round has been scaled back. The Financial Times reported that the company lowered its target to $20 billion, from an earlier $30 billion raise at a $1.4 trillion valuation and then at $1.25 trillion, with the first close expected to be lower still. The round is led by investors from the United Arab Emirates, and a later retail offering for wealthy individuals could bring the total to the target.
+
+The Wall Street Journal reports that OpenAI has secured $11 billion so far, and that some large investors gave the raise a lukewarm reception. The company had been preparing an IPO. TechCrunch notes that investors have grown wary of heavy AI infrastructure spending after a sell-off in tech stocks, and that Anthropic's planned IPO may face similar pressure. OpenAI had not commented when TechCrunch published.
+
+**Takeaways**
+- Track whether the retail tranche closes the gap between the $11 billion secured and the $20 billion target, since the first close is expected to land below even that.
+
+## Boom's Overture timeline slips as the supersonic company pivots to data-center turbines
+- ids: 12, 13
+- topic: Startups
+- signal: recommended
+- url: https://arstechnica.com/gadgets/2026/10/united-airlines-ceo-doubts-supersonic-airliner-from-boom-will-be-ready-by-2029/
+- event: boom supersonic gas turbines data centers
+- original title: Supersonic airliner in doubt as company shifts to powering AI data centers
+- source: Ars Technica | https://arstechnica.com/gadgets/2026/10/united-airlines-ceo-doubts-supersonic-airliner-from-boom-will-be-ready-by-2029/
+- source: Slashdot | https://hardware.slashdot.org/story/26/10/30/2355244/supersonic-airliner-in-doubt-as-company-shifts-to-powering-ai-data-centers
+- author: Jeremy Hsu
+- image: https://cdn.arstechnica.net/wp-content/uploads/2026/10/Superpower-Superfactory-2560x1440.jpg
+- read: 2 min
+- full text: yes
+
+> A United Airlines CEO doubts the 2029 delivery date, while Boom opens a Colorado factory for gas turbines.
+
+Boom Supersonic unveiled a Colorado factory that will make gas turbines for AI data centers, and its chief executive framed the move as a renaissance in both energy and supersonic flight. Early backers of both ventures have questioned the aircraft timeline or dropped out. United Airlines CEO Scott Kirby, one of Boom's first customers, said in an October 28 podcast interview that 2029 is Boom's official timeline but that the first delivery will take longer.
+
+Regulators are also moving Boom's way. Boom flew its XB-1 demonstrator in 2024 and 2025 to test a "boomless cruise" approach that bends shockwaves upward. In June 2026 the FAA proposed a rule that would end the long-running restriction on supersonic commercial flights over US land, following a presidential executive order. Boom holds conditional agreements with American Airlines, Japan Airlines and United, backed by non-refundable deposits of undisclosed size, that would let each airline buy the Overture once it is available.
+
+The open question is funding. The reporting does not say how much the turbine business contributes to the airliner program, and the deposit amounts remain unknown.
+
+**Takeaways**
+- When comparing supersonic options, treat 2029 as an unconfirmed target, and check the FAA rulemaking docket for the final rule.
+
+## Linux 7.4 reverts a fuzzing filter after it broke VFIO device passthrough
+- ids: 120
+- topic: Open Source
+- signal: recommended
+- url: https://www.phoronix.com/news/Linux-7.4-Drops-Taint-Bind
+- event: linux bind unbind vfio revert
+- original title: New Linux 7.4 Feature For Reducing AI Noise Already Reverted Due To A "Crazy Beast"
+- source: Phoronix | https://www.phoronix.com/news/Linux-7.4-Drops-Taint-Bind
+- author: Michael Larabel
+- image: https://www.phoronix.net/image.php?id=2026&image=crazy_beast
+- read: 2 min
+- full text: yes
+
+> The feature flagged sysfs bind and unbind calls to cut junk fuzzer reports, but VFIO relies on the same interface to hand devices to virtual machines.
+
+Greg Kroah-Hartman added TAINT_FORCED_BIND in September. The option taints the running kernel whenever the sysfs bind and unbind interface is used, so maintainers can spot bug reports produced by fuzzers such as Syzbot, which were binding hardware to drivers that had nothing to do with it. The option merged for Linux 7.4 as a response to a large fuzzing campaign against the kernel.
+
+The change was reverted within a week, after developers found that VFIO depends on bind and unbind to detach PCIe devices from host drivers and attach them to vfio-pci for guest VMs. In the revert, Kroah-Hartman called VFIO a "crazy beast" and said people had been relying on the debugging interface for passthrough, so the taint would fire on normal workflows. He said a proposal from Uwe is the likely way forward and will be revisited after 7.4. The revert merged on a Friday night.
+
+**Takeaways**
+- If your bug triage flags sysfs bind and unbind usage as suspicious, expect false positives from VFIO users until a replacement lands.
+
+## OpenSearch's AWS share of contributions fell from 91 to 72 percent in five years
+- ids: 107
+- topic: Open Source
+- signal: recommended
+- url: https://thenewstack.io/opensearch-foundation-aws-elasticsearch/
+- event: opensearch aws contributions linux foundation
+- original title: Five years after the fork, OpenSearch is slowly stepping out of AWS’s shadow
+- source: The New Stack | https://thenewstack.io/opensearch-foundation-aws-elasticsearch/
+- author: Paul Sawers
+- image: https://cdn.thenewstack.io/media/2026/10/e88d1014-aws-hero.jpg
+- read: 6 min
+- full text: yes
+
+> Self-managed OpenSearch deployments grew faster than Amazon's managed service, with 60 percent of surveyed users now running their own clusters in the cloud.
+
+OpenSearch started in January 2021 as AWS's response to Elastic moving Elasticsearch and Kibana off Apache 2.0. Elastic later restored open-source licensing with AGPL, and reconciled with AWS. OpenSearch kept its own path, and in September 2024 AWS moved it to the Linux Foundation under the OpenSearch Software Foundation with vendor-neutral governance.
+
+The contribution numbers now show the shift. According to figures from the foundation, AWS's share of contribution activity across the repositories fell from 91 percent in the first year to 72 percent in 2025 and 2026. Amazon-affiliated engineers were 95 percent of core repository maintainers in April 2022 and are 71 percent now. The 2026 Open Data Infrastructure Report says 60 percent of surveyed users run self-managed deployments in the cloud, up from 37 percent in 2024, while use of Amazon's managed service rose from 44 to 48 percent.
+
+The figures come from the foundation itself, and the article notes that AWS's history with the project still puts off some prospective users.
+
+**Takeaways**
+- When choosing a search cluster, check the maintainer mix in the core repository, not only the license.
+
+## OpenBSD 8.0 adds Intel Arc graphics support and 64-vCPU virtual machines
+- ids: 26
+- topic: Infra
+- signal: recommended
+- url: https://www.infoq.com/news/2026/10/openbsd-8-released/
+- event: openbsd 8.0 release intel arc
+- original title: OpenBSD 8.0 Brings Expanded Hardware Support, Security Enhancements, and Virtualization Improvements
+- source: InfoQ | https://www.infoq.com/news/2026/10/openbsd-8-released/
+- author: Sergio De Simone
+- image: https://res.infoq.com/news/2026/10/openbsd-8-released/en/headerimage/openbsd-8-released-1793464400707.jpeg
+- read: 3 min
+- full text: yes
+
+> The release widens the AMD64 kernel's virtual address space from 4 GB to 512 GB, and NVIDIA GPUs remain unsupported.
+
+OpenBSD 8.0 adds support for Intel's Arc A-Series graphics, based on the DG2 Alchemist architecture. The AMD64 kernel's virtual address space grows from 4 GB to 512 GB, which lets the kernel map graphics cards with more than 4 GB of video memory. The vmm and vmd hypervisor tools now run multi-processor guests with up to 64 virtual CPUs each.
+
+Other changes include the RISC-V vector extension and Advanced Interrupt Architecture, arm64 hibernation, faster swap encryption using AES instructions, and new wireless and peripheral drivers. The httpd daemon gains custom HTTP headers, header block and drop rules, and cache control for static files. The release includes LibreSSL 4.4.0. NVIDIA GPUs remain unsupported, because NVIDIA does not provide proprietary binary drivers for OpenBSD. The project says the default install has had only two remote holes in more than thirty years.
+
+**Takeaways**
+- If you are considering OpenBSD for a workstation, confirm your Intel Arc card and drivers against the release notes before buying hardware.
+- If you run httpd, test the new header and cache-control rules before relying on them in production.
+
+## LocalStack's Azure emulator enters free preview, but many settings are stored and never enforced
+- ids: 33
+- topic: Dev Tools
+- signal: recommended
+- url: https://www.infoq.com/news/2026/10/localstack-azure-preview/
+- event: localstack azure emulator public preview
+- original title: LocalStack for Azure Enters Public Preview with Security Settings Stored but Not Enforced
+- source: InfoQ | https://www.infoq.com/news/2026/10/localstack-azure-preview/
+- author: Steef-Jan Wiggers
+- image: https://res.infoq.com/news/2026/10/localstack-azure-preview/en/headerimage/generatedHeaderImage-1793037893055.jpg
+- read: 3 min
+- full text: yes
+
+> LocalStack's own docs list App Service keys, access restrictions and HTTPS-only as stored but not enforced, so a passing local test proves less than it appears to.
+
+A local Azure emulator from LocalStack is now in a free, self-serve public preview, due for general availability in early 2027. Existing deployment code runs against it unchanged: ARM and Bicep templates, Terraform, Pulumi and Azure CLI scripts all work. Services include AKS, Container Apps, Functions, Cosmos DB, Service Bus, Key Vault and API Management, and every developer gets a sandbox of their own.
+
+Coverage is uneven. The documentation lists 24 resource providers and shows how much of each API is built: Storage Accounts has 13 of 81 operations, App Service 143 of 616, and Virtual Network 10 of 29. Many of the operations that exist accept settings, save them and hand them back without applying them. On App Service, keys and access restrictions are ignored, along with authentication and credential policies. HTTPS-only is not enforced, so the emulator serves plain HTTP, and custom hostnames answer only on default names. Backup settings are stored, though backup and restore do not exist.
+
+Networking is the weakest area. The Virtual Network page states that the emulator does not route traffic or enforce security rules, peering is unsupported, and VPN gateways, ExpressRoute, Load Balancer and Application Gateway are not implemented. Private DNS zones accept only A records. The project lead, Paolo Salvatori, a former Microsoft principal, says that if a solution works on Azure but fails on the emulator, the emulator's behavior is the bug to fix.
+
+**Takeaways**
+- Before using LocalStack for an App Service or Storage test, check the coverage page for each operation you call.
+- Keep HTTPS-only, access-restriction and authentication checks in a real Azure staging environment, since the emulator does not enforce them.
+
+## An AI agent picked a gene therapy and injected a live mouse's brain
+- ids: 131
+- topic: AI
+- signal: notable
+- url: https://www.wired.com/story/an-ai-agent-did-brain-surgery-on-live-mouse/
+- event: ai agent mouse brain injection
+- original title: An AI Agent Injected Drugs Into a Live Mouse’s Brain
+- source: Wired | https://www.wired.com/story/an-ai-agent-did-brain-surgery-on-live-mouse/
+- author: Emily Mullin
+- image: https://media.wired.com/photos/6ae4d6bbd55a0e2bc0a8d990/191:100/w_1280,c_limit/103026-AI%20Mouse%2002.jpg
+- read: 4 min
+- full text: yes
+
+> The first model the team tried, Claude Opus 5.5, refused to guide the needle, suggesting the procedure could stop midway and endanger the animal.
+
+Biotech founder Gabriel Ocana Santero, the CEO of Exin Therapeutics, connected an AI agent to a custom surgical rig for brain injections in mice. A veterinary surgeon performed the craniotomy while the agent watched through a camera. The agent then chose one of 19 gene therapy options from a spreadsheet, picked the brain region and injection coordinates, and controlled the robotic arms, the needle, the volume and the speed. The therapy was being tested for reducing seizures in a mouse with epilepsy.
+
+The first model the team tried, Anthropic's Claude Opus 5.5, refused to guide the needle into the brain, reasoning that the procedure might stop partway through and endanger the animal. Santero says the agent told him that something in its output was warning it not to proceed. The excerpt does not name the model that carried out the injection.
+
+Santero argues that models trained mainly on published literature miss failed experiments, unexpected results and the real-time decisions scientists make, so connecting them to lab equipment can make them more reliable. The evidence is one experiment on one mouse, described in his social media post and an interview.
+
+**Takeaways**
+- For any agent controlling lab equipment, log refusals and the reasons given, since this agent's refusal is what flagged the risk in the first place.
+- Require a human operator to approve the actuation step before an agent drives a needle or pump.
+
+## SETI's Allen Telescope Array now runs agents that take natural-language instructions
+- ids: 56
+- topic: AI
+- signal: notable
+- url: https://blogs.nvidia.com/blog/ai-joins-the-search-for-extraterrestrial-signals/
+- event: seti breakthrough listen agentic ai
+- original title: Things That Go Beep in the Night: Agentic AI Joins the Search for Extraterrestrial Signals
+- source: NVIDIA Blog | https://blogs.nvidia.com/blog/ai-joins-the-search-for-extraterrestrial-signals/
+- author: Chris Porter
+- image: https://blogs.nvidia.com/wp-content/uploads/2026/10/IMG_1607-ATA-2023-CREDIT-Joe-Marfia-scaled.jpg
+- read: 3 min
+- full text: yes
+
+> Agents can steer the instrument, correct incoming data and apply models to the live stream, all from a single plain-language request.
+
+At the Allen Telescope Array in Northern California, Breakthrough Listen and the SETI Institute have put AI agents to work on the routine hunt for signals from other civilizations. A single plain-language request can have an agent steer the telescope, clean up incoming data and run AI models over the live stream. The stack is built on NVIDIA's Holoscan platform, which feeds sensor data to the agents.
+
+The pipeline has three layers. DAQIRI, a Holoscan library, pulls terabits per second of sensor data directly into GPU memory, so observations are processed as they arrive instead of being written to disk first. CyberEther, a signal-processing framework from the SETI Institute, performs the math with cuFFT and cuBLAS. Nexus, a web-based observatory orchestrator, serves as the agent harness with one source of truth for instrument state, compute and pipelines, and researchers can watch packet loss, read live spectrograms and rewrite processing blocks by prompting.
+
+The post is from NVIDIA and describes the setup without reporting any detections. Andrew Siemion, the project's principal investigator, argues the signals found may have more in common with the agents that search for them than with their human builders.
+
+**Takeaways**
+- If you process high-rate sensor data, the transferable pattern is ingesting directly into GPU memory so the data is processed in flight.
+
+## A Google satellite with four TPUs is running Gemma 4 in orbit, with a 20-minute power limit
+- ids: 139
+- topic: Infra
+- signal: notable
+- url: https://science.slashdot.org/story/26/10/30/2344228/googles-first-data-center-satellite-is-online-and-writing-poetry
+- event: google data center satellite tpus orbit
+- original title: Google's First Data Center Satellite Is Online and Writing Poetry
+- source: Slashdot | https://science.slashdot.org/story/26/10/30/2344228/googles-first-data-center-satellite-is-online-and-writing-poetry
+- author: BeauHD
+- full text: no
+
+> On the satellite's power budget, each TPU can run for only about 20 minutes at a time, which complicates the plan for orbital inference.
+
+This story is built from the headline and standfirst only, because the full article could not be retrieved. Google's first orbital data center test satellite launched earlier this month and is now operating. The satellite runs the Gemma 4 model and generated a haiku about being in orbit. It carries four Google Tensor Processing Units and produces up to 1 kW of electricity.
+
+Google's stated goal is to pave the way for networks of close-flying satellites that perform large inference workloads in orbit. The constraint is power. Each TPU draws enough power that the satellite can run it for only about 20 minutes at a time.
+
+**Takeaways**
+- Watch for Google's follow-up on sustained runtime, since the 20-minute limit is the number that decides whether orbital inference is practical.
+
+## France moves toward a per-gigabyte tax on internet traffic
+- ids: 95
+- topic: Infra
+- signal: notable
+- url: https://tech.slashdot.org/story/26/10/31/1857243/french-lawmakers-back-per-gigabyte-internet-traffic-tax
+- event: france per gigabyte internet traffic tax
+- original title: French Lawmakers Back Per-Gigabyte Internet Traffic Tax
+- source: Slashdot | https://tech.slashdot.org/story/26/10/31/1857243/french-lawmakers-back-per-gigabyte-internet-traffic-tax
+- author: EditorDavid
+- full text: no
+
+> French lawmakers approved the tax 11 to 10 on October 30, and it now sits in the next budget over government objections.
+
+This story is built from the headline and standfirst only, because the full article could not be retrieved. Members of the National Assembly voted 11 to 10 in support of a motion on October 30 that puts a tax on the amount of data sent per gigabyte to users in France into the country's next budget. The reporting names Google, Netflix, TikTok and Meta as companies that could end up owing it. The government side and the finance committee's rapporteur opposed the motion, and the standfirst gives no rate, threshold or start date.
+
+**Takeaways**
+- If your service sends heavy traffic to France, wait for the budget text to publish the rate and thresholds before modeling the cost.
+
+## Flock reinstalled cameras in towns that had canceled its contracts
+- ids: 102
+- topic: Security
+- signal: notable
+- url: https://yro.slashdot.org/story/26/10/31/0238210/flock-reinstalled-its-cameras-after-another-city-canceled-its-contract
+- event: flock cameras reinstalled canceled contracts
+- original title: Flock Reinstalled Its Cameras After Another City Canceled Its Contract
+- source: Slashdot | https://yro.slashdot.org/story/26/10/31/0238210/flock-reinstalled-its-cameras-after-another-city-canceled-its-contract
+- author: EditorDavid
+- full text: no
+
+> In Plymouth, Minnesota, police had to unplug cameras because Flock ignored a cancellation notice, and Dayton says Flock installed cameras without permission.
+
+This story is built from the headline and standfirst only, because the full article could not be retrieved. Earlier reporting from The Drive described a police chief in Plymouth, Minnesota, who had his staff disconnect Flock cameras after the company did not respond to the city's notice that it was canceling service. The Drive reports that in other places Flock has reinstalled cameras without permission. In Dayton, Minnesota, the city said in a September 29 community update that Flock had installed and activated two cameras against its direction.
+
+**Takeaways**
+- If your city runs Flock cameras, get written confirmation of how they will be removed after a contract ends, and check that no units remain connected afterward.
+
+## Reward labels barely matter, one test suggests, but one of three models followed wrong ones
+- ids: 124
+- topic: AI
+- signal: notable
+- url: https://towardsdatascience.com/i-told-an-ai-agent-that-its-wrong-answers-were-right-one-model-believed-me/
+- event: reward labels ai agents wrong
+- original title: I Told an AI Agent That Its Wrong Answers Were Right. One Model Believed Me.
+- source: Towards Data Science | https://towardsdatascience.com/i-told-an-ai-agent-that-its-wrong-answers-were-right-one-model-believed-me/
+- author: Abdullahi Dattijo
+- full text: no
+
+> The author tested a paper's claim that reward labels barely change how agents learn, and one of three models followed the wrong labels exactly.
+
+This story is built from the headline and standfirst only, because the full article could not be retrieved. One paper argues that the reward labels an agent receives hardly affect what it learns. Testing three models, the author found one that followed the bad labels to the letter. That result cuts against the paper's claim, but the standfirst does not say which models were used, what the labels were, or how learning was measured, so the strength of the disagreement cannot be judged from here.
+
+**Takeaways**
+- Before accepting a claim that reward labels matter little, run your own control with deliberately wrong labels on the models you use.
+
+## CUDA Oxide 0.3 moves NVIDIA's Rust-to-CUDA compiler onto stable Rust
+- ids: 136
+- topic: Languages
+- signal: notable
+- url: https://www.phoronix.com/news/CUDA-Oxide-0.3
+- event: cuda oxide rust nvidia release
+- original title: CUDA Oxide 0.3 Vastly Improves Rust Support For NVIDIA CUDA Programming
+- source: Phoronix | https://www.phoronix.com/news/CUDA-Oxide-0.3
+- author: Michael Larabel
+- image: https://www.phoronix.net/image.php?id=2026&image=cuda_oxide_03
+- read: 1 min
+- full text: yes
+
+> An experimental cute-rs port of CUTLASS CuTe is in testing on Blackwell GPUs, where it runs Qwen3-8B end to end at BF16 and NVFP4.
+
+NVIDIA's CUDA Oxide, its experimental Rust-to-CUDA compiler, reached version 0.3 at the end of October. It now targets the stable Rust channel, currently 1.99.1, so nightly builds are no longer needed. Version 0.3 also folds cutile-rs's host runtime into the cuda-rust monorepo.
+
+The most notable addition is cute-rs, an experimental Rust version of CUTLASS CuTe. According to the release coverage, it runs Qwen3-8B end to end at BF16 and NVFP4, along with Qwen3-TTS, and those runs are being tested on Blackwell GPUs. Version 0.3 also adds full cuda-gdb DWARF debugging support, in-kernel event tracing, register and spill diagnostics, and performance work for Blackwell and Hopper GPUs.
+
+The project remains experimental, and the coverage gives no benchmark comparison against CUTLASS's C++ implementation.
+
+**Takeaways**
+- If you evaluate Rust for GPU kernels, try the cuda-gdb debugging path first, since it is new in 0.3.
+
+## GNOME adopts a formal RFC process for major technical changes
+- ids: 130
+- topic: Open Source
+- signal: notable
+- url: https://www.phoronix.com/news/GNOME-Establishes-RFC
+- event: gnome rfc process consensus
+- original title: GNOME Now Has An Established RFC Process, GNOME OS Continues Improving
+- source: Phoronix | https://www.phoronix.com/news/GNOME-Establishes-RFC
+- author: Michael Larabel
+- image: https://www.phoronix.net/image.php?id=cachyos-ubuntu2610-fedora45&image=cachy_fedora_2
+- read: 1 min
+- full text: yes
+
+> GNOME OS also enabled the LDAC codec and improved NVIDIA support for Snap apps in the same week the process was agreed.
+
+GNOME stakeholders reached consensus on a Request for Comments process for major technical questions and changes, led by Sophie Herold. It formalizes the ad hoc discussions GNOME relied on until now, and the full text lives in the GNOME RFCs repository.
+
+The same week brought Nautilus improvements, more efficient icon and remote asset loading in GNOME Software, and XDG Intents support in GLib so applications can register as handlers for terminal commands and URI schemes. In GNOME OS, LDAC is now enabled in the PipeWire builds, the extra-codecs feature is on by default, Zswap fixes merged, and there are NVIDIA fixes for Snap applications and for the R615 driver firmware.
+
+The article does not name a pending RFC, so the first major test of the process is still ahead.
+
+**Takeaways**
+- If you plan a major GNOME change, read the RFC repository first, since that is now the route such decisions take.
+
+## Anthropic's hiring manager stops giving coding interviews because Claude does them better
+- ids: 75
+- topic: Engineering
+- signal: notable
+- url: https://www.techradar.com/pro/anthropic-hiring-manager-says-he-stopped-giving-coding-interviews-because-claude-is-better-at-them-and-tells-junior-engineers-that-hunger-beats-tenure
+- event: anthropic coding interviews felix rieseberg
+- original title: Anthropic hiring manager says he stopped giving coding interviews because Claude is better at them — and tells junior engineers that 'hunger beats tenure'
+- source: TechRadar | https://www.techradar.com/pro/anthropic-hiring-manager-says-he-stopped-giving-coding-interviews-because-claude-is-better-at-them-and-tells-junior-engineers-that-hunger-beats-tenure
+- author: Christian Cawley
+- image: https://cdn.mos.cms.futurecdn.net/SQriLkNFMAWuNK8Fz7yhFL-1920-80.jpg
+- read: 3 min
+- full text: yes
+
+> Felix Rieseberg says candidates should show a project they built with AI and what it achieved, in place of a coding challenge.
+
+Felix Rieseberg, an engineering manager at Anthropic, says he stopped giving coding tasks in candidate interviews this month. His reason is that Claude now codes better than people, so a candidate's answer to a coding task says little about the candidate. He compared a small React challenge to quizzing people on assembly, arguing that Claude beats people at both.
+
+In his blog post, Rieseberg says the replacement is a demonstration: a project the candidate prompted and refined with AI, and the outcome. He advises junior engineers to focus on making an impact and on understanding the company and the people in it, and he says he is working on a way to interview people who are strong at AI-assisted coding.
+
+The post is one manager's view. The article does not describe a formal change to Anthropic's hiring policy.
+
+**Takeaways**
+- If you hire engineers, consider replacing a coding challenge with a review of a project the candidate built with AI, including the prompts they used and what changed.
