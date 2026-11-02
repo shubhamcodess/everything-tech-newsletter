@@ -1,0 +1,478 @@
+---
+date: 2026-11-02
+edition: 41
+schema_version: 1
+generated_at: 2026-11-02T01:37:21+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 404
+candidates: 127
+full_text: 15
+---
+
+# The Brief
+
+- Security leads the day: an FBI attribution of the $6.3 billion Binance heist to North Korea, Fortanix's attestation-gated keys for AI workloads on Kubernetes, and Cloudflare's post-quantum rebuild of its geo-fenced key service.
+- Compute supply is the tight thread: a reported OpenAI purchase of Google TPUs, AWS saying its 2027 capacity is largely committed, and Amazon's forecast that six to eight models will cover most workloads.
+- Data centers are meeting resistance in courts and at the ballot box, from a Clean Air Act suit over xAI's Memphis turbines to California's Proposition 45.
+- Open source had a busy stretch: a record Linux 7.4 merge window, an early OpenBSD file system, and a new KDE terminal that claims large speed gains.
+- Who decides what AI can do is being argued in two places at once: mathematicians responding to OpenAI's flood of papers, and Delaware's draft law for companies run by AI agents.
+
+# Stories
+
+## FBI blames North Korea for the $6.3 billion Binance heist as withdrawals reopen
+- ids: 87
+- topic: Security
+- signal: must-read
+- url: https://www.theverge.com/tech/1024176/north-korea-binance-crypto-heist
+- event: binance wallet hack withdrawals
+- original title: North Korea linked to massive Binance crypto heist
+- source: The Verge | https://www.theverge.com/tech/1024176/north-korea-binance-crypto-heist
+- author: Terrence O'Brien
+- image: https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/STK428_CRYPTO_2_B.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200
+- read: 1 min
+- full text: yes
+
+> The attribution is new: the loss is now put at $6.3 billion, far above the $2 billion estimate we cited on October 30, and the stolen funds are moving into Ether.
+
+Our October 30 edition reported that Binance had frozen withdrawals after hackers drained what was then estimated at about $2 billion from its hot wallets. The FBI has now said North Korea carried out the theft, which it calls TraderTraitor, on or about October 29, and puts the total at more than $6 billion. The bureau, working with the Secret Service and IRS criminal investigators, says the attackers are converting the stolen assets mainly into Ether and preparing them for further laundering through DeFi and instant-swap services.
+
+Binance has reopened customer withdrawals, and the exchange says it has now covered 95 percent of the stolen assets. The FBI gave few other details or evidence, so the attribution rests on its statement alone for now. The open question is how much of the $6.3 billion can be followed through the swap services the agency expects the thieves to use.
+
+**Takeaways**
+- Check whether your Binance balances were affected by the freeze and the reconciliation, rather than assuming a reopened withdrawal means full recovery.
+- Watch for large Ether movements through DeFi swap services, which the FBI named as the next laundering step.
+
+## OpenAI plans to buy Google TPUs, its first large move beyond Nvidia chips
+- ids: 76
+- topic: AI
+- signal: must-read
+- url: https://www.techradar.com/pro/openai-pledges-to-buy-google-ai-chips-in-its-first-move-away-from-depending-solely-on-nvidia
+- event: openai google tpu purchase
+- original title: OpenAI pledges to buy Google AI chips in its first move away from depending solely on Nvidia
+- source: TechRadar | https://www.techradar.com/pro/openai-pledges-to-buy-google-ai-chips-in-its-first-move-away-from-depending-solely-on-nvidia
+- author: Efosa Udinmwen
+- image: https://cdn.mos.cms.futurecdn.net/PnmNd8HFBHVjfxzYJpPNQi-1920-80.jpg
+- read: 3 min
+- full text: yes
+
+> The reported deal has no disclosed size, price or delivery schedule, but it adds a supplier to a relationship that already includes rented Google chips and Google Cloud access.
+
+OpenAI intends to buy Google's tensor processing units to expand its computing capacity beyond the Nvidia GPUs it has relied on, according to The Information. Financial terms, quantities and delivery dates have not been disclosed. The stated driver is demand: training and running models is getting more expensive, and Google has begun selling its TPUs to outside customers rather than keeping them for its own data centers.
+
+The relationship already runs deeper than a single purchase. OpenAI began renting Google's chips in 2025 to support its products, and it recently made its models available through Google Cloud. In June, OpenAI also said it had designed a custom AI chip with Broadcom and planned to deploy it before the end of 2026, so a TPU purchase would sit alongside its own silicon rather than replace it.
+
+What remains open is how much of OpenAI's capacity would actually move to TPUs, and whether a deal between two direct competitors holds up as demand grows. The answer will show whether alternatives to Nvidia are becoming a real procurement option for frontier labs or a hedge kept in reserve.
+
+**Takeaways**
+- Watch for an official OpenAI or Google announcement with volumes and dates, since the reported purchase has no disclosed size yet.
+- If your team plans capacity around one accelerator vendor, track TPU pricing and availability as more labs buy them.
+
+## AWS says its 2027 capacity is largely sold out, but on-demand headroom is held back
+- ids: 21
+- topic: Infra
+- signal: must-read
+- url: https://www.infoq.com/news/2026/11/aws-capacity-sold-out/
+- event: aws capacity sold out 2027
+- original title: AWS Capacity Largely Sold Out Through 2027, With On Demand Headroom Reserved
+- source: InfoQ | https://www.infoq.com/news/2026/11/aws-capacity-sold-out/
+- author: Steef-Jan Wiggers
+- image: https://res.infoq.com/news/2026/11/aws-capacity-sold-out/en/headerimage/generatedHeaderImage-1793124716899.jpg
+- read: 3 min
+- full text: yes
+
+> Andy Jassy's claim covers large pre-reserved blocks, and developers report tighter on-demand supply for ordinary instances, so the two accounts need to be read together.
+
+Andy Jassy told a podcast in late October that AWS's large committed capacity is largely sold out through 2027, with a good part of 2028 already allocated. He said AWS keeps some capacity back for On-Demand instances, Bedrock and EC2. He also argued that spending above the roughly $220 billion budgeted for this year would still be sound capital allocation, given how much of the capacity is already committed.
+
+Cloud analyst David Linthicum argued the coverage overstated the position. Blocks reserved years ahead for a model provider are different from what an enterprise can allocate on the console today, and he warned that headlines like this push buyers toward bad assumptions about reserved instances and committed capacity. AWS raised Capacity Blocks for ML rates by about 15 percent in January, which is the other side of tight supply.
+
+On the ground, practitioners describe the squeeze. One developer on Reddit said their team has had trouble getting enough on-demand EC2 capacity over the past month, mostly for CI runners, with production Kubernetes clusters briefly constrained. That is anecdote rather than measured availability. If a deployment depends on one instance type in one zone, On-Demand Capacity Reservations are the mechanism AWS offers to hold it.
+
+**Takeaways**
+- Check whether CI or production node groups depend on a single instance type, and add a fallback family so a capacity error is less disruptive.
+- If capacity errors recur in your region, price a reservation or a Capacity Block against the cost of the interruptions.
+
+## Cloudflare moves its post-quantum GeoKey Manager into closed beta, dropping attribute-based encryption
+- ids: 32
+- topic: Security
+- signal: recommended
+- url: https://www.infoq.com/news/2026/10/cf-pq-geokey-manager/
+- event: cloudflare geokey post quantum beta
+- original title: Cloudflare’s Post-Quantum GeoKey Manager Enters Closed Beta Without Attribute-Based Encryption
+- source: InfoQ | https://www.infoq.com/news/2026/10/cf-pq-geokey-manager/
+- author: Steef-Jan Wiggers
+- image: https://res.infoq.com/news/2026/10/cf-pq-geokey-manager/en/headerimage/generatedHeaderImage-1793376907936.jpg
+- read: 4 min
+- full text: yes
+
+> The rebuild protects regional keys with a hybrid of ML-KEM-768 and X25519, and general availability is planned for the first quarter of 2027.
+
+GeoKey Manager keeps decryption keys tied to geographic regions, which data sovereignty rules often require. Since 2022 it has used ciphertext-policy attribute-based encryption to do that. The rebuild, opened to existing Data Localization Suite customers on October 23, drops that scheme for two reasons: no production-ready post-quantum version of it exists, and customers do not need the large number of regions it was built to express.
+
+The replacement uses HPKE from RFC 9180, with a hybrid key encapsulation that combines ML-KEM-768 and X25519, plus HKDF-SHA-256 and AES-256-GCM. Each region holds a 256-bit root key, and each service such as Tunnel or Gateway derives its own key pair from that root, advanced by rotation epochs. Wrapped keys travel through Quicksilver, Cloudflare's replicated key-value store, while regional roots move through a provisioning service into Vault. Before an edge server receives a root, it must pass a hardware identity check through TPM and a lookup in Cloudflare's server inventory, and the root lives only in the kernel keyring.
+
+That last detail has a cost. A machine restart clears the keys, so each server has to authenticate again before it can serve a region. The design targets harvest-now, decrypt-later attacks, where traffic captured today is decrypted once quantum computers exist. Whether the restart and re-authentication path holds up at scale is the part the beta will test.
+
+**Takeaways**
+- If you use Data Localization Suite, ask how your regional keys will migrate from the attribute-based scheme before general availability.
+- Plan for re-authentication delays after edge restarts when you assess geo-fenced key handling.
+
+## Fortanix adds attestation-gated key release to Kubernetes Confidential Containers
+- ids: 39
+- topic: Infra
+- signal: recommended
+- url: https://www.infoq.com/news/2026/10/k8s-confidential-containers/
+- event: fortanix confidential containers kubernetes attestation
+- original title: Kubernetes Confidential Containers Get Fortanix Attestation and Key Management
+- source: InfoQ | https://www.infoq.com/news/2026/10/k8s-confidential-containers/
+- author: Mark Silvester
+- image: https://res.infoq.com/news/2026/10/k8s-confidential-containers/en/headerimage/header-1793049721702.jpeg
+- read: 3 min
+- full text: yes
+
+> Keys stay locked unless the workload passes attestation, and for GPU workloads the policy setting decides how much the GPU evidence actually counts.
+
+Fortanix has added support for Confidential Containers to its Confidential AI platform. CoCo, a CNCF project, runs Kubernetes pods inside confidential virtual machines backed by hardware trusted execution environments, which encrypt memory and keep the host out of the workload. Fortanix supplies the trust layer above that: its Confidential Computing Manager verifies the environment, and its Data Security Manager releases keys only to environments the manager has verified. If attestation fails, keys stay in the manager and the workload cannot decrypt protected models or data.
+
+The GPU setting is the detail to get right. In Fortanix's Intel TDX guide, Required makes the manager validate GPU evidence through NVIDIA's attestation service, while Ignored checks only that the evidence exists and disregards the result. The Helm chart does not configure host firmware or kernel settings, so those must be correct before installation.
+
+The mechanism itself is not new. CoCo's open-source Trustee components already separate evidence appraisal from secret release and apply a user-defined policy before releasing anything. The Fortanix offer packages that as a clustered, hosted or on-premises service with 24x7 support. The protection is only as strong as the policy, so a permissive GPU setting weakens it regardless of the platform.
+
+**Takeaways**
+- Set GPU attestation to Required for AI workloads, and confirm it with a test pod that must fail when evidence is missing.
+- Verify host firmware and kernel settings before installing the Helm chart, since the chart leaves them unconfigured.
+
+## Delaware's bill for AI-run companies draws a warning letter from the House Oversight chair
+- ids: 62
+- topic: AI
+- signal: recommended
+- url: https://www.techradar.com/pro/this-us-state-wants-to-let-ai-set-up-and-run-an-entire-business-with-only-a-single-human-needed
+- event: delaware artificial intelligence company bill
+- original title: This US state wants to let AI set up and run an entire business — with only a single human needed
+- source: TechRadar | https://www.techradar.com/pro/this-us-state-wants-to-let-ai-set-up-and-run-an-entire-business-with-only-a-single-human-needed
+- author: Christian Cawley
+- image: https://cdn.mos.cms.futurecdn.net/v7DvrGvEfUSWhuAWwLN5mL-2238-80.jpg
+- read: 3 min
+- full text: yes
+
+> James Comer's letter to Governor Matt Meyer adds a federal warning to a committee document request, and the bill's sandbox would run for 30 months.
+
+Delaware's draft bill would allow a company to be run by an AI agent with a single human involved. It would create a 30-month regulatory sandbox for testing these businesses, and it would permit any lawful business to be operated this way except banking. Delaware already attracts incorporations with low taxes and specialized courts, which is why lawyers think the bill matters beyond the state.
+
+House Oversight Committee chairman James Comer wrote to Governor Matt Meyer warning that the proposal could shield large AI firms and their backers when their systems cause reckless damage. The worry is that when an AI-run business causes harm, the owner bears no clear responsibility. Under the draft, the company could still be sued and could sue, like any other business. Comer has said he would consider federal legislation if the safety assessments he demanded do not satisfy him.
+
+Some law experts see the bill as a possible liability shield for businesses with AI interests. Others expect AI-centric corporate structures to appear overseas if no US state moves first. Whether Delaware keeps the bill as drafted will depend on the committee's document requests and any federal response.
+
+**Takeaways**
+- Watch whether the committee's requests produce a hearing or a federal bill, since Comer tied federal action to the safety results.
+- If you hold a Delaware entity, track the bill's liability terms, which decide who answers for an AI-run decision.
+
+## GPT-6.1 Terra trails Opus 5.5 by 3.2 points on agent tasks, at about one-ninth the cost
+- ids: 125
+- topic: AI
+- signal: recommended
+- url: https://thenewstack.io/gpt-6-1-terra-vs-claude-opus-5-5/
+- event: gpt terra input tokens
+- original title: GPT-6.1 Terra vs. Claude Opus 5.5: Cheaper and faster in three tests at max effort
+- source: The New Stack | https://thenewstack.io/gpt-6-1-terra-vs-claude-opus-5-5/
+- author: Jessica Wachtel
+- image: https://cdn.thenewstack.io/media/2026/10/374e8f01-getty-images-z8rxuuw3s8y-unsplash-scaled.jpg
+- read: 8 min
+- full text: yes
+
+> The gap comes from OpenAI's launch figures, and the cost advantage depends on how many tokens each model uses for the same task.
+
+OpenAI launched GPT-6.1 Terra on October 26 and compared it with Opus 5.5 in its marketing. On the Agents' Last Exam test of multistep computer-use work, Terra reached 60.0 percent at $1.01 a task, and Opus hit 63.2 percent at $8.82. That is a 3.2-point gap in accuracy alongside an estimated 8.7-to-1 cost ratio, not identical results.
+
+Pricing tells the rest of the story. Terra lists at $1 per million input tokens and $5 per million output tokens, against $4 and $20 for Opus 5.5. The author calculates that at the same input and output mix, Terra would need four times as many tokens to match Opus's cost. Actual task cost also depends on cache reads and writes and any pricing adjustments.
+
+The author ran his own three tests through each vendor's API at maximum effort: two on computer use and scientific coding, and one recreating a large-dataset task that Terra had handled poorly against OpenAI's GPT-6 Astra. He says the results do not establish repeatability, because he changed the tests after early runs and ran each final version only once per model. The fetched text stops before his scores, so this edition reports only the vendor figures and the author's method.
+
+**Takeaways**
+- Measure token counts on a representative workload before switching, since the per-token discount only saves money if Terra does not need far more tokens.
+- Read the author's full scores before relying on them, because each final test ran once per model.
+
+## Jassy expects six to eight frontier models to cover 95 percent of workloads
+- ids: 122
+- topic: AI
+- signal: notable
+- url: https://thenewstack.io/jassy-bedrock-multimodel-prediction/
+- event: jassy six eight models bedrock
+- original title: Amazon CEO predicts 6 to 8 AI models will be ‘good enough’ for almost everything
+- source: The New Stack | https://thenewstack.io/jassy-bedrock-multimodel-prediction/
+- author: Amanda Caswell
+- image: https://cdn.thenewstack.io/media/2026/10/e12596ac-adriandra-karuniawan-p6azjkuq_ge-unsplash-scaled.jpg
+- read: 4 min
+- full text: yes
+
+> The forecast favors multi-model platforms like Bedrock, which already routes requests to more than 100 models through one API.
+
+On Amazon's third-quarter 2026 earnings call, CEO Andy Jassy predicted that within two to three years there will be six to eight models about as good as each other, and good enough for 95 percent or more of workloads. He compared the market with databases, analytics and TensorFlow, where early leaders lost ground, and argued that choosing among models will matter more than committing to one.
+
+The forecast maps onto Bedrock's pitch. The service reaches models from Anthropic, OpenAI, Meta, Mistral, DeepSeek, Moonshot AI and xAI through a single API. Amazon recently added OpenAI's models alongside its closed models, and has added managed versions of open models such as Kimi and GLM.
+
+Switching is not free. Models differ in context limits, tool support and supported features, so teams still have to test each application when they change models. The Converse API makes the calling code more uniform, but not the behavior. Jassy's six-to-eight figure is a forecast, not a measured result.
+
+**Takeaways**
+- Put model selection behind one interface and test prompts and tool calls against each candidate before switching.
+- Check context limits and tool-calling support for any model you route to, since those are where switches tend to break.
+
+## Linux 7.4 merge window becomes the busiest on record, with 19,671 commits
+- ids: 44
+- topic: Open Source
+- signal: recommended
+- url: https://linux.slashdot.org/story/26/11/01/2012246/ai-makes-linux-74-merge-window-the-largest-in-kernel-history
+- event: linux 7.4 merge window commits
+- original title: AI Makes Linux 7.4 Merge Window the Largest in Kernel History
+- source: Slashdot | https://linux.slashdot.org/story/26/11/01/2012246/ai-makes-linux-74-merge-window-the-largest-in-kernel-history
+- source: Phoronix | https://www.phoronix.com/news/Linux-7.4-Massive-Window
+- author: EditorDavid
+- full text: no
+
+> The source tree now runs to about 41.6 million lines, and the headline credits AI tooling for the surge in contributions.
+
+This story is built from the headline and the opening of the report, because the full article could not be retrieved. Phoronix counted 19,671 commits in the Linux 7.4 merge window, measured against Linux 7.3. On a Git commit basis, that makes it the busiest merge window on record.
+
+Counted with cloc, the kernel source tree stood at about 41.6 million lines before the 7.4-rc1 release, roughly 31.4 million of them code. The window added close to half a million lines of code, ignoring comments and blank lines. Phoronix's reporting also covered a number of OverlayFS fixes that the project attributes to AI-assisted code review.
+
+The headline credits AI for the volume. The sources reachable for this edition do not show how Phoronix measured that cause, so treat the attribution as its reading rather than a verified figure.
+
+**Takeaways**
+- Maintainers of out-of-tree drivers should rebase against 7.4 early, since a window this large tends to change more interfaces.
+
+## Frank Calegari says OpenAI's flood of math papers is a watershed, not a reason for despair
+- ids: 6
+- topic: AI
+- signal: recommended
+- url: https://terrytao.wordpress.com/2026/11/01/mathematics-has-changed-lets-act-like-it/
+- event: calegari openai mathematics papers
+- original title: Mathematics has changed. Let's act like it
+- source: terrytao.wordpress.com | https://terrytao.wordpress.com/2026/11/01/mathematics-has-changed-lets-act-like-it/ | via Hacker News
+- author: Terence Tao
+- image: https://secure.gravatar.com/blavatar/bd4bda4207561b6998f10dec44b570f04ff4072b20f89162d525b186dfca3e49?s=200&ts=1793582959
+- read: 17 min
+- discuss: https://news.ycombinator.com/item?id=50328251 | Hacker News | 222 points | 241 comments
+- full text: yes
+
+> His argument is that the papers have real flaws, but the problems they appear to close were only the edge of understanding, not the end of a field.
+
+Calegari starts from OpenAI's October 6 release of more than 700 research papers, which he calls a watershed in the history of mathematics. He says AI is now clearly capable of groundbreaking contributions across many areas, and that mathematicians are unhappy for two reasons: the companies' disregard for how the discipline works, and a sense that the subject is being hollowed out.
+
+On the first, he is blunt. The papers are badly written, break the community's attribution expectations, and some of them are wrong. On the second, he argues that the release barely dented the central problems of the Langlands program, and that solving them would not solve number theory, any more than the periodic table solved chemistry. He notes that Hugo Duminil-Copin lamented that every major open problem he had named was claimed proved, and that reaction is understandable.
+
+His remedy is practical. Mathematicians control how they hire, publish and train students, and he thinks those levers matter more than the conduct of trillion-dollar companies. He also points to the classification of finite simple groups as a precedent for how long verification takes: a program begun in 1972 was declared complete in 1983, and one case took about two more decades to close.
+
+**Takeaways**
+- If you review AI-written proofs or papers, check attribution and verify the claimed results yourself, since Calegari reports that some of these papers are wrong.
+- Editors who handle AI-assisted submissions can set attribution rules now rather than after the next batch arrives.
+
+## Judge lets NAACP Clean Air Act suit over xAI's Memphis turbines proceed
+- ids: 116
+- topic: Infra
+- signal: recommended
+- url: https://techcrunch.com/2026/10/31/judge-allows-naacp-lawsuit-over-xai-data-center-pollution-to-move-forward/
+- event: xai naacp lawsuit memphis turbines
+- original title: Judge allows NAACP lawsuit over xAI data center pollution to move forward
+- source: TechCrunch | https://techcrunch.com/2026/10/31/judge-allows-naacp-lawsuit-over-xai-data-center-pollution-to-move-forward/
+- author: Anthony Ha
+- image: https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217198328.jpeg?resize=1200,800
+- read: 2 min
+- full text: yes
+
+> The ruling rejects xAI's claims that its gas turbines are mobile and that citizen suits are unconstitutional, so the case moves toward the merits.
+
+A federal judge denied xAI's motion to dismiss a suit brought by the NAACP, represented by the Southern Environmental Law Center. The suit says the SpaceX-owned company ran at least 35 combustion turbines and other pollution sources at its Colossus data center outside Memphis without preconstruction or operating air permits, in violation of the Clean Air Act.
+
+xAI argued that the turbines are exempt because they are mobile, and that the plaintiffs lacked standing. Judge Debra Brown rejected both points, finding that the plaintiffs have statutory standing and that the turbines are not mobile sources under Mississippi's state implementation plan. She also held that citizen suits do not violate Article II or the private nondelegation doctrine, because the plaintiffs sue in their own name over harm to themselves.
+
+The NAACP says a similar motion from the Justice Department was denied earlier this month. The case now heads toward the merits, where the central question is whether the turbines needed permits at all. TechCrunch has asked SpaceX for comment.
+
+**Takeaways**
+- Anyone running onsite generation for a data center should get a written determination on whether its equipment counts as mobile or stationary before deployment, since this ruling leaves that classification open to challenge.
+- Track the merits phase of the Clean Air Act claims, because a loss for xAI would set a precedent for turbines at other AI sites.
+
+## California's Proposition 45 would fast-track environmental reviews, and data center developers could benefit
+- ids: 93
+- topic: Infra
+- signal: notable
+- url: https://www.theverge.com/policy/1023877/prop-45-california-data-centers-energy
+- event: prop 45 data center california ceqa
+- original title: Prop 45 in California could be hiding a loophole for data centers
+- source: The Verge | https://www.theverge.com/policy/1023877/prop-45-california-data-centers-energy
+- author: Justine Calma
+- image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_C.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200
+- read: 5 min
+- full text: yes
+
+> The measure shortens review deadlines and public comment, and critics say data center developers could label their projects essential to skip scrutiny.
+
+Proposition 45 would shorten the timelines for state environmental reviews of eligible projects and make it harder for residents to challenge them in court. Proponents say it would ease the housing shortage and speed new renewable energy to meet rising electricity demand. Environmental groups warn that data center developers backing the measure could fit their projects into the essential category and escape the normal review.
+
+The mechanics are the concern. The measure sets a 365-day deadline for the environmental impact report and requires legal challenges to settle within 270 days. It allows 45 days of public comment and requires consultation only with federally recognized tribes. Under the current CEQA law, public review is a minimum period rather than a maximum, and consultation extends to tribes that may be affected even without federal recognition.
+
+The largest change is in alternatives. Under CEQA, state agencies work with developers to develop alternatives that reduce environmental and health harm. Proposition 45 would instead require developers to propose a single alternative for regulators to consider. Earthjustice, which opposes the measure, says communities get cut out of the conversation. Much depends on how "essential" infrastructure is defined, and that is where data centers could fit.
+
+**Takeaways**
+- If Proposition 45 passes, watch how the state defines essential infrastructure in implementing rules, since that definition decides which projects get the fast track.
+
+## Apple CEO John Ternus says Apple won't ship AI 'for AI's sake'
+- ids: 114
+- topic: AI
+- signal: notable
+- url: https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/
+- event: apple ternus ai interview
+- original title: Apple CEO says the company doesn’t ‘want to ship AI for AI’s sake’
+- source: TechCrunch | https://techcrunch.com/2026/10/31/apple-ceo-says-the-company-doesnt-want-to-ship-ai-for-ais-sake/
+- author: Anthony Ha
+- image: https://techcrunch.com/wp-content/uploads/2026/10/GettyImages-2302418320.jpg?w=1024
+- read: 1 min
+- full text: yes
+
+> Ternus, CEO since September, says Apple will use AI in its products but wants it invisible to users, and he downplayed agents replacing apps.
+
+In an interview with Wired's Steven Levy, John Ternus defended Apple's position in AI. Ternus, a longtime Apple executive who became CEO in early September, acknowledged that everyone has an opinion but said he likes where Apple stands. The company had been criticized for delaying a more capable Siri, which launched this summer.
+
+He said Apple will use AI in new products, but without treating it as the point. The test he gave is that users should not have to know whether AI or traditional software did the work, only whether they love what was built.
+
+Asked whether agents could make apps unnecessary, he said that could make life easy in theory, but that making products is a deeply human activity Apple wants to keep doing. The interview sets a direction rather than a product schedule.
+
+**Takeaways**
+- Nothing in the interview sets a launch date, so treat any Apple AI feature as unscheduled until the company announces it.
+
+## Apple's HomeView 27.2 code hints at a HomeKit Secure Video camera mode
+- ids: 77
+- topic: Security
+- signal: notable
+- url: https://www.theverge.com/tech/1024219/apples-homeview-could-add-security-camera-features
+- event: apple homeview secure video
+- original title: Apple’s HomeView could add security camera features
+- source: The Verge | https://www.theverge.com/tech/1024219/apples-homeview-could-add-security-camera-features
+- author: Terrence O'Brien
+- image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/LR6B6101.jpeg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200
+- read: 1 min
+- full text: yes
+
+> The strings describe motion detection, live streaming and privacy indicators, but Apple has said nothing publicly about the feature.
+
+A Reddit user found strings inside HomeView 27.2 that point to a camera feature: motion alerts, live feeds, recording choices and privacy controls. One setup page explicitly describes HomeView as a possible security camera through HomeKit Secure Video.
+
+The described design is privacy-first. Feeds would be visible only to members of the home, the device would show an indicator light and play a sound whenever someone is watching or recording, and household members would be notified whenever Secure Video settings change. Detection and recording options would depend on whether the home is occupied.
+
+Apple has not commented, and firmware strings are not a launch date. The Verge's reading is that the company may be refining those privacy controls before release, which fits Apple's marketing but is still speculation. Treat the feature as likely but unconfirmed.
+
+**Takeaways**
+- Wait for Apple's announcement before buying a camera on the assumption that HomeView will gain this mode.
+
+## Kwi, a Ghostty-based KDE terminal, claims 3x to 35x the speed of Konsole
+- ids: 10, 11
+- topic: Open Source
+- signal: notable
+- url: https://blogs.kde.org/2026/11/01/introducing-kwi/
+- event: kwi kde terminal emulator
+- original title: Introducing Kwi, a new KDE terminal emulator
+- source: blogs.kde.org | https://blogs.kde.org/2026/11/01/introducing-kwi/ | via Lobsters
+- source: Phoronix | https://www.phoronix.com/news/KDE-Kwi-Terminal-Emulator
+- read: 8 min
+- full text: yes
+
+> The early-stage terminal uses GPU rendering for speed, but its feature set is narrower than Konsole's for now.
+
+Kwi is a new KDE terminal emulator in early development, built with Kirigami so it fits recent Plasma applications. Its developer describes the product vision as deliberately plain: a fast terminal that does what KDE users expect. The name comes from a Korean word for ghost, which is also why the logo is a small terminal ghost.
+
+The speed case rests on two choices. Kwi uses libghostty-vt, the headless terminal-parsing library from the Ghostty project, for parsing and terminal state, and renders on the GPU through Vulkan or OpenGL using the Qt Scene Graph. Konsole is built on QWidget, which draws on the CPU. The developer reports 3x to 35x faster than Konsole depending on the benchmark, and says the gain should also reduce battery use.
+
+The feature set is streamlined compared with Konsole's, and the developer plans to grow it slowly. The 3x to 35x range depends heavily on what is being measured, so it is the developer's benchmark, not a general result.
+
+**Takeaways**
+- Benchmark Kwi with your own workload before judging speed, since the gain depends on the output being drawn.
+- Compare the feature list against Konsole before moving over.
+
+## Amutable's Linux systems, from systemd's creator, open a private preview of signed state reports
+- ids: 65
+- topic: Open Source
+- signal: recommended
+- url: https://tech.slashdot.org/story/26/11/01/229250/systemds-creator-opens-signups-for-private-preview-of-amutables-cryptographically-verified-linux-systems
+- event: amutable poettering signed linux
+- original title: SystemD's Creator Opens Signups for Private Preview of Amutable's Cryptographically Verified Linux Systems
+- source: Slashdot | https://tech.slashdot.org/story/26/11/01/229250/systemds-creator-opens-signups-for-private-preview-of-amutables-cryptographically-verified-linux-systems
+- author: EditorDavid
+- full text: no
+
+> Each machine would produce signed reports of its own state, a model aimed at keeping trust in a Linux system over time.
+
+This story is built from the headline and the opening of the report, because the full article could not be retrieved. Lennart Poettering, creator of systemd, left Microsoft ten months ago to co-found Amutable, which is working on Linux systems whose trust is meant to hold over time. The company's first product, as described, is a read-only, image-based system in which every machine produces signed reports of its own state. Signups for a private preview are now open.
+
+Before the product, Amutable released two open-source tools. tine is a build system based on Buck2 that composes OS images, and it is licensed under MPL-2.0. Quarry is built on TUF, the framework for securing software update metadata.
+
+What is still open is how the signed reports get verified and by whom. That detail decides whether the claim means anything for an operator who does not trust Amutable.
+
+**Takeaways**
+- If you build OS images, look at tine's MPL-2.0 source now, since it is the part of the offer you can inspect today.
+
+## OpenBSD's GEFS file system gains mkfs and error-handling fixes, but its commit protocol is still missing
+- ids: 14
+- topic: Open Source
+- signal: notable
+- url: https://www.undeadly.org/cgi?action=article;sid=20261101115637
+- event: gefs openbsd file system
+- original title: Work on GEFS (the Good Enough File System) for OpenBSD progresses
+- source: undeadly.org | https://www.undeadly.org/cgi?action=article;sid=20261101115637 | via Lobsters
+- read: 3 min
+- full text: yes
+
+> The developer calls the consistency protocol the biggest missing piece, and the next design borrows ideas from the old softupdates code.
+
+Ori, the developer behind the Good Enough File System port to OpenBSD, posted an update to the tech list on October 31. The update says the error-handling code has been reworked, that most important bug fixes from the 9front version were forward-ported, and that the first filesystem block is now left unused so disklabels can live there.
+
+Userspace has moved forward. mkfs now works on OpenBSD, but snapshot control does not yet exist. The planned gefs program would take subcommands for debug mode, reserving space, retaining snapshots, naming snapshots and forking them, modeled on the 9front control file.
+
+The unfinished part is consistency. The developer needs ordering barriers in the commit path, so data blocks reach disk before the superblock is written, without blocking new I/O. The planned approach orders writes by generation, using kernel threads that write blocks to disk synchronously. The developer notes that only arena headers and superblocks must not be reordered, so a flag to pin them unwritten may be enough.
+
+**Takeaways**
+- Keep backups if you try the preview, since crash safety is not yet established while the commit protocol is unfinished.
+
+## Stack Overflow says reports of its death are exaggerated, citing 64% of developers visiting less often
+- ids: 58
+- topic: Engineering
+- signal: notable
+- url: https://developers.slashdot.org/story/26/11/02/0026255/stack-overflow-reports-of-our-death-are-greatly-exaggerated
+- event: stack overflow decline 2026 survey
+- original title: Stack Overflow: 'Reports of Our Death are Greatly Exaggerated'
+- source: Slashdot | https://developers.slashdot.org/story/26/11/02/0026255/stack-overflow-reports-of-our-death-are-greatly-exaggerated
+- author: EditorDavid
+- full text: no
+
+> The company's 2026 Developer Survey finds developers asking harder questions and using the site to check AI-generated answers.
+
+This story is built from the headline and the opening of the report, because the full article could not be retrieved. Stack Overflow's senior vice president of community responded to predictions that the site is finished. The company's argument is that the drop reflects how people reach knowledge, not a loss of the knowledge itself. In its 2026 Developer Survey, 64 percent of respondents said they visit less often for simple questions.
+
+The same survey points to a shift in what people bring to the site: more advanced questions, and visits to verify AI-generated answers. The company frames that as a reason the site still matters, since AI answers still need a place where they can be challenged.
+
+The claim is self-reported by the company. The survey shows fewer visits but not whether advanced questions are getting answered, or whether traffic will keep falling.
+
+**Takeaways**
+- Decide where your team's verified answers live, since AI assistants are now the first stop for many simple questions.
+
+## OmniDiff, an AGPL Rust difftool, claims to diff 25 languages plus images and PDFs
+- ids: 9
+- topic: Dev Tools
+- signal: notable
+- url: https://github.com/ivankovic/omnidiff
+- event: omnidiff git difftool rust
+- original title: Show HN: OmniDiff – Opensource, super fast, content aware Git difftool, in Rust
+- source: github.com | https://github.com/ivankovic/omnidiff | via Hacker News
+- discuss: https://news.ycombinator.com/item?id=50325253 | Hacker News | 157 points | 40 comments
+- full text: no
+
+> The author built it from 2,000 diffs sampled from Gentoo-packaged repositories, and claims diffs of tens of thousands of lines in under 100 milliseconds.
+
+This story is built from the headline and the opening of the Show HN post, because the full page could not be retrieved. OmniDiff is an open-source Git difftool written in Rust and licensed under AGPLv3. Its author says it handles code in 25 languages, plus config files, images, PDFs, archives and fonts.
+
+The author sampled 2,000 diffs from about 7,400 repositories listed in Gentoo's packages, worked through them by hand, and built a diff pipeline for each content type. The speed claim is that a C++ file of tens of thousands of lines diffs in under 100 milliseconds on a 2023 ThinkPad T14s. Those are the author's own benchmarks, not an independent test.
+
+What remains to be seen is how it compares with established content-aware diff tools on the same inputs, and whether the sample reflects how people review real changes.
+
+**Takeaways**
+- Test OmniDiff on your own large diffs before adopting it, comparing against git diff and your current tool.
+- If you plan to embed it in a hosted product, review the AGPLv3 network-use terms first.
