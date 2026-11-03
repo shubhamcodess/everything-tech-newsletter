@@ -1,8 +1,15 @@
 {
- "count": 41,
- "latest": "2026-11-02",
+ "count": 42,
+ "latest": "2026-11-03",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-03",
+   "edition": 42,
+   "stories": 14,
+   "must_read": 3,
+   "lead": "GPT-6 Astra edits a small model's raw weights and lifts its MATH-500 score from 7.9% to 48.1%"
+  },
   {
    "date": "2026-11-02",
    "edition": 41,
