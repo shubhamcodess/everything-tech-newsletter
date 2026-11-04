@@ -1,8 +1,15 @@
 {
- "count": 42,
- "latest": "2026-11-03",
+ "count": 43,
+ "latest": "2026-11-04",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-04",
+   "edition": 43,
+   "stories": 24,
+   "must_read": 3,
+   "lead": "Binance's postmortem: fake job interviews and an internal AI tool let hackers take $6.3 billion"
+  },
   {
    "date": "2026-11-03",
    "edition": 42,
