@@ -1,8 +1,15 @@
 {
- "count": 43,
- "latest": "2026-11-04",
+ "count": 44,
+ "latest": "2026-11-05",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-05",
+   "edition": 44,
+   "stories": 21,
+   "must_read": 3,
+   "lead": "PHP2Shell: an AI-assisted audit turned a 2024 PHP crash bug into a critical flaw"
+  },
   {
    "date": "2026-11-04",
    "edition": 43,
