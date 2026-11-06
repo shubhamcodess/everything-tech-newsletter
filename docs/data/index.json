@@ -1,8 +1,15 @@
 {
- "count": 44,
- "latest": "2026-11-05",
+ "count": 45,
+ "latest": "2026-11-06",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-06",
+   "edition": 45,
+   "stories": 18,
+   "must_read": 4,
+   "lead": "A decade-old OpenSSH flaw lets anyone log into passwordless Alpine accounts with a 256-plus-character password"
+  },
   {
    "date": "2026-11-05",
    "edition": 44,
