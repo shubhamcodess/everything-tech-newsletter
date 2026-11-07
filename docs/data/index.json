@@ -1,8 +1,15 @@
 {
- "count": 45,
- "latest": "2026-11-06",
+ "count": 46,
+ "latest": "2026-11-07",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-07",
+   "edition": 46,
+   "stories": 26,
+   "must_read": 5,
+   "lead": "METR audit finds Anthropic's AI research speeds up on well-defined tasks at twice the 2024 and 2025 pace"
+  },
   {
    "date": "2026-11-06",
    "edition": 45,
