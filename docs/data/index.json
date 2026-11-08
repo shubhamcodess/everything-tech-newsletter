@@ -1,8 +1,15 @@
 {
- "count": 46,
- "latest": "2026-11-07",
+ "count": 47,
+ "latest": "2026-11-08",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-08",
+   "edition": 47,
+   "stories": 20,
+   "must_read": 4,
+   "lead": "METR finds Anthropic's models now improve about twice as fast as a year ago, largely because of AI"
+  },
   {
    "date": "2026-11-07",
    "edition": 46,
