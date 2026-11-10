@@ -1,8 +1,15 @@
 {
- "count": 48,
- "latest": "2026-11-09",
+ "count": 49,
+ "latest": "2026-11-10",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-10",
+   "edition": 49,
+   "stories": 13,
+   "must_read": 3,
+   "lead": "Anthropic ships Fable 5.2 and Mythos 5.2 at a lower price with faster output"
+  },
   {
    "date": "2026-11-09",
    "edition": 48,
