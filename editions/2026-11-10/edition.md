@@ -1,0 +1,332 @@
+---
+date: 2026-11-10
+edition: 49
+schema_version: 1
+generated_at: 2026-11-10T01:39:08+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 403
+candidates: 200
+full_text: 13
+---
+
+# The Brief
+
+- Anthropic dominates the day: a new Fable 5.2 and Mythos 5.2 pair at a lower price, a reported IPO push, and a leak in Claude Code's approval settings.
+- Security is about trust in stored secrets: a hardcoded password exposed a hotel giant's customer database, a Russian host lost its cloud platform, and Cloudflare is pushing certificates toward post-quantum safety.
+- AI is now producing research-level results. An open quantum complexity conjecture fell to an AI-written proof, and OpenAI's own horizon data suggests its research agents are improving fast.
+- Models are moving into ordinary plumbing: Pinterest replaced a clustering pipeline with a 4B language model, and Google's Gemini 4 Argon is aimed at robot control.
+
+# Stories
+
+## Anthropic ships Fable 5.2 and Mythos 5.2 at a lower price with faster output
+- ids: 1, 2, 3, 4
+- topic: AI
+- signal: must-read
+- url: https://www.anthropic.com/claude-fable-and-mythos-5-2
+- event: anthropic claude fable mythos 5.2 launch
+- original title: Claude Fable 5.2 and Mythos 5.2
+- source: anthropic.com | https://www.anthropic.com/claude-fable-and-mythos-5-2 | via Hacker News
+- source: artificialanalysis.ai | https://artificialanalysis.ai/models/claude-fable-5-2 | via Hacker News
+- source: The Verge | https://www.theverge.com/ai-artificial-intelligence/1030005/anthropic-claude-fable-mythos-5-2
+- source: Slashdot | https://slashdot.org/story/26/11/09/2018231/anthropic-launches-new-claude-fable-and-mythos-52-models
+- image: https://www-cdn.anthropic.com/images/4zrzovbb/website/b2dab182c77b4ccfd36423470106915b20f676ae-1200x630.jpg
+- read: 17 min
+- discuss: https://news.ycombinator.com/item?id=50429906 | Hacker News | 940 points | 567 comments
+- full text: yes
+
+> The dek: Both models are cheaper per token than before, and the fast mode is priced at double the standard rate.
+
+Anthropic has released upgraded versions of its two flagship models, Claude Fable 5.2 and Claude Mythos 5.2. They are the same underlying model, but Fable carries stronger cybersecurity and biology safeguards, so it is open to all users, while Mythos is reserved for organizations doing beneficial work in cybersecurity or biomedical research who apply through Anthropic's verification programs.
+
+Anthropic says the new versions produce output up to 30 percent faster than Fable 5.1 and Mythos 5.1, and cost $8 per million input tokens and $40 per million output tokens. An optional fast mode, which speeds up generation by up to 2.5 times, costs $16 and $80 for the same units. The company also says Fable 5.2 keeps the same cyber and biology protections as 5.1 while blocking fewer legitimate requests, and that it has added its strongest defenses yet against distillation attacks.
+
+The company's own prerelease claims are ambitious: testers reportedly used the models for software migrations that had been out of reach, for designing working electronic devices, and for formalizing the proof of Fermat's Last Theorem in 30 hours. Those are Anthropic's descriptions, not independent results. Anthropic also recommends Opus 5.5 as the default for most coding and knowledge work, reserving Fable and Mythos for the most open-ended technical problems.
+
+**Takeaways**
+- Benchmark Fable 5.2 against Opus 5.5 on your own workload before moving, since Anthropic itself recommends Opus 5.5 for most tasks.
+- If you do cybersecurity or biomedical research and want Mythos, start the verification application now, because access is not automatic.
+- Keep fast mode for interactive sessions where latency matters; at twice the price it is hard to justify for batch jobs.
+
+## Claude Code's "don't ask again" approvals are leaking secrets into public GitHub repos
+- ids: 33
+- topic: Dev Tools
+- signal: must-read
+- url: https://arstechnica.com/ai/2026/11/claude-code-settings-files-expose-thousands-of-secrets-on-github/
+- event: claude code secrets leak github settings
+- original title: Claude Code is accidentally exposing secrets all over GitHub
+- source: Ars Technica | https://arstechnica.com/ai/2026/11/claude-code-settings-files-expose-thousands-of-secrets-on-github/
+- author: Kyle Orland
+- image: https://cdn.arstechnica.net/wp-content/uploads/2026/11/claude-github-leaks-1152x648.jpg
+- read: 2 min
+- full text: yes
+
+> The dek: Apiiro found more than 100,000 public uploads of Claude Code's local settings file, and about 1,100 of them contained live credentials.
+
+When a developer approves a shell command with "Yes, and don't ask again," Claude Code saves that approval to a local file, .claude/settings.local.json. Sometimes the approval is stored as a general pattern, but often the exact command is written in as typed, with any passwords, API tokens, or keys embedded in it. Apiiro's researchers counted those uploads and found about 1,100 from 63 organizations that contained secrets such as database passwords, private keys, and root logins.
+
+The file is supposed to stay on the developer's machine. Anthropic's documentation says it is added to the global gitignore, but that protection does not follow a repository when it is cloned to another machine, or when a folder later becomes a repo. The report says Claude Code itself will sometimes commit changes to the file without being asked. Deleting the file after discovery does not clean up forks, where the secrets can persist.
+
+The report does not say what Anthropic plans to change in how approvals are stored.
+
+**Takeaways**
+- Run git ls-files on your repos for .claude/settings.local.json, and add it to each repo's own .gitignore.
+- Rotate any credential that was ever typed into an approved command, since the settings file keeps a copy of it.
+- Replace literal secrets in commands with environment variables before approving anything again.
+
+## Hotel giant Wyndham left a hardcoded password in its Android app, exposing customer records
+- ids: 128
+- topic: Security
+- signal: must-read
+- url: https://techcrunch.com/2026/11/09/hotel-giant-wyndham-exposed-customer-data-after-app-security-lapse/
+- event: wyndham hardcoded password app database exposure
+- original title: Hotel giant Wyndham exposed customer data after app security lapse
+- source: TechCrunch | https://techcrunch.com/2026/11/09/hotel-giant-wyndham-exposed-customer-data-after-app-security-lapse/
+- author: Zack Whittaker
+- image: https://techcrunch.com/wp-content/uploads/2026/11/wyndham-967205948.jpg?resize=1200,843
+- read: 3 min
+- full text: yes
+
+> The dek: The password opened a Salesforce-hosted database holding millions of entries, and Wyndham has not said how long it was exposed.
+
+Security researcher Robert Wiggins found a password embedded in the source code of Wyndham's Android app. That password gave access to an internal database hosted on Salesforce. The database held customer names, email addresses, and Wyndham member numbers, along with login tokens that keep customers signed in, plus company files and documents. Wiggins could not determine how many customer records were exposed, but said the database had millions of entries. Wyndham says it has about 129 million rewards members.
+
+Wiggins said Wyndham had no way for researchers to report flaws, so he went to TechCrunch. The credential was revoked soon after TechCrunch contacted Wyndham's security staff. Wyndham says it has no evidence of unauthorized access, but it would not say whether it has server logs that could show who reached the database before the discovery, how long the password sat in the app, whether it will notify customers, or whether it will disclose the incident to US regulators.
+
+Hardcoded credentials are dangerous because anyone who downloads the app can extract them, which is why scanners often rate them at the highest severity. The login tokens in the same database raise the stakes: if they were valid, they could let someone act as affected customers until they expire.
+
+**Takeaways**
+- Scan the built Android and iOS packages for embedded keys and passwords before every release, not just the source tree.
+- Check whether session tokens are invalidated when a backend credential is rotated, since the tokens here sat beside the password.
+- If you have a Wyndham rewards account, watch for unfamiliar bookings or points activity.
+
+## Anthropic moves ahead with its IPO, setting a valuation range this week
+- ids: 113
+- topic: Startups
+- signal: recommended
+- url: https://techcrunch.com/2026/11/09/anthropic-reportedly-plans-to-move-forward-with-ipo-plans/
+- event: anthropic ipo valuation listing
+- original title: Anthropic reportedly plans to move forward with IPO plans
+- source: TechCrunch | https://techcrunch.com/2026/11/09/anthropic-reportedly-plans-to-move-forward-with-ipo-plans/
+- author: Marina Temkin
+- image: https://techcrunch.com/wp-content/uploads/2026/11/Dario-Amodei.jpg?w=1024
+- read: 1 min
+- full text: yes
+
+> The dek: Some institutional investors want a valuation below the $1.5 trillion target discussed last week, which itself is well under the $2 trillion floated months ago.
+
+The Wall Street Journal reports that Anthropic is pressing ahead with a listing even after a steep Nasdaq selloff and the Nvidia scandal: the company expects to fix its valuation range within days and start trading the week after. The listing would be one of the most closely watched tech offerings in some time, because investors are using Anthropic's valuation as a gauge of how strong the AI boom really is.
+
+The valuation target has already moved down. A few months ago the figure floated was $2 trillion, then the talk settled near $1.5 trillion, and now some institutional investors want to go lower. For comparison, OpenAI was reportedly valued at $1.25 trillion last week after raising $11 billion, well short of the $20 billion it had sought.
+
+**Takeaways**
+- Watch the valuation range announcement this week. The report puts the first trading day on Thursday or Friday of next week.
+
+## An AI-produced proof settles the Aaronson-Ambainis conjecture in quantum complexity
+- ids: 17, 18
+- topic: AI
+- signal: recommended
+- url: https://scottaaronson.blog/?p=10295&amp;amp;utm_source=tldrnewsletter
+- event: aaronson ambainis conjecture proof ai
+- original title: Aaronson-Ambainis Conjecture proved! (By AI, of course)
+- source: scottaaronson.blog | https://scottaaronson.blog/?p=10295&amp;amp;utm_source=tldrnewsletter | via TLDR Tech
+- source: psi.inc | https://psi.inc/research/aaronson-ambainis/ | via TLDR AI
+- image: https://s0.wp.com/_si/?t=eyJpbWciOiJodHRwczpcL1wvc2NvdHRhYXJvbnNvbi5ibG9nXC93cC1jb250ZW50XC91cGxvYWRzXC8yMDIxXC8xMFwvY3JvcHBlZC1KYWNrZXQuZ2lmIiwidHh0IjoiU2h0ZXRsLU9wdGltaXplZCIsInRlbXBsYXRlIjoiZWRnZSIsImZvbnQiOiIiLCJibG9nX2lkIjoxMjk1MjA1ODB9.siOtN7gHw4tefA_rZickBw4GfI6tPxGgOQ1AXr2ZoOQMQ
+- read: 6 min
+- full text: yes
+
+> The dek: The result rules out one narrow kind of quantum speedup and leaves the practical roadmap for quantum computers unchanged, according to one of the authors.
+
+Scott Aaronson says an AI system has solved the Aaronson-Ambainis conjecture, a problem he and Andris Ambainis posed in 2009. Stated informally, the claim is that any low-degree function of many random bits with non-trivial spread must hinge on at least one bit that has a noticeable pull on its output, with the pull measured against the degree. Aaronson's own write-up is blunt that the result does not undermine quantum supremacy or change how quantum computers are built.
+
+The stakes are theoretical. The authors had shown that the conjecture implies no superpolynomial quantum query advantage over classical algorithms for decision problems on most Boolean inputs, and therefore no way to separate P from BQP relative to a random oracle without a non-relativized proof. The conjecture would have answered a question Fortnow and Rogers asked in 1998.
+
+The argument builds on Beals and colleagues' 1998 observation that a quantum algorithm making T queries corresponds to a real polynomial of degree at most 2T. Repeatedly querying the most influential variable until the polynomial is nearly constant gives a classical simulation that makes poly(T) queries and works for most inputs. Aaronson notes that open problems in theoretical computer science are now falling to AI faster than he can write about them.
+
+## Fitting OpenAI's published data gives an R&D time-horizon doubling near two months
+- ids: 85
+- topic: AI
+- signal: recommended
+- url: https://threadreaderapp.com/thread/2119541238856663473.html
+- event: openai ai research time horizons
+- original title: What the heck is going on with OpenAI internal AI R&D time horizons
+- source: threadreaderapp.com | https://threadreaderapp.com/thread/2119541238856663473.html | via TLDR AI
+- image: https://threadreaderapp.com/images/screenshots/thread/2119541238856663473.jpg
+- read: 4 min
+- full text: yes
+
+> The dek: The 80 percent reliability trend slows to a 585-day doubling under one fit and speeds to 86 days under another, a nearly sevenfold difference.
+
+An analyst reads OpenAI's publicly shared time-horizon chart for its internal AI R&D work in three ways. Interpolating the curves gives a 50 percent time horizon of about 10 hours, doubling every 68 days, and an 80 percent horizon of 15 minutes, doubling every 585 days. Fitting a logistic distribution gives 6 hours with a 63-day doubling time, and 15 minutes at 86 days for 80 percent. A Weibull fit matches the data better and also shows the 80 percent horizon doubling quickly.
+
+The reason this matters is the comparison with METR's measurements. METR's time horizon for software tasks was doubling every four to seven months until its measurements ended, while OpenAI's internal figures, fitted METR's way, double about every two months. The analyst lists three explanations: a large overhang of research capability that OpenAI researchers were not using, uneven progress across domains, or progress that has accelerated across domains. He says he cannot yet tell which one is right.
+
+This is one person's analysis of a public chart, not a published method from OpenAI, and the choice of fit changes the 80 percent result by almost sevenfold.
+
+**Takeaways**
+- When you quote a doubling time from this data, name the fit behind it, because the 80 percent figure depends on it.
+- Compare METR's next measurement with the two-month pace; a gap that persists would support the overhang explanation.
+
+## Cloudflare plans a public certificate authority for Merkle Tree Certificates aimed at Chrome's post-quantum root store
+- ids: 41
+- topic: Security
+- signal: recommended
+- url: https://www.infoq.com/news/2026/11/cloudflare-merkle-certificates/
+- event: cloudflare merkle tree certificates ca
+- original title: Cloudflare Develops Public Certificate Authority for Post-Quantum Web Security
+- source: InfoQ | https://www.infoq.com/news/2026/11/cloudflare-merkle-certificates/
+- author: Leela Kumili
+- image: https://res.infoq.com/news/2026/11/cloudflare-merkle-certificates/en/card_header_image/generatedCard-1792889369262.jpg
+- read: 3 min
+- full text: yes
+
+> The dek: Its Chrome experiment cut median performance time by 9 percent, mostly by dropping intermediate certificates, and it used classical signatures rather than post-quantum ones.
+
+Merkle Tree Certificates, or MTCs, have a certificate authority record certificate data in an append-only Merkle tree and sign a checkpoint. Clients then verify a certificate with a compact inclusion proof instead of downloading a full chain. Cloudflare ran the approach in an experiment that served billions of MTCs to half of Chrome Beta 146 for selected domains on its free plan, and wound the experiment down in August 2026.
+
+The motivation is the cost of post-quantum signatures, which Cloudflare says can be roughly 40 times larger than classical ones and would strain bandwidth and storage on the web's certificate system. Most of the measured gain came from removing intermediate certificates, and the experiment used classical signatures, so the post-quantum benefit has not been measured yet.
+
+Cloudflare is now developing a public certificate authority that issues MTCs, and it is aiming for inclusion in Chrome's quantum-resistant Root Store in early 2027, subject to Chrome's evaluation. A related design uses landmark-relative certificates, so that in the common case a handshake carries one public key, one signature, and an inclusion proof under 1 KB. Clients that are newly installed, offline, or missing the latest landmark update are the harder case.
+
+**Takeaways**
+- Track Chrome's evaluation of the quantum-resistant Root Store in early 2027, since that decision determines whether MTCs become a practical option.
+
+## Google's Gemini 4 Argon targets robot control, with simulation-to-real tooling and an 87 percent ERQA score
+- ids: 39
+- topic: AI
+- signal: recommended
+- url: https://www.infoq.com/news/2026/11/google-gemini-argon/
+- event: google gemini 4 argon robotics
+- original title: Google Releases Gemini 4 Argon for Robotics Control, Simulation, and Policy Improvement
+- source: InfoQ | https://www.infoq.com/news/2026/11/google-gemini-argon/
+- author: Daniel Dominguez
+- image: https://res.infoq.com/news/2026/11/google-gemini-argon/en/headerimage/generatedHeaderImage-1794224974378.jpg
+- read: 2 min
+- full text: yes
+
+> The dek: Google reports 87 percent on the ERQA embodied reasoning benchmark, but its robotics examples rely on long, task-specific prompts and scaffolding.
+
+Google is pitching Gemini 4 Argon as a reasoning model for the physical world, not a single robot controller. Its jobs span driving robots, reconstructing simulated scenes from teleoperation recordings, annotating robot footage, and refining robot policies over repeated rounds. Access is limited to paying tiers: the top Google AI plan and the metered Gemini API, where the model is addressed as gemini-4-argon.
+
+Google's demos include a Boston Dynamics Spot that presses a foot pedal after rehearsing in a simulated copy of the lab, a simpler arm guided by image coordinates and motion commands sent over HTTP, and a loop that feeds results back through the Gemini Omni video world model. One reported result is that domain-randomized simulation episodes built from a single RGB photo raised a vision-language-action policy's success on the real setup from 56 percent to 75 percent.
+
+The 87 percent ERQA score comes from pure reasoning without helper tools, and Google says that leads other frontier models on the test. But the robotics posts depend on verifiers, coordinate grids, and motion primitives, so the measured system includes the scaffolding. Google does not publish per-demo failure rates beyond that one policy result. Early practitioners argued that a simulation can look convincing while objects behave wrongly at contact, which is the part worth checking.
+
+**Takeaways**
+- Test contact-heavy manipulation tasks in the simulated twin before trusting it, since practitioners flagged contact behavior as the weak point.
+- Budget for the scaffolding, because the reported results depend on prompts, grids, and primitives, not the model alone.
+
+## Pinterest swaps a clustering pipeline for a fine-tuned 4B Qwen3 model and reports engagement gains
+- ids: 57
+- topic: Engineering
+- signal: recommended
+- url: https://www.infoq.com/news/2026/11/pinterest-journey/
+- event: pinterest user journey qwen3 llm clustering
+- original title: Pinterest Replaces Journey Clustering with 4B Qwen3 LLM, Reports Improved Engagement
+- source: InfoQ | https://www.infoq.com/news/2026/11/pinterest-journey/
+- author: Matt Foster
+- image: https://res.infoq.com/news/2026/11/pinterest-journey/en/headerimage/generatedHeaderImage-1793998579474.jpg
+- read: 3 min
+- full text: yes
+
+> The dek: The model reads up to 150 user actions over 360 days and names the goals behind them, and Pinterest reports a 1.1 percent lift in email click-through and 1.3 percent more push opens.
+
+Pinterest's old system extracted keywords from user activity, grouped them with embeddings and hierarchical clustering, named the clusters, and ranked them. That approach could split related activity into separate journeys, produce generic labels, or mistake incidental clicks for lasting intent. The new system treats the problem as generation: a fine-tuned LLM reads a chronological history of user actions and a compact profile, then produces a ranked list of journey names. Searches and saves count for more than incidental clicks, and the model may return nothing when the evidence is thin.
+
+Because Pinterest had no large human-labeled dataset, frontier models generated synthetic training examples from user histories. Those examples were used to fine-tune Qwen3 models through supervised fine-tuning and LoRA. Pinterest tested sizes from 0.6B to 8B parameters and chose 4B for the balance between quality and serving throughput.
+
+Much of the old ranking and filtering logic now lives in the prompt, and Pinterest treats prompt changes as production launches rather than casual edits. The article's engagement figures are the company's own, and the synthetic labels mean the model inherits whatever the frontier models got wrong.
+
+**Takeaways**
+- If you run a clustering pipeline for personalization, test a small model with an explicit "return nothing" option against it on your own engagement metrics.
+- Put prompt edits through the same review and rollback process you use for code.
+
+## Russian hosting giant Beget loses its cloud platform in a November 1 cyberattack
+- ids: 138
+- topic: Security
+- signal: recommended
+- url: https://www.techradar.com/pro/we-are-not-giving-up-russian-hosting-giant-beget-has-cloud-platform-wiped-in-major-cyberattack
+- event: beget russia hosting cyberattack cloud wiped
+- original title: 'We are not giving up': Russian hosting giant Beget has cloud platform wiped in major cyberattack
+- source: TechRadar | https://www.techradar.com/pro/we-are-not-giving-up-russian-hosting-giant-beget-has-cloud-platform-wiped-in-major-cyberattack
+- author: Christian Cawley
+- image: https://cdn.mos.cms.futurecdn.net/85kAnS2rcuxwyaibPRC4Ze-2000-80.jpg
+- read: 3 min
+- full text: yes
+
+> The dek: More than 1,000 servers must be inspected by hand, and Beget says most data is recoverable from backups but that the process will take a long time.
+
+Russian hosting provider Beget was hit by a major cyberattack on November 1, 2026, and its platform went offline. Websites, cloud storage, VPS hosting, and hosting for Kubernetes containers were all affected, and abnormal activity was recorded just before the incident. Thousands of websites were hit. The company says it needs several days to assess the damage and must physically check more than 1,000 servers.
+
+Beget told Kommersant that most virtual hosting and cloud data should be recoverable from backups, but the volume means recovery will take a long time. The article notes that many customers did not use disaster recovery plans, which makes the response harder.
+
+Beget is under EU sanctions for hosting services for authorities in the occupied Ukrainian regions of Crimea, Donetsk, and Luhansk. It is also the second-largest registrar for .ru domains, with 14.7 percent of the market. The attack comes amid a wave of attacks on Russian tech firms, but the article does not establish who carried it out. A compliance expert quoted in the piece called the outage a systemic risk from depending on one provider.
+
+**Takeaways**
+- If your sites depend on one host, confirm that your backups are stored outside that provider's infrastructure.
+- Test a restore from backup before you need one, since recovery time depends on what backups actually exist.
+
+## Topcoat: Tokio's full-stack Rust framework reaches version 0.9 with server rendering and no WebAssembly
+- ids: 61
+- topic: Languages
+- signal: notable
+- url: https://www.infoq.com/news/2026/11/topcoat-rust-framework/
+- event: topcoat tokio rust full-stack framework
+- original title: Tokio Releases Topcoat: A Batteries-Included Full-Stack Rust Framework
+- source: InfoQ | https://www.infoq.com/news/2026/11/topcoat-rust-framework/
+- author: Daniel Curtis
+- image: https://res.infoq.com/news/2026/11/topcoat-rust-framework/en/headerimage/generatedHeaderImage-1793983973654.jpg
+- read: 3 min
+- full text: yes
+
+> The dek: Its interpolated expressions are type-checked Rust that runs on the server and translates to JavaScript for the browser, so most interactivity avoids a WebAssembly bundle.
+
+The Tokio team has opened its full-stack Rust web framework, which is still at an early 0.9 version. Pages are rendered on the server. The toolkit offers a macro that lets HTML and Rust control flow sit side by side, routes inferred from folder layout, cache-busting asset URLs, and Tailwind support that skips the Node toolchain. A tie-in with the Toasty async ORM covers migrations and data access inside one workspace.
+
+The central design idea is an interpolation form written as $(...): regular Rust that the server runs for the first render and that is also translated into JavaScript, so it can update in the browser without shipping a WebAssembly bundle. Components marked #[shard] re-render on the server when their inputs change and swap in new HTML. That design puts it in the same camp as HTMX, Datastar, and Phoenix LiveView, rather than React or SolidJS. Topcoat UI, a shadcn-style component library, is vendored into projects through a CLI so teams can edit the components.
+
+Carl Lerche said at ScyllaDB's P99 conference that Topcoat targets ordinary database-driven web apps, not Figma-scale products. Commenters were split between enthusiasm for a full-stack Rust option and doubt about whether it can match Django or Rails without built-in admin, auth, and migrations.
+
+## Nominal raises $240 million at a $3 billion valuation, tripling its March figure
+- ids: 147
+- topic: Startups
+- signal: notable
+- url: https://techcrunch.com/2026/11/09/ai-hardware-startup-nominal-triples-valuation-to-3b-in-8-months/
+- event: nominal series c hardware ai valuation
+- original title: AI hardware startup Nominal triples valuation to $3B in 8 months
+- source: TechCrunch | https://techcrunch.com/2026/11/09/ai-hardware-startup-nominal-triples-valuation-to-3b-in-8-months/
+- author: Julie Bort
+- image: https://techcrunch.com/wp-content/uploads/2026/11/Nominal-CEO-Cameron-McCord.jpg?resize=1200,661
+- read: 1 min
+- full text: yes
+
+> The dek: The Austin company says 80 commercial and government organizations use its platform, and Anduril is one of its key customers.
+
+Nominal, a four-year-old Austin startup, announced a $240 million Series C at a $3 billion valuation on Monday, led by Lightspeed Venture Partners with Insight Partners as co-lead. That follows a $155 million Series B extension in March at a $1 billion valuation, which Founders Fund led in a preemptive deal the investor initiated. Other backers include Sequoia, General Catalyst, and Lux Capital.
+
+The company sells an AI platform for engineering and testing complex hardware, including aircraft, nuclear reactors, and smart factories. Its CEO and co-founder, Cameron McCord, is a former Navy submarine officer and an Anduril alumnus. In October the Air Force selected Nominal for a $71.2 million STRATFI award, a program that requires matching funds from outside the Air Force.
+
+The report gives no revenue figures, so the valuation multiple cannot be checked from this coverage.
+
+## Meta's Muse Ember small model undercuts Claude Haiku 5.5 and GPT-6 Luna on cost, by Meta's own tests
+- ids: 11
+- topic: AI
+- signal: notable
+- url: https://research.meta.ai/blog/muse-ember
+- event: meta muse ember small model pricing
+- original title: Our Smallest, Most Efficient Model: Muse Ember
+- source: research.meta.ai | https://research.meta.ai/blog/muse-ember | via Hacker News
+- author: Meta AI Research
+- image: https://research.meta.ai/articles/muse-glint/hero/blog-header-light-v1.webp
+- read: 3 min
+- discuss: https://news.ycombinator.com/item?id=50429024 | Hacker News | 239 points | 100 comments
+- full text: yes
+
+> The dek: By Meta's measure, Muse Ember reaches Haiku's top score for roughly a third of the price and outscores each Luna setting, priced at ten cents in and fifty cents out per million tokens.
+
+Meta has released Muse Ember, the smallest model in its Muse family, aimed at the high-volume work agents repeat: tool calls, coding subtasks, routing, extraction, and long document parsing. It is available today on the Meta Model API and Muse Code as muse-ember-1.0. It has a 1M-token context window and up to 512K output tokens, and natively handles text, images, audio, and video, including operating a computer from screenshots.
+
+The efficiency claims come from Meta's own evaluations, which place the model on the efficiency frontier of the Artificial Analysis leaderboard. Meta suggests pairing it with its larger Muse Wonder model for hard planning, with Muse Ember handling the volume. Meta says Muse Ember stayed below the high-risk thresholds of its scaling framework across the categories it assessed.
+
+**Takeaways**
+- Run your own evals on the agent subtasks you plan to route to it before moving volume, since the comparisons are Meta's.
