@@ -1,8 +1,15 @@
 {
- "count": 49,
- "latest": "2026-11-10",
+ "count": 50,
+ "latest": "2026-11-11",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-11",
+   "edition": 50,
+   "stories": 25,
+   "must_read": 5,
+   "lead": "Anthropic's seven co-founders each plan to sell about $250 million of stock in the IPO"
+  },
   {
    "date": "2026-11-10",
    "edition": 49,
