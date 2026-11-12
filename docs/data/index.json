@@ -1,8 +1,15 @@
 {
- "count": 50,
- "latest": "2026-11-11",
+ "count": 51,
+ "latest": "2026-11-12",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-12",
+   "edition": 51,
+   "stories": 16,
+   "must_read": 3,
+   "lead": "Nvidia's board weighs ousting Jensen Huang after a second affair report"
+  },
   {
    "date": "2026-11-11",
    "edition": 50,
