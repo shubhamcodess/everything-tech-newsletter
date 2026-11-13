@@ -1,8 +1,15 @@
 {
- "count": 51,
- "latest": "2026-11-12",
+ "count": 52,
+ "latest": "2026-11-13",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-13",
+   "edition": 52,
+   "stories": 25,
+   "must_read": 5,
+   "lead": "Jensen Huang resigns as Nvidia CEO after reports of affairs, one with an alleged Chinese spy"
+  },
   {
    "date": "2026-11-12",
    "edition": 51,
