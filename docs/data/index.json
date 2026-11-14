@@ -1,8 +1,15 @@
 {
- "count": 52,
- "latest": "2026-11-13",
+ "count": 53,
+ "latest": "2026-11-14",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-14",
+   "edition": 53,
+   "stories": 24,
+   "must_read": 5,
+   "lead": "FAA halts all US departures nationwide over a telecom failure, stranding hundreds of thousands"
+  },
   {
    "date": "2026-11-13",
    "edition": 52,
