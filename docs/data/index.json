@@ -1,8 +1,15 @@
 {
- "count": 53,
- "latest": "2026-11-14",
+ "count": 54,
+ "latest": "2026-11-15",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-15",
+   "edition": 54,
+   "stories": 20,
+   "must_read": 3,
+   "lead": "FAA's nationwide ground stop traced to a copper-to-fiber swap and a router overload"
+  },
   {
    "date": "2026-11-14",
    "edition": 53,
