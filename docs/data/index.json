@@ -1,8 +1,15 @@
 {
- "count": 54,
- "latest": "2026-11-15",
+ "count": 55,
+ "latest": "2026-11-16",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-16",
+   "edition": 55,
+   "stories": 17,
+   "must_read": 6,
+   "lead": "A malfunctioning FAA router in Arkansas flooded the network and triggered the nationwide ground stop"
+  },
   {
    "date": "2026-11-15",
    "edition": 54,
