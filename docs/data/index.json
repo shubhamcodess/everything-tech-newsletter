@@ -1,8 +1,15 @@
 {
- "count": 58,
- "latest": "2026-11-19",
+ "count": 59,
+ "latest": "2026-11-20",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-20",
+   "edition": 59,
+   "stories": 21,
+   "must_read": 6,
+   "lead": "Anthropic's $81.3 billion IPO is the largest on record, valuing the Claude maker near $1.5 trillion"
+  },
   {
    "date": "2026-11-19",
    "edition": 58,
