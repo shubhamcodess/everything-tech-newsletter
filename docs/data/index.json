@@ -1,8 +1,15 @@
 {
- "count": 59,
- "latest": "2026-11-20",
+ "count": 60,
+ "latest": "2026-11-21",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-21",
+   "edition": 60,
+   "stories": 14,
+   "must_read": 4,
+   "lead": "A mathematician claims a Lean-formalized proof of the Generalized Riemann Hypothesis"
+  },
   {
    "date": "2026-11-20",
    "edition": 59,
