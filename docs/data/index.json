@@ -1,8 +1,15 @@
 {
- "count": 60,
- "latest": "2026-11-21",
+ "count": 61,
+ "latest": "2026-11-22",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-22",
+   "edition": 61,
+   "stories": 17,
+   "must_read": 5,
+   "lead": "Anthropic mathematician claims Lean-checked proof of the Riemann hypothesis"
+  },
   {
    "date": "2026-11-21",
    "edition": 60,
