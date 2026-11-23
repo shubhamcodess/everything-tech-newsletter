@@ -1,0 +1,607 @@
+---
+date: 2026-11-23
+edition: 62
+schema_version: 1
+generated_at: 2026-11-23T01:38:24+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 398
+candidates: 122
+full_text: 21
+---
+
+# The Brief
+
+- Agents are being fenced in from two sides at once. Big banks are cutting third-party bots off from customer logins, while Google is adding a checkpoint that reviews each tool call before it runs.
+- Security dominates today: a phishing kit that keeps rewriting emails until spam filters accept them, a Claude Code setting that has been writing live credentials into repositories, and a GnuPG bug whose fix has not reached every Linux distribution yet.
+- Infrastructure gets easier to run. PostgreSQL 19 adds an online table rebuild, and AWS Lambda can now serve GPU inference from shared models.
+- The money side of AI is loud. Anthropic's IPO turned early investors' bets into large paper gains, Nvidia pulled H200 sales out of China, and OpenAI's chief scientist proposed perplexity as a yardstick for limiting how fast models advance.
+- Open source and standards keep moving: a Rust driver for Clevo laptops, an AI reviewer for kernel patches, and a fresh push for email-style interoperability between open social networks.
+
+# Stories
+
+## Claude Code's "don't ask again" approvals have been leaking credentials into public repositories
+- ids: 24
+- topic: Security
+- signal: must-read
+- url: https://www.infoq.com/news/2026/11/claude-code-leaking-secrets/
+- event: claude code leaked secrets
+- original title: Claude Code Has Been Leaking Secrets through its "Don't Ask Again" Feature
+- source: InfoQ | https://www.infoq.com/news/2026/11/claude-code-leaking-secrets/
+- author: Sergio De Simone
+- image: https://res.infoq.com/news/2026/11/claude-code-leaking-secrets/en/headerimage/linux-6-12-real-time-1795344939763.jpeg
+- read: 3 min
+- full text: yes
+
+> Apiiro found 63 affected organizations, and GitGuardian counted 31,088 secrets in these files on public GitHub, with 5,343 still valid when checked.
+
+When a developer approves a shell command with the "don't ask again" option, Claude Code saves that command as a permanent permission rule in a local file, `.claude/settings.local.json`. Many commands carry inline passwords, API keys or tokens, so the file quietly collects working credentials. Claude Code does add the file to the developer's global gitignore when it creates it inside a repository. That protects the common case and misses the rest: a folder that becomes a repository later, a clone on another machine, or a file someone has already committed. The project's own `.gitignore` never gets the entry, so nothing travels with the repository to keep the file out of git.
+
+Apiiro's numbers are the first warning sign: 1,122 secrets in local settings files, a further 1,160 spread across git history, the team-shared settings file, and chat transcripts that agents save into repositories. Claude Code itself committed the file on some occasions. Ordinary secret scanners, gitleaks and TruffleHog among them, missed several of these, since the credentials are buried in command strings rather than in the formats those tools match. GitGuardian then searched public GitHub and reported 31,088 exposed secrets in those settings files, with 5,343 still valid when checked, plus 613 more in Docker Hub images. A key that still works is a live exposure, not a historical one.
+
+The file works like a map for anyone who gets into a machine: one search turns up the systems a developer can reach and the passwords that open them, and the same path exists in every project. The coverage I read does not say what fix, if any, Anthropic has shipped for the storage behavior, so treat the setting as unsafe until the vendor confirms otherwise.
+
+**Takeaways**
+- Search your repositories and their git history for `.claude/settings.local.json`, and rotate any credential that appears in it.
+- Add `.claude/settings.local.json` to each project's own `.gitignore`, not only to your global ignore list.
+- Review saved "don't ask again" rules and delete any that embed a password or token.
+
+## Wells Fargo and other big banks are putting the risk of AI agent mistakes on customers
+- ids: 102
+- topic: Security
+- signal: must-read
+- url: https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/
+- event: banks ai agent login terms
+- original title: Banks Have Had It Up to Here With Your AI Agent
+- source: Wired | https://www.wired.com/story/banks-are-cracking-down-on-ai-agents/
+- author: Reece Rogers
+- image: https://media.wired.com/photos/6b0080a25f35c47a5c116087/191:100/w_1280,c_limit/GettyImages-2285133719.jpg
+- read: 5 min
+- full text: yes
+
+> Wells Fargo's new terms make the customer responsible for any agent's actions, and Amazon and United are blocking agents from buying on their sites too.
+
+Wells Fargo is rolling out an updated customer agreement that says using any AI agent is entirely at the customer's own risk. The change follows a year in which personal agents, which click and buy on a user's behalf, made some costly errors, including one that posted a user's bank details where coworkers could see them. Many users handed these tools their account credentials and broad permissions without much thought, and the banks now treat that habit as the problem.
+
+JPMorgan Chase changed its terms in late October to ban third-party agents that log in with a customer's credentials. Bank of America told customers not to share login details with agents that day, and Citi and PNC have added warnings of their own. Outside banking, Amazon blocked Meta's Muse agent from making purchases on its platform, and United said personal bots would no longer be allowed to book flights on a customer's behalf. The retailers and airlines are protecting their own checkout flows, while the banks are protecting their liability.
+
+The core conflict is that the automation is the selling point of these agents, and the automation requires handing over a login. The new terms do not describe any sanctioned way for an agent to act on an account, so a customer who wants agent-driven payments has no approved route for now. Expect more terms like these to spread from banks into other services that hold money or identity.
+
+**Takeaways**
+- Read your bank's current terms for language on third-party agents before you give any agent your login.
+- Keep banking passwords away from shopping and budgeting agents, and use read-only account links wherever a provider offers them.
+
+## Google's semantic governance policies make a second check vet every agent tool call before it runs
+- ids: 28
+- topic: AI
+- signal: must-read
+- url: https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/
+- event: google semantic governance policies agents
+- original title: Check what your AI agents do before they do it, with Semantic governance policies
+- source: Google Developers Blog | https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/
+- author: Deepti Sehrawat
+- image: https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/header_2.2e16d0ba.fill-1200x600.png
+- read: 5 min
+- full text: yes
+
+> The check sits outside the agent, so a manipulated model cannot argue its way past it, but it only covers traffic routed through Agent Gateway.
+
+Google's semantic governance policies, now in Preview on the Gemini platform, inspect each tool call an agent's model proposes before the call executes. The example in Google's post is a finance-team agent asked to send preliminary quarterly results to an outside investor under NDA and to copy a personal Gmail address. Permissions would let that agent send email, so a permission check alone would pass it. A semantic check compares each proposed call against what the user actually asked for and against rules the company writes in plain language, and the call has to pass both checks to run.
+
+The enforcement happens in Agent Gateway, which routes the agent's model traffic. When the model returns a tool call, the gateway passes it to a policy engine. An LLM judge evaluates the call against the conversation so far, the agent's system instructions, the tool descriptions and the company's policies. A failing call gets its content replaced with a configurable denial message, so it never runs, and the verdict and the judge's reasoning go to Cloud Logging. Replies that contain only text, such as an answer or a question back to the user, are not evaluated, because they take no action.
+
+Google's argument for keeping the check outside the agent is that a permission says what an agent can do, not whether a particular call is allowed. A model can be talked out of its instructions, persuaded by a user with a plausible reason, or redirected by a document that carries injected instructions. The limits are plain: Agent Gateway is the only enforcement point supported today, so an agent that bypasses it is not covered, and the judge is itself a model whose verdicts can be wrong. The Cloud Logging trail is what a team would audit to decide whether the rules are catching the right calls.
+
+**Takeaways**
+- If your agents run on Gemini Enterprise or Agent Gateway, confirm that all agent egress goes through the gateway before you rely on any policy.
+- Sample the logged verdicts for both blocked and allowed calls, and adjust the plain-language rules where the judge gets it wrong.
+
+## TheMailer phishing kit wires six commercial AI models into a loop that rewrites emails until spam filters accept them
+- ids: 67
+- topic: Security
+- signal: must-read
+- url: https://www.techradar.com/pro/security/while-attackers-use-ai-to-create-better-phishing-lures-todays-cybercrime-tools-do-much-more-experts-warn-themailer-ai-phishing-kit-runs-on-claude-and-chatgpt-and-constantly-evolves-until-it-gets-past-your-spam-filter
+- event: themailer ai phishing kit
+- original title: 'While attackers use AI to create better phishing lures, today's cybercrime tools do much more': Experts warn 'TheMailer' AI phishing kit runs on Claude and ChatGPT — and constantly evolves until it gets past your spam filter
+- source: TechRadar | https://www.techradar.com/pro/security/while-attackers-use-ai-to-create-better-phishing-lures-todays-cybercrime-tools-do-much-more-experts-warn-themailer-ai-phishing-kit-runs-on-claude-and-chatgpt-and-constantly-evolves-until-it-gets-past-your-spam-filter
+- author: Efosa Udinmwen
+- image: https://cdn.mos.cms.futurecdn.net/88Btws2w53ivfStaAhDZgR-1920-80.jpg
+- read: 4 min
+- full text: yes
+
+> Varonis found the self-hosted kit advertised on a cybercrime forum since March, with lifetime licenses reportedly priced from $3,000 to $6,000.
+
+The Varonis Threat Labs team describes TheMailer as a self-hosted kit that plugs into a set of commercial chatbot APIs, among them Claude, ChatGPT, Grok, Gemini, Mistral and DeepSeek, using each operator's own keys. The buyer decides which model drafts each message. The kit has been advertised on an underground forum since March and has drawn more than 24,000 views, which suggests a sizable pool of interested buyers at a price that small crews can afford.
+
+The toolkit automates the whole campaign. A Letter Builder generates HTML emails from brief instructions, and another feature converts genuine business correspondence into templates for impersonating established firms. The most troubling piece is an Inbox Loop that sends test messages to see where they land. When a message is filtered into spam, the AI rewrites its contents and the platform sends it again, so the phishing email keeps changing until it gets through.
+
+That changes the defensive problem. A filter tuned to catch one template loses ground when every send is a fresh variant, and fluent, well-written phishing no longer signals anything about the sender. The coverage does not say how many campaigns have used TheMailer or what share of its messages reach inboxes, so the scale of the threat is still an open question. Security teams should assume the attackers are testing their defenses in real time.
+
+**Takeaways**
+- Treat unexpected requests for payments, logins or invoice changes as suspicious even when the message reads perfectly.
+- If you run mail filtering, watch for bursts of near-identical messages that change slightly after bounces.
+
+## PostgreSQL 19 adds REPACK CONCURRENTLY to rebuild tables without blocking, plus planner controls
+- ids: 23
+- topic: Infra
+- signal: must-read
+- url: https://www.infoq.com/news/2026/11/postgresql-19-released/
+- event: postgresql 19 repack release
+- original title: PostgreSQL 19 Released with Online Table Repacking and Query Planning Controls
+- source: InfoQ | https://www.infoq.com/news/2026/11/postgresql-19-released/
+- author: Robert Krzaczyński
+- image: https://res.infoq.com/news/2026/11/postgresql-19-released/en/headerimage/generatedHeaderImage-1795349035334.jpg
+- read: 2 min
+- full text: yes
+
+> The release also adds WAIT FOR LSN for read-your-writes on replicas and turns JIT compilation off by default.
+
+The headline feature of PostgreSQL 19 is REPACK, which reclaims unused table space and can reorder rows to match an index. With the CONCURRENTLY option it runs without blocking reads or writes, so it can replace many uses of VACUUM FULL and CLUSTER that used to require a maintenance window. Administrators also get pg_plan_advice and pg_stash_advice, extensions that influence query plan selection and attach stored advice to queries by identifier, without any application code change.
+
+The rest of the release leans toward operations and performance. Vacuum work gets faster with parallel index cleaning, autovacuum changes how it ranks tables, and an EXPLAIN ANALYZE run now shows asynchronous I/O plus the log volume from full-page images. On the planner side, NOT IN queries on eligible columns can use a cheaper join strategy, and aggregation can happen before joins. The project reports that a change to foreign key checks nearly doubled bulk insert speed in its testing. For applications, WAIT FOR LSN lets a client wait until a standby has replayed a given WAL position before reading, logical replication now carries sequence values, and COPY can emit JSON.
+
+The plan-control extensions need caution. Last week this paper covered a case where a plan hint made a query about nine times slower under load, so benchmarks under production-like concurrency should come before any hint goes live. Compatibility also moves: MD5 password authentication now logs a warning after each successful login, ahead of removal in a later release, and JIT compilation is off by default because its cost estimates proved unreliable.
+
+**Takeaways**
+- Test REPACK CONCURRENTLY on a copy of your largest table before replacing VACUUM FULL in maintenance scripts.
+- Benchmark any pg_plan_advice hint under realistic concurrency before deploying it.
+- Move MD5 password users to SCRAM now, since the warning will keep appearing in your logs until they do.
+
+## Python security developers document GitHub Actions triggers that give outsiders a path to your secrets
+- ids: 84
+- topic: Security
+- signal: recommended
+- url: https://it.slashdot.org/story/26/11/22/0625233/python-devs-document-de-fanging-dangerous-triggers-in-github-actions
+- event: github actions risky workflow triggers
+- original title: Python Devs Document 'De-fanging Dangerous Triggers In GitHub Actions'
+- source: Slashdot | https://it.slashdot.org/story/26/11/22/0625233/python-devs-document-de-fanging-dangerous-triggers-in-github-actions
+- author: EditorDavid
+- full text: no
+
+> The write-up argues that the unsafe trigger and the safe one are often a single line apart, which is how careful maintainers end up exposed.
+
+This story is written from the headline and standfirst only, because the full article was not retrievable. Two security developers at the Python Software Foundation document a small set of GitHub Actions triggers that let a stranger who opens a pull request start a workflow that may have access to repository secrets. According to the standfirst, these dangerous triggers have caused real incidents repeatedly, and the authors stress that the maintainers involved were not careless.
+
+The mechanism is the difference between two triggers. The safe one runs a fork's code with a read-only token and no secrets. The snippet cuts off before it names the riskier trigger, so the exact trigger names are not confirmed here. The lesson in the standfirst is that the unsafe form looks harmless in a workflow file and differs from the safe one by a small edit.
+
+**Takeaways**
+- Search your workflow files for `pull_request_target` and check whether any step checks out or runs code from the pull request.
+
+## Microsoft's final report on the November Outlook outage admits some emails never reached their recipients
+- ids: 74
+- topic: Infra
+- signal: recommended
+- url: https://tech.slashdot.org/story/26/11/22/1949204/microsoft-admits-some-emails-bounced-during-global-outlook-outage-reveals-new-failures
+- event: microsoft 365 outlook outage exchange
+- original title: Microsoft Admits Some Emails Bounced During Global Outlook Outage, Reveals New Failures
+- source: Slashdot | https://tech.slashdot.org/story/26/11/22/1949204/microsoft-admits-some-emails-bounced-during-global-outlook-outage-reveals-new-failures
+- author: EditorDavid
+- full text: no
+
+> The report also details failures in Microsoft's email security features that the company had not disclosed before.
+
+This is a follow-up to our earlier coverage of the outage. This story is written from the headline and standfirst only, because the full report was not retrievable. The outage on November 12 cut millions of people off from Microsoft 365 services, including Outlook. Microsoft has now published its final post-incident report, and it says some emails were never delivered to their intended recipients. The new fact is that the report discloses those delivery failures and separate failures in email security features that had not been made public before.
+
+The summary says that every enterprise message stuck in queues was eventually delivered, and that Microsoft found none that vanished for good. Consumer Outlook users are treated differently in the summary, and Microsoft acknowledged that some of their mail failed. The summary does not name the security features affected or say how many messages were involved.
+
+**Takeaways**
+- If your organization relies on Exchange Online, check message trace logs for November 12 for bounced or deferred mail.
+
+## Google's Agent Compute Engine runs AI agents in microVMs and keeps their credentials outside the sandbox
+- ids: 25
+- topic: AI
+- signal: recommended
+- url: https://www.infoq.com/news/2026/11/google-agent-compute-engine/
+- event: google agent compute engine
+- original title: Google Announces Agent Compute Engine for Secure AI Agent Execution
+- source: InfoQ | https://www.infoq.com/news/2026/11/google-agent-compute-engine/
+- author: Renato Losio
+- image: https://res.infoq.com/news/2026/11/google-agent-compute-engine/en/headerimage/generatedHeaderImage-1793561615054.jpg
+- read: 3 min
+- full text: yes
+
+> The service can suspend an idle agent and resume it later, and Google already runs Gemini and Antigravity workloads on it.
+
+Google has announced Agent Compute Engine, a managed service that runs each agent in an isolated microVM and can checkpoint an environment to suspend and resume it. The design keeps API keys, OAuth refresh tokens and other credentials out of the sandbox entirely. An external Agent Gateway authenticates outgoing requests and injects the secrets, so an agent that makes a mistake or is manipulated has no keys to hand over.
+
+Google names three goals behind the design: keep sandboxes free of exploitable credentials, minimize the cost and latency of resuming idle agents, and preserve persistent workspaces across sessions and operating system updates. The method is copy-on-write memory, so many agents share one operating system template, combined with fast checkpoint and restore to pause idle microVMs. The orchestration harness runs outside the sandbox and dispatches explicit commands, which creates an audit trail that links each harness-initiated tool call to activity inside the sandbox.
+
+The platform covers four workload types: interactive consumer and enterprise agents, persistent Linux workspaces for software engineering, large parallel environments for model evaluation and reinforcement learning, and lightweight sandboxes for dynamic logic inside Google services. Google also offers Agent Substrate, an open-source Kubernetes-native runtime for isolated agents. The write-up does not give pricing or regional availability, so the cost of the design for a team is still unclear.
+
+**Takeaways**
+- If you run agents yourself, move API keys out of the agent's environment and inject them through a gateway or secret broker.
+
+## AWS Lambda now runs GPU inference, with up to 48 concurrent invocations sharing one model in GPU memory
+- ids: 26
+- topic: Infra
+- signal: notable
+- url: https://www.infoq.com/news/2026/11/aws-lambda-gpu-managed-instances/
+- event: aws lambda gpu inference
+- original title: AWS Lambda Now Runs GPU Inference with 48 Concurrent Invocations Sharing One Model per GPU
+- source: InfoQ | https://www.infoq.com/news/2026/11/aws-lambda-gpu-managed-instances/
+- author: Steef-Jan Wiggers
+- image: https://res.infoq.com/news/2026/11/aws-lambda-gpu-managed-instances/en/headerimage/generatedHeaderImage-1795178998128.jpg
+- read: 5 min
+- full text: yes
+
+> Billing is the EC2 On-Demand price with a 9.75 percent management fee on top, and each request costs an extra $0.20 per million.
+
+Lambda now accepts GPU workloads on its Managed Instances tier, which runs event functions on capacity the customer picks. The supported hardware is EC2 G-series instances, including G4dn, G5, G6, G6f, Gr6, Gr6f and G6e at launch. Functions ship as container images and fire from the same triggers as any other Lambda function. Nobody has to install GPU drivers, match CUDA versions or maintain AMIs, and no cluster or device plugin is needed.
+
+The capacity provider is where you define the instance types Lambda may use, the VPC, and a ceiling on vCPUs. Lambda chooses the most recent generation that has room and drops back to older ones when newer capacity runs low. The function declares its GPU memory in a new AcceleratorConfig block. Invocations that land in the same execution environment use one model loaded into GPU memory, and each environment can take up to 48 at once. Scaling responds to GPU use, CPU use and concurrency. The example configuration sets a lower per-environment limit of 4, so 48 is a ceiling rather than a default.
+
+This lets a small inference model sit behind an event trigger without a dedicated GPU instance per function. The example serves a 1.5-billion-parameter Qwen model. The article does not say how long a GPU environment takes to start, which matters for bursty traffic.
+
+**Takeaways**
+- Set the accelerator memory to the model's real footprint, then load-test concurrency before choosing a per-environment limit.
+
+## Early Anthropic backers look vindicated after an $81.3 billion IPO at a $1.5 trillion valuation
+- ids: 49
+- topic: Startups
+- signal: recommended
+- url: https://techcrunch.com/2026/11/22/how-notable-capital-gic-and-baillie-gifford-bet-big-on-anthropic-before-its-ipo/
+- event: anthropic ipo notable gic
+- original title: How Notable Capital, GIC, and Baillie Gifford bet big on Anthropic before its IPO
+- source: TechCrunch | https://techcrunch.com/2026/11/22/how-notable-capital-gic-and-baillie-gifford-bet-big-on-anthropic-before-its-ipo/
+- author: Marina Temkin
+- image: https://techcrunch.com/wp-content/uploads/2026/11/antrhopic-openingday-getty.jpg?resize=1200,801
+- read: 3 min
+- full text: yes
+
+> Notable's Series E stake, bought at a $61.5 billion valuation, now shows a paper return of roughly 15 times.
+
+Anthropic's IPO brought in $81.3 billion, which the article describes as the biggest offering ever, and left the company with a fully diluted valuation near $1.5 trillion before trading began. Notable Capital put roughly 10 percent of the US portion of its $1 billion-plus fund into the Series E round at $61.5 billion, which puzzled some of its limited partners at the time. The firm was then the highest valuation it had ever invested at in its 25-year history.
+
+Notable's reasoning was that developers were the early adopters who would decide the market. Its team found developers using Claude about 70 percent of the time, a reversal from the year before, and it judged that the most sensitive work would stay with US-based closed models. Singapore's GIC had researched Anthropic through 2024 and invested after a meeting with Anthropic's CFO in early 2025, which convinced it that model improvements were driving enterprise adoption. GIC's first investment came in the Series F round at a $183 billion valuation.
+
+The gains are still on paper until shares are sold, so the early backers' results depend on how the stock trades after the IPO. The story describes the investors' conviction more than the terms of their stakes, and it does not give exit timing.
+
+## Etsy sellers are closing shops over terms that let the marketplace train AI on their listings
+- ids: 68
+- topic: Startups
+- signal: recommended
+- url: https://slashdot.org/story/26/11/22/2221256/sellers-are-closing-etsy-stores-in-response-to-its-new-ai-training-policy
+- event: etsy ai training terms sellers
+- original title: Sellers are Closing Etsy Stores in Response to Its New AI Training Policy
+- source: Slashdot | https://slashdot.org/story/26/11/22/2221256/sellers-are-closing-etsy-stores-in-response-to-its-new-ai-training-policy
+- author: EditorDavid
+- full text: no
+
+> The new terms take effect December 15 and include rights to use seller content for AI training and to pass it to third parties.
+
+This story is written from the headline and standfirst only, because the full article was not retrievable. Illustrator Aaron Millard deleted his Etsy shop, which had 8 years of history, more than 11,000 sales and over 3,000 reviews, and posted about it on Instagram. He objected to Etsy's new Terms of Use, which give the company a legitimate interest in using seller content, including for AI training, and rights for it and its partners to reuse that content. The seller writes that there is no way to opt out, at least for sellers in Canada.
+
+The summary frames the move as a reaction to a single policy change rather than a broader trend, and the excerpt does not say how many other sellers have left. The terms take effect December 15, which leaves sellers a short window to decide whether to keep their listings live.
+
+**Takeaways**
+- If you sell on Etsy, read the December 15 terms before that date and decide whether to keep your listings up.
+
+## Debian shipped the GPGME fix on disclosure day, but Ubuntu 24.04 still carries the pre-2.3.0 release
+- ids: 47
+- topic: Security
+- signal: recommended
+- url: https://dev.to/alexgeorgiev17/how-long-it-actually-takes-a-gpgme-fix-to-reach-ubuntu-30go
+- event: gpgme critical security bug gnupg
+- original title: How long it actually takes a GPGME fix to reach Ubuntu
+- source: Dev.to | https://dev.to/alexgeorgiev17/how-long-it-actually-takes-a-gpgme-fix-to-reach-ubuntu-30go
+- author: Alex Georgiev
+- image: https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2Fyukm85s8kjudtlaep9it.png
+- read: 6 min
+- full text: yes
+
+> The lag is the new fact: Debian patched the day the bug was disclosed, while Ubuntu 24.04 still offered version 1.18.0 when the author checked.
+
+This is a follow-up to our earlier coverage of the GPGME bug. The author wanted to know whether their own machines were exposed, and they checked versions rather than reproducing the bug. The GnuPG advisory (CVE-2026-129975) covers GPGME versions before 2.3.0 and says 2.3.1 fixes them. The flaw is a double-free in two internal functions that read status lines from gpg: an early return on a read error leaves the library holding a pointer to memory that is about to be freed a second time. The bug can reach mail clients, Samba and statically linked software.
+
+The author confirmed that the published SHA-1 for the gpgme-2.3.1 tarball matched the advisory. Inside a clean ubuntu:24.04 container, the candidate version of libgpgme11t64 was 1.18.0-4.1ubuntu4, which is below the 2.3.0 cutoff. The author tested only that ordinary signing and verification still worked, and did not try the bug itself.
+
+Version numbers alone do not settle exposure, because distributions often backport fixes without changing the upstream number. The excerpt stops before the author reports whether Ubuntu's package carries a patch, so the Ubuntu position is unresolved in what I read. Until a distribution notice confirms a backport, the older version should be treated as exposed.
+
+**Takeaways**
+- On Ubuntu hosts, run `apt-cache policy libgpgme11t64` and compare the candidate with the fixed upstream release.
+- Treat software that links libgpgme, such as mail clients and Samba, as in scope until your distribution confirms a patched build.
+
+## Gemini 4 Hydrogen drives real robot arms and ships with a robotics plugin for Google Antigravity
+- ids: 33
+- topic: AI
+- signal: recommended
+- url: https://developers.googleblog.com/gemini-hydrogen-for-robotics/
+- event: gemini 4 hydrogen robotics
+- original title: Gemini 4 Hydrogen: a faster model for general purpose robotics
+- source: Google Developers Blog | https://developers.googleblog.com/gemini-hydrogen-for-robotics/
+- author: Alex Gruenstein et al.
+- image: https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/Robotics_Banner.2e16d0ba.fill-1200x600.jpg
+- read: 5 min
+- full text: yes
+
+> On the Artificial Analysis Robotics 0.1 benchmark, Hydrogen scores 58, similar to Gemini 4 Argon at a lower cost per token.
+
+Google has released Gemini 4 Hydrogen, a quicker model aimed at robots that carries over the spatial reasoning of its Robotics ER 2 predecessors. Give it a plain-language goal and a camera feed, and it lays out the task, writes the control code, runs it and corrects course until the job is finished. In the Artificial Analysis Robotics 0.1 test it drives a physical six-axis arm through eight table-level chores, such as pouring a drink and stacking blocks into a box. Its score there is 58, close to Gemini 4 Argon, at a lower cost per token.
+
+Google also reports that Hydrogen beats ER 2 on the public ERQA benchmark for spatial tasks like matching views across cameras and reasoning about 3D paths, and it advises ER 2 users to switch for those workloads. The model comes with a Robotics plugin for Google Antigravity. The plugin bundles hardware onboarding, simulation and robot control into skills Gemini can call, and the walkthrough shows a developer connecting an I2RT YAM arm and a depth camera to a laptop and asking Hydrogen to bring them up.
+
+The post reports benchmark numbers and a demonstration, not failure rates on mixed hardware. The benchmark score is a single figure, and it is not clear how often generated control code needs human correction on real arms.
+
+**Takeaways**
+- Try the Robotics plugin on a bench arm with an emergency stop in reach before letting generated control code run unattended.
+
+## Google AI Studio can now generate full-stack Kotlin Android apps with Firestore, sign-in and Gemini built in
+- ids: 32
+- topic: Dev Tools
+- signal: notable
+- url: https://developers.googleblog.com/build-full-stack-android-apps-with-gemini-in-google-ai-studio/
+- event: google ai studio android apps
+- original title: Build full-stack Android apps with Gemini in Google AI Studio
+- source: Google Developers Blog | https://developers.googleblog.com/build-full-stack-android-apps-with-gemini-in-google-ai-studio/
+- author: Mike Taylor-Cai
+- image: https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/Gemini_Generated_Image_41reuz41re.2e16d0ba.fill-1200x600.jpg
+- read: 3 min
+- full text: yes
+
+> The Build agent provisions the Firebase backend only after the developer confirms, and the emulator sends screenshots straight back to the agent.
+
+Previously, Android apps generated in Google AI Studio stayed in local session storage. Now, when a prompt describes persistent data, user sign-in or generative AI features, the Build agent detects those needs and, with the developer's confirmation, provisions the Firebase backend and wires up the Kotlin code. It adds the Firebase Bill of Materials and generates data and AI layers, and the example calls a Gemini model through Firebase AI Logic with Cloud Firestore for storage.
+
+Other changes cover the development loop. The Android emulator is faster and offers high-definition output with real-time audio, one click sends an emulator screenshot to the coding agent for visual fixes, and developers can style apps with custom fonts. Developers can build and test on their own device from the Play Store at no cost. The post says the agent handles securely calling the Gemini API but does not describe how keys are stored.
+
+**Takeaways**
+- Before accepting backend provisioning, check which Firebase project the agent writes to and what security rules it applies.
+
+## GitHub Actions accepts YAML the spec forbids, so conforming parsers cannot read some real workflows
+- ids: 15
+- topic: Dev Tools
+- signal: notable
+- url: https://yossarian.net/til/post/github-actions-accepts-invalid-yaml/
+- event: github actions invalid yaml
+- original title: GitHub Actions accepts invalid YAML
+- source: yossarian.net | https://yossarian.net/til/post/github-actions-accepts-invalid-yaml/ | via Lobsters
+- read: 2 min
+- full text: yes
+
+> The author's own first attempt at a parser fix was wrong, and the best guess for the root cause is GitHub's use of an old YAML library.
+
+The author maintains zizmor, a tool that scans GitHub Actions workflows, and found a real action step with a multi-line flow-style string under a block key. A conforming YAML parser rejects it. The YAML 1.2.2 specification requires flow nodes nested inside a block collection to be indented at least one level deeper than their parent, and this step breaks that rule while GitHub accepts it.
+
+The author first changed tree-sitter-yaml to accept the pattern, then reverted that change as a misbegotten fix. The author's best guess is that GitHub's parser is YamlDotNet 5.3.0, released in 2018, and that even the newest release still has the bug. A 2020 patch fixed only the double-quoted form, probably because the official YAML test suite exercises this rule only with double-quoted strings. The post leaves open whether GitHub has a clean path toward conformance, since much of its Actions code is proprietary.
+
+**Takeaways**
+- If you parse workflow files, test with a parser that tolerates this pattern, because a strict one will reject workflows GitHub runs.
+- Indent multi-line flow strings one level deeper than their key in your own workflows so every parser reads them the same way.
+
+## Agent Anomaly Detection now watches agents running on AWS and Microsoft Foundry, not just Google Cloud
+- ids: 13
+- topic: Security
+- signal: recommended
+- url: https://developers.googleblog.com/agent-anomaly-detection-safeguarding-agents-across-other-clouds/
+- event: agent anomaly detection cross cloud
+- original title: Agent Anomaly Detection: Safeguarding agents across other clouds
+- source: Google Developers Blog | https://developers.googleblog.com/agent-anomaly-detection-safeguarding-agents-across-other-clouds/
+- author: Gopi Subburaja Alagar and Arvind Chaudhary
+- image: https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/00-hero-banner.2e16d0ba.fill-1200x600.png
+- read: 4 min
+- full text: yes
+
+> Setup captures prompts and responses and sends them to the Google Cloud project, which is a data-flow decision to make before switching it on.
+
+Google's Agent Anomaly Detection, now in Private Preview, previously covered only agents on Google Cloud, such as those on Agent Runtime, Cloud Run and GKE. It now analyzes agents that run elsewhere, including an agent on AWS Lambda beside an inventory database, a hosted agent in Microsoft Foundry, and an on-premises agent that cannot move. It works from traces and logs rather than from the agent's runtime, so an agent only needs its telemetry to reach the Google Cloud project that the customer chooses.
+
+Agents built with the Agent Development Kit for Python, version 2.12.0 or later, can export that telemetry with a few environment variables. They name the Google Cloud project and credentials, control how message content is captured, and set the service name and resource attributes that identify the cloud provider, platform, region and function. Within 30 minutes the agent appears in a Monitored agents list, and it can be enabled manually or automatically when discovered.
+
+The post says it found behavior problems in the AWS and Foundry agents it examined, but the findings are not in the part of the article I read. The trade-off is that the agent's prompts and responses leave its home cloud and land in a Google Cloud project, so the data policy needs to allow that before the feature is turned on.
+
+**Takeaways**
+- Confirm that sending prompts and responses to a Google Cloud project fits your data policies before you enable cross-cloud monitoring.
+- Set the resource attributes on every non-Google agent so the monitored list shows the correct cloud, region and function name.
+
+## A private Cloud Run MCP server can serve Gemini Enterprise through an egress gateway and a single-name DNS zone
+- ids: 27
+- topic: Dev Tools
+- signal: notable
+- url: https://developers.googleblog.com/how-to-securely-connect-internal-cloud-run-mcp-servers-to-gemini-enterprise/
+- event: cloud run mcp gemini enterprise
+- original title: How to securely connect internal Cloud Run MCP servers to Gemini Enterprise
+- source: Google Developers Blog | https://developers.googleblog.com/how-to-securely-connect-internal-cloud-run-mcp-servers-to-gemini-enterprise/
+- author: Neeraj Agrawal
+- image: https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/header_image_1600x900.2e16d0ba.fill-1200x600.png
+- read: 4 min
+- full text: yes
+
+> A wildcard run.app private zone would break DNS for every other Cloud Run service in a shared VPC, so the guide scopes the zone to one hostname.
+
+Enterprise teams are building custom Model Context Protocol servers so agents can reach internal APIs and databases, and Cloud Run is a natural host for them. Moving one into production creates three networking and security problems. Connecting Gemini Enterprise, which runs in a Google-managed tenant, to an internal Cloud Run service requires two network hops and one scoped DNS lookup.
+
+The Egress Agent Gateway resolves the service hostname once, then injects the packet into the customer's VPC through a Private Service Connect network attachment. Without a private DNS zone, public DNS returns internet addresses, and those requests time out with HTTP 502 because the attachment does not route to the public internet. The fix is a Private Cloud DNS zone for the exact fully qualified domain name, peered only to the Agent Gateway. Cloud DNS uses longest-suffix matching, so other services keep resolving normally. The gateway connects to a private address while keeping the hostname in the TLS SNI and Host header, so Cloud Run still routes to the right container.
+
+Google provides a runnable reference implementation and setup scripts on GitHub. The post does not cover what the gateway costs to run, which will matter for teams with many small MCP servers.
+
+**Takeaways**
+- In a shared VPC, scope private DNS zones to one service hostname, since a wildcard zone can break resolution for unrelated services.
+- If an agent-to-MCP call returns HTTP 502, check whether the hostname resolves to a public address inside your VPC.
+
+## OpenAI's chief scientist proposes perplexity as the yardstick for capping how fast AI models advance
+- ids: 70
+- topic: AI
+- signal: recommended
+- url: https://techcrunch.com/2026/11/22/openais-chief-scientist-has-thoughts-on-how-to-limit-ai-development/
+- event: openai perplexity pachocki limits
+- original title: OpenAI’s chief scientist has thoughts on how to limit AI development
+- source: TechCrunch | https://techcrunch.com/2026/11/22/openais-chief-scientist-has-thoughts-on-how-to-limit-ai-development/
+- author: Anthony Ha
+- image: https://techcrunch.com/wp-content/uploads/2026/05/openai-logo-code-background.jpg?resize=1200,798
+- read: 2 min
+- full text: yes
+
+> Jakub Pachocki argues that downstream capability benchmarks go stale quickly, while perplexity keeps giving a usable signal.
+
+OpenAI's chief scientist, Jakub Pachocki, published a blog post proposing a shared measure for AI progress, perplexity, which captures how well a model predicts the next token. The proposal follows a debate in which critics warned that AI labs were gambling with lives and Anthropic's CEO, Dario Amodei, called for a plan to pace the frontier with common safety standards and limits on the rate of progress. Sam Altman called the post among the most important OpenAI has published in a while.
+
+Pachocki's argument is that benchmarks of downstream capabilities go stale as models improve, while perplexity remains informative. His post charts how OpenAI's models' loss has fallen since GPT-3.5. He links a value of about 0.91, reached by GPT-4, with productive use of chain-of-thought reasoning, and says that after losses fell below 0.8, transformative capabilities appeared in fields such as cybersecurity and mathematics. The proposal is that labs agree on a shared benchmark for general intelligence and commit not to cross a threshold until they reach a concrete milestone in understanding and monitoring AI behavior.
+
+The coverage does not say what threshold would apply, who would verify it, or whether rival labs have agreed to use the same measure. A single number can also miss capabilities that a loss curve does not capture, and the piece does not address that objection.
+
+**Takeaways**
+- Watch whether Anthropic and Google publish their own perplexity or loss figures, since a shared metric only works if rivals report it.
+
+## Nvidia halts H200 sales to China and closes remote access, while a campaign pushes Jensen Huang back as CEO
+- ids: 109
+- topic: Startups
+- signal: recommended
+- url: https://techcrunch.com/2026/11/21/a-tale-of-two-nvidias/
+- event: nvidia h200 china remote access
+- original title: A tale of two Nvidias
+- source: TechCrunch | https://techcrunch.com/2026/11/21/a-tale-of-two-nvidias/
+- author: Anthony Ha
+- image: https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2256813240.jpg?resize=1200,800
+- read: 5 min
+- full text: yes
+
+> Revenue soared in the latest report, but the stock fell as investors weighed a leadership gap, since the company says it has no plans to bring back its former CEO.
+
+Nvidia's latest earnings report showed soaring revenue, and its interim CEO, Colette Kress, said the company would no longer sell H200 chips in China. At the same time, an online petition and former CEO Jensen Huang himself have pushed for his return, and the company insists it has no such plans. The stock's fall suggests Wall Street is not reassured by management's message.
+
+The China change goes beyond direct sales. Companies in China had been using chips in data centers set up in countries such as Malaysia through remote access, and Nvidia is shutting that route too. The move coincides with the Trump administration tightening restrictions on remote access. Critics of Nvidia's China stance estimate that about 20 percent of its business comes from China, which makes the decision a material one.
+
+The discussion on the TechCrunch podcast argues that export policy loosened in the past few years, and that the shift is worth watching. Whether the restriction holds past the first half of 2027 is an open question, and the coverage does not say how the company plans to replace the lost revenue.
+
+## Harvard study puts 403 US hyperscale data centers at Michigan-scale power use, with more than half fossil-fueled
+- ids: 50
+- topic: Infra
+- signal: notable
+- url: https://www.techradar.com/pro/hyperscaler-data-centers-are-now-using-as-much-energy-as-entire-us-states-and-the-problem-is-only-going-to-get-worse
+- event: harvard data center energy hyperscale
+- original title: Hyperscaler data centers are now using as much energy as entire US states — and the problem is only going to get worse
+- source: TechRadar | https://www.techradar.com/pro/hyperscaler-data-centers-are-now-using-as-much-energy-as-entire-us-states-and-the-problem-is-only-going-to-get-worse
+- author: Efosa Udinmwen
+- image: https://cdn.mos.cms.futurecdn.net/pjysvtTcT6ffUC32W7xqt6-2560-80.jpg
+- read: 4 min
+- full text: yes
+
+> The estimated 68 to 99 terawatt-hours is roughly 1.8 percent of US demand, and the authors warn the buildout is only in its early stages.
+
+Harvard researchers assessed 403 US hyperscale data centers over May 2024 to April 2025 and estimated their annual power use at 68 to 99 terawatt-hours. That is roughly the electricity consumption of Michigan, and the research attributes about 25.7 million metric tons of carbon dioxide to the facilities, more than Denmark's entire annual greenhouse gas output. The estimate is at least two to three times higher than comparable figures from 2018.
+
+Fossil fuels supplied about 54 percent of the electricity the facilities used, with natural gas at 30 percent and coal at 15 percent. Four states, Virginia, Ohio, Oregon and Iowa, account for more than half of the consumption examined. Coal's role in the regional grids where many of the sites sit is therefore significant, and that matters for the emissions figure.
+
+The study period ends in April 2025, so facilities built or expanded since then fall outside the numbers. The authors say the research captures only the early stages of the industry's expansion, which suggests the current demand is higher than the estimate.
+
+## Google's Sashiko AI reviewer for Linux kernel patches adds a performance-review stage
+- ids: 113
+- topic: Open Source
+- signal: notable
+- url: https://www.phoronix.com/news/Sashiko-AI-Performance-Review
+- event: sashiko linux kernel review
+- original title: Sashiko AI Introducing Linux Performance Specialist Review Stage
+- source: Phoronix | https://www.phoronix.com/news/Sashiko-AI-Performance-Review
+- author: Michael Larabel
+- full text: no
+
+> The new stage evaluates the performance and benchmark impact of kernel changes, following an experimental patch-series design review.
+
+This story is written from the headline and standfirst only, because the full article was not retrievable. Sashiko is an agentic AI code-review tool that Google developed, first aimed at the Linux kernel. It keeps finding new bugs in patches as they arrive on the kernel mailing list, and individuals run it manually as well. The update adds an experimental patch-series design assessment and a new skill for evaluating the performance and benchmark effects of kernel changes.
+
+The summary does not say how well the performance review performs against human reviewers, so any claim about its accuracy has to wait for maintainers' experience.
+
+**Takeaways**
+- Maintainers can run Sashiko on a patch series before posting it to the list and compare its findings with the list's replies.
+
+## The first Rust driver for Linux's WMI interface targets Clevo laptops
+- ids: 104
+- topic: Languages
+- signal: notable
+- url: https://www.phoronix.com/news/Rust-WMI-Driver-Clevo-Laptops
+- event: rust wmi clevo laptop driver
+- original title: The First Rust WMI Linux Driver Being Developed Is For Clevo Laptops
+- source: Phoronix | https://www.phoronix.com/news/Rust-WMI-Driver-Clevo-Laptops
+- author: Michael Larabel
+- full text: no
+
+> The new clevo-laptop driver also covers machines sold by TUXEDO Computers, Metabox, Sager and XMG.
+
+This story is written from the headline and standfirst only, because the full article was not retrievable. The first driver written in Rust to use the Linux kernel's Rust abstractions for Windows Management Instrumentation is called clevo-laptop. It targets Clevo laptop platforms, including those sold under other brand names. WMI drivers have mostly been written in C, so the driver is a small but real sign that Rust is reaching hardware-facing kernel code beyond the core.
+
+## A parallel-universe essay argues TLS could have been layered over HTTP, dropping the need for port 443
+- ids: 21
+- topic: Security
+- signal: notable
+- url: https://owl.billpg.com/what-if-netscape-did-ssl-the-http-way/
+- event: netscape ssl http parallel universe
+- original title: What If Netscape Did SSL the HTTP Way?
+- source: owl.billpg.com | https://owl.billpg.com/what-if-netscape-did-ssl-the-http-way/ | via Lobsters
+- read: 18 min
+- full text: yes
+
+> In the author's version, the certificate arrives in an ordinary HTTP response, so the Host header does the job that SNI now does.
+
+The author begins with an observation: a secure connection starts speaking TLS before it speaks HTTP, so HTTP ideas such as the Host header had to be reinvented inside TLS, with SNI as the best-known case. The essay imagines Netscape waiting for HTTP/1.1 headers and negotiating encryption inside HTTP rather than inventing a new scheme and port. In that version a browser asks for the certificate over ordinary HTTP on port 80, checks the chain against its root list as usual, and proceeds.
+
+The author argues that sending a certificate in the clear is not a new exposure, because every version of SSL and TLS up to 1.2 sent it unencrypted as well. The essay is a thought experiment rather than a proposal, and the part I read does not weigh its trade-offs against the design that shipped.
+
+## Falsehoods about ATProto: handles change, DIDs need normalizing, and a new handle can share nothing with the old one
+- ids: 20
+- topic: Open Source
+- signal: notable
+- url: https://reiver.link/atproto/falsehoods-programmers-believe/
+- event: atproto falsehoods handles dids
+- original title: Falsehoods Programmers Believe About ATProto
+- source: reiver.link | https://reiver.link/atproto/falsehoods-programmers-believe/ | via Lobsters
+- author: Charles Iliya Krempeaux
+- read: 25 min
+- full text: yes
+
+> The author's own handle moved across three domains, and the change is visible in the public PLC directory audit log.
+
+The essay is part of the "Falsehoods Programmers Believe" genre and lists assumptions about handles, DIDs, records and servers that break code. Its first claim is that a user's handle never changes. Handles can change, but the account's DID is the permanent identifier, and the accounts specification calls DIDs unique and immutable. The author's handle moved from one domain to another and then to a third, and the public audit log shows each change.
+
+Normalization is the next trap. The URI scheme in a DID is case-insensitive, so two spellings can name the same account, yet the protocol insists on lowercase. Code should lowercase DIDs as they come in from users, compare only that form, and refuse uppercase variants in protocol messages. Handles are just as flexible: a new one needs no connection to the old, since the update call checks only that the handle is valid.
+
+The part I read covers only handles and DIDs, so the essay's sections on records and servers are beyond this summary.
+
+**Takeaways**
+- Use the DID as the database key for accounts, and store handles only for display, re-checking them from time to time.
+- Normalize DIDs to lowercase when they arrive from user input, and reject non-normalized DIDs in protocol data.
+
+## Open Social Web Alliance pitches email-style interoperability between ActivityPub and AT Protocol networks
+- ids: 8
+- topic: Open Source
+- signal: notable
+- url: https://osw-alliance.net/en/
+- event: open social web alliance
+- original title: Open Social Web Alliance
+- source: osw-alliance.net | https://osw-alliance.net/en/ | via Hacker News
+- image: https://osw-alliance.net/wp-content/uploads/2026/07/cropped-OSWA-Dots-01-freisteller-scaled-1.png
+- read: 4 min
+- discuss: https://news.ycombinator.com/item?id=50600511 | Hacker News | 219 points | 214 comments
+- full text: yes
+
+> Its 2028 scenario has more than 100 million people on open networks, while the Fediverse today has about 13 million active users.
+
+The Open Social Web Alliance lays out a vision in which one account works across many open social services, the way one email address reaches anyone. The 2028 scenario it describes has more than 100 million people on interoperable networks, built on ActivityPub, the AT Protocol and Matrix for direct messages. Public-interest projects such as Mastodon and Eurosky would sit alongside commercial offerings, and the networks would exchange content through shared interfaces.
+
+The piece is candid about the starting point. The Fediverse has been in development since 2008, with more than 100 applications and over 42,000 active instances, yet only about 13 million active users, and that number is growing slowly. The AT Protocol community has been building since 2022, with around 43 million registered accounts, mostly in North America but increasingly in Europe.
+
+The text is a vision statement rather than a status report, and the part I read does not explain how cross-network identity or moderation would work in practice.
+
+## Mad Labs' QCon keynote argues that the agent harness, not the model, now plays the operating system's role
+- ids: 11
+- topic: Engineering
+- signal: notable
+- url: https://www.infoq.com/news/2026/11/harness-new-operating-system/
+- event: qcon harness operating system
+- original title: QCon San Francisco 2026: The Harness Is the New Operating System
+- source: InfoQ | https://www.infoq.com/news/2026/11/harness-new-operating-system/
+- author: Andrew Hoblitzell
+- image: https://res.infoq.com/news/2026/11/harness-new-operating-system/en/headerimage/harness-header-1200x630-1795301479582.jpg
+- read: 5 min
+- full text: yes
+
+> Rajashekhar maps context, interface, execution and feedback onto virtual memory, system calls, processes and return codes.
+
+At QCon San Francisco 2026, Mad Labs' chief executive Manju Rajashekhar made the case that an agent's harness, the scaffolding around the model, determines its reach and its safety. Her definition is that an agent is a model plus its harness, and the harness is all of the agent except the model. That covers the work to be done, the information the model sees, its tools, its state and permissions, the feedback it gets, and the test for when the job is finished.
+
+Her mapping gives each piece an operating-system twin. Context plays the role of virtual memory, so the harness hands the model pointers rather than whole files inside the window. The interface is the system-call layer and caps what the agent can do. She pointed to SWE-agent, where the same model fixed 11.0 percent of SWE-bench Lite issues with a bare shell and 18.0 percent with a purpose-built interface. Execution resembles processes and permissions, enforced by isolation and scoped credentials. Feedback resembles return codes, keeping "tests failed," "could not run" and "outcome unknown" separate so the model can act without guessing.
+
+Errors compound, which is her case for the harness. On a 20-step task where each step succeeds 95 percent of the time, the whole job succeeds about 36 percent of the time, and catching 80 percent of errors lifts that to about 82 percent. The keynote is a framing rather than a measured study, and the excerpt offers little production data beyond the SWE-agent figures.
+
+**Takeaways**
+- Give agents pointers into a codebase rather than whole files, and measure how many tokens each step loads.
+- Separate "tests failed," "could not run" and "outcome unknown" in your agent's tool output so the model does not guess.
