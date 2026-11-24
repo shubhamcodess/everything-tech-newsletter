@@ -1,8 +1,15 @@
 {
- "count": 62,
- "latest": "2026-11-23",
+ "count": 63,
+ "latest": "2026-11-24",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-24",
+   "edition": 63,
+   "stories": 19,
+   "must_read": 5,
+   "lead": "Nvidia reinstates Jensen Huang as CEO eleven days after he resigned"
+  },
   {
    "date": "2026-11-23",
    "edition": 62,
