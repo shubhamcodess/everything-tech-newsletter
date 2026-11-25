@@ -1,8 +1,15 @@
 {
- "count": 63,
- "latest": "2026-11-24",
+ "count": 64,
+ "latest": "2026-11-25",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-25",
+   "edition": 64,
+   "stories": 20,
+   "must_read": 5,
+   "lead": "Anthropic stock drops below its $83 IPO price less than a week after the Nasdaq debut"
+  },
   {
    "date": "2026-11-24",
    "edition": 63,
