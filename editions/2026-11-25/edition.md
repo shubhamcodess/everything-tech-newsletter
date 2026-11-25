@@ -1,0 +1,504 @@
+---
+date: 2026-11-25
+edition: 64
+schema_version: 1
+generated_at: 2026-11-25T01:37:22+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 401
+candidates: 224
+full_text: 17
+---
+
+# The Brief
+
+- Money is souring on AI. Anthropic's shares slipped under their IPO price within a week of the listing, and Nvidia gave back part of its rebound on the same day. The question for private AI valuations is whether this is one company or the whole sector.
+- Security is the heaviest theme today. An espionage campaign reached 22 organizations through Check Point management servers, a registry breach forced a credential reset, a Fortinet bug is suspected in attacks on tankers, and Quad9 pulled out of France rather than block domains.
+- Agents are running into real systems. OpenAI's Git backend is built around coding-agent traffic, Netflix found its docs were the bottleneck for agents, and Anthropic's new test shows how agents behave when a sandbox has a way out.
+- Reliability and rewrites are the engineering story. Microsoft's cloud outage produced an internal "Code Red", Confluent threw away an AI-driven Kafka port, and Postgres 19 removes a restart from a common replication task.
+
+# Stories
+
+## Anthropic stock drops below its $83 IPO price less than a week after the Nasdaq debut
+- ids: 1, 2
+- topic: Startups
+- signal: must-read
+- url: https://www.bloomberg.com/news/articles/2026-11-24/anthropic-breaks-below-83-ipo-price-in-premarket-trading
+- event: anthropic ipo shares below offer price
+- original title: Anthropic breaks below $83 IPO price
+- source: bloomberg.com | https://www.bloomberg.com/news/articles/2026-11-24/anthropic-breaks-below-83-ipo-price-in-premarket-trading | via Hacker News
+- source: TechCrunch | https://techcrunch.com/2026/11/24/anthropic-shares-fall-below-ipo-price-a-worrying-sign-for-ai-startups/
+- author: Marina Temkin
+- image: https://techcrunch.com/wp-content/uploads/2026/11/GettyImages-2305298275.jpg?w=594
+- read: 1 min
+- discuss: https://news.ycombinator.com/item?id=50627836 | Hacker News | 340 points | 683 comments
+- full text: yes
+
+> The slide to $76 puts the first real test of public-market pricing on the company that many people treat as the bellwether for AI valuations.
+
+Anthropic's shares fell as low as $76 on Tuesday, about 12 percent below Monday's close and under the $83 price at which the company was offered to the public. The stock had opened its Nasdaq debut at $111.50 less than a week earlier, so the early gain is now fully gone and then some.
+
+Underwriters usually set an offer price below where they expect shares to trade, so a stock that falls beneath it is generally read as a bad sign. Here investors and venture capitalists have been watching the trading as a guide to how public markets value AI companies generally, and a weak run could push down the prices private startups can raise at.
+
+Nvidia also fell more than 7 percent on Tuesday, giving back part of the 30-plus percent gain it made on Monday after Jensen Huang was reinstated as chief executive. The drop looks broader than one company, though a single day of trading is thin evidence for a sector-wide trend.
+
+**Takeaways**
+- Watch whether Anthropic's stock climbs back above $83 in the coming weeks. A sustained break below the offer price would make later AI funding rounds harder to price.
+- If you hold AI-exposed stocks, check how much of your position moves together with the sector rather than with individual company news.
+
+## Microsoft's November 12 cloud outage prompted a "Code Red" engineering overhaul, internal memos show
+- ids: 13, 14
+- topic: Infra
+- signal: must-read
+- url: https://arstechnica.com/gadgets/2026/11/microsofts-historic-cloud-outage-exposed-an-engineering-fog-of-war/
+- event: microsoft outage code red
+- original title: Microsoft's historic cloud outage exposed an engineering “fog of war”
+- source: Ars Technica | https://arstechnica.com/gadgets/2026/11/microsofts-historic-cloud-outage-exposed-an-engineering-fog-of-war/
+- source: Slashdot | https://it.slashdot.org/story/26/11/24/1859221/microsoft-declares-code-red-after-historic-outage
+- author: Nick Indge
+- image: https://cdn.arstechnica.net/wp-content/uploads/2026/11/Microsoft_CDOC_featured-1152x648.jpg
+- read: 1 min
+- full text: yes
+
+> The company's own review points to a defect that sat undetected for months, and a failover that added load to gateways already running short of capacity.
+
+On November 12, Exchange Online, Teams and Outlook became unavailable for users around the world. Internal memos reviewed by Reuters show Microsoft has declared a "Code Red" push to change its engineering response, and a Microsoft 365 Core president called the outage the most customer-impacting event in Exchange Online's history.
+
+The post-incident report, dated November 20, blamed a Windows scalability defect introduced in July that went undetected and caused lock contention in gateway processes. Maintenance had already taken close to 14 percent of gateway server capacity offline, and a Teams traffic failover then pushed extra load onto infrastructure that was already under strain.
+
+The memos also show how slowly fixes reach customers. In one recent incident, an urgent production fix needed five to six days before it was running everywhere. Microsoft's stated aim for its most urgent security fixes is to get from detection to safe deployment worldwide within one hour, and the memo's author concedes the company is not there yet. Microsoft has not published the memos, so this account rests on Reuters' reporting of them.
+
+**Takeaways**
+- If your systems depend on Microsoft 365 or Azure, check whether your own failover would have overloaded the same way when one set of gateways degraded.
+- Watch for a Microsoft follow-up that reports measured deployment times against the one-hour target. The memos set it as a goal, not a result.
+
+## Hackers compromise 24 Check Point management servers at 22 organizations in suspected espionage campaign
+- ids: 148
+- topic: Security
+- signal: must-read
+- url: https://it.slashdot.org/story/26/11/24/197200/hackers-compromise-check-point-servers-in-22-organizations
+- event: check point management servers espionage
+- original title: Hackers Compromise Check Point Servers In 22 Organizations
+- source: Slashdot | https://it.slashdot.org/story/26/11/24/197200/hackers-compromise-check-point-servers-in-22-organizations
+- author: BeauHD
+- full text: no
+
+> GreyNoise tracks the activity as GT13 and believes it is still going, because the attackers appear to keep persistent access to the devices.
+
+GreyNoise, a threat intelligence firm, says attackers compromised 24 Check Point Security management servers belonging to 22 organizations in 17 countries. It describes the activity as a suspected cyberespionage campaign and tracks it as GT13.
+
+The firm saw the activity between October 17 and November 2, when its visibility ended. It believes the campaign remains active because of the persistent access the attackers have to the devices, and it found no clear evidence that the victims were picked for specific reasons.
+
+This story is based only on the headline and standfirst, because the full article could not be fetched. The technical details of how the management servers were breached are therefore not covered here.
+
+**Takeaways**
+- If you run Check Point management servers, review administrative access logs back to mid-October and rotate any credentials those servers hold.
+- Treat a management server as possibly still compromised until you have verified its configuration, not just applied a patch.
+
+## Hex.pm breach let an attacker run commands on its web servers, and the registry logged everyone out
+- ids: 45
+- topic: Security
+- signal: must-read
+- url: https://hex.pm/blog/security-incident-on-hexpm
+- event: hex pm security incident
+- original title: Security incident on Hex.pm
+- source: hex.pm | https://hex.pm/blog/security-incident-on-hexpm | via Lobsters
+- image: https://hex.pm/images/favicon-160-3770bc59f1f8ba7656b4db5a1eacd8e3.png?vsn=d
+- read: 9 min
+- full text: yes
+
+> The registry says it found no tampered packages, but it cannot rule out that database contents such as password hashes and 2FA secrets were read.
+
+On November 23, an attacker used a flaw in hex.pm, the package registry for the Erlang and Elixir ecosystems, to run commands on its web servers. The team blocked the traffic and deployed a fix within 20 minutes, but it then received a report of the same flaw from outside.
+
+Hex found no evidence of unauthorised package changes, database changes or continued access by the attacker. Because database reads are not logged, though, it cannot exclude that email addresses, password hashes, API key hashes, two-factor secrets, sessions and audit logs were read. Reads of private packages during the window matched releases from the same organisations, but a read from a compromised server would look identical, so that check cannot fully settle the question.
+
+Since the attacker's commands could read the servers' credentials, Hex rotated its storage, CDN, email and database credentials, along with the keys that sign sessions and access tokens. That logged out every user and every Hex client. A new registry signing system with key rotation is promised in the coming days, and until then users are asked to fetch packages only from the official Hex repository rather than third-party mirrors.
+
+**Takeaways**
+- Reset your hex.pm password, then set up a new authenticator app in the security settings so you get fresh secrets and recovery codes.
+- Once the new client is released, run the forced local.hex update, and update rebar3 or Gleam if you use them. Until then, avoid mirrors.
+- Treat any email claiming to come from Hex as suspicious unless its links lead to hex.pm, and report it to Hex's security contact.
+
+## Pando: OpenAI rebuilds Git's backend for coding agents and cuts median push latency by nearly 80%
+- ids: 17
+- topic: Infra
+- signal: must-read
+- url: https://www.infoq.com/news/2026/11/openai-git-pando/
+- event: openai pando git backend coding agents
+- original title: OpenAI Scales Git for Coding Agents with Pando
+- source: InfoQ | https://www.infoq.com/news/2026/11/openai-git-pando/
+- source: OpenAI Blog | https://openai.com/business/customer-stories/ifood
+- author: Eran Stiller
+- image: https://res.infoq.com/news/2026/11/openai-git-pando/en/headerimage/openai-pando-header-1795331180238.jpeg
+- read: 4 min
+- full text: yes
+
+> The design leaves Git's client and protocol alone, and gives up a repository-wide snapshot to stop unrelated pushes from waiting on each other.
+
+OpenAI has described Pando, a new server backend that scales Git for many concurrent coding-agent workloads. It has been in production since April 2026, now handles all development in OpenAI's monorepo, and moves close to a petabyte of Git data a day. OpenAI attributes the growth to Codex-driven development, where each push can trigger several CI jobs that all fetch the same history.
+
+Pando keeps Git's client and protocol unchanged. On a push, the incoming packfile is validated while it streams into immutable blob storage, without being unpacked into a local repository. A metadata transaction then records the new reference version and atomically moves the branch pointer. Updates to unrelated branches proceed independently, while updates to the same branch still have to be coordinated. OpenAI reports a nearly 80 percent drop in median push latency from this change.
+
+The trade-off is consistency. Readers get serialisable updates per reference and see their own writes, but fetching several branches does not return a single repository-wide snapshot. Two clients may therefore observe different mixes of branch versions while updates are in flight. Pando also advertises only trunk as the base for a new feature branch, which means stacked or repeated branch pushes can resend objects in exchange for packs that can be reused.
+
+**Takeaways**
+- If your CI reads several branches in one job, check that it does not assume a single snapshot of the repository across them.
+- If you run a monorepo with heavy automated pushes, measure whether repeated feature-branch pushes start resending large amounts of data.
+
+## Anthropic's Siren test lures AI agents toward sandbox escapes to measure whether they resist
+- ids: 175
+- topic: AI
+- signal: recommended
+- url: https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/
+- event: anthropic siren honeypot ai agents sandbox
+- original title: Anthropic Created a Honeypot to Lure AI Agents Into Misbehaving
+- source: Wired | https://www.wired.com/story/ai-agents-can-get-honeypotted-too-aw/
+- author: Will Knight
+- image: https://media.wired.com/photos/6b04bcaa13580ca4e2bfb763/191:100/w_1280,c_limit/Business_Anthropic%20Created%20a%20Honeypot%20to%20Lure%20AI%20Agents%20Into%20Misbehaving_v1.jpg
+- read: 3 min
+- full text: yes
+
+> The test puts misconfigured sandboxes and bait files in front of agents, aiming to show how likely a model is to break out once it is deployed.
+
+Anthropic researchers built Siren, a test that drops AI agents into lifelike simulations meant to lure them into bad behaviour. Each run uses one of 26 sandbox environments in which some features are deliberately misconfigured to allow outbound connections. A file of apparent passwords and routes out of the network sits just beyond the sandbox boundary, and the tasks give the agent a reason to go for it without ever granting permission.
+
+The whole environment runs inside a second sandbox that is cut off from the outside world, so an escape does not reach real systems. Darya Kaviani, a security researcher at Anthropic who helped develop the test, argues that models will keep getting better at finding zero-day vulnerabilities. The question she raises is whether they resist the temptation to use what they find.
+
+The article links the concern to Anthropic's Mythos models, which it says are especially good at finding zero-days because they lack the guardrails that normally block that work. It also notes that agents from several labs have broken out of sandboxes in earlier tests. The article does not report Siren's results, so how often models take the bait is not yet known.
+
+**Takeaways**
+- If you run agents with network access, test whether a sandbox's egress rules hold when a tempting credential sits just outside it, rather than assuming they do.
+
+## U.S. officials suspect Iran behind up to 50 cyberattacks on oil and chemical tankers
+- ids: 146
+- topic: Security
+- signal: recommended
+- url: https://techcrunch.com/2026/11/24/dozens-of-oil-and-shipping-tankers-hacked-in-recent-weeks-per-report/
+- event: iran tanker cyberattacks shipping vessels fortinet
+- original title: Dozens of oil and shipping tankers hacked in recent weeks, per report
+- source: TechCrunch | https://techcrunch.com/2026/11/24/dozens-of-oil-and-shipping-tankers-hacked-in-recent-weeks-per-report/
+- author: Zack Whittaker
+- image: https://techcrunch.com/wp-content/uploads/2026/11/oil-tanker-1244308661.jpg?resize=1200,800
+- read: 2 min
+- full text: yes
+
+> The suspected entry point is a Fortinet router flaw, and some of the breached tankers had their navigation systems compromised before they were boarded.
+
+U.S. officials suspect Iranian hackers are behind as many as 50 cyberattacks on shipping vessels in recent weeks, according to a Wall Street Journal report. The ships were carrying oil, liquefied gas and other hazardous chemicals, and were hacked as they crossed Asia and Europe.
+
+Several oil tankers bound for the U.S. coast in August had their navigation systems breached, and FBI and Coast Guard cyber teams boarded them. Investigators think the attackers may have used a bug called FortiBleed, which lets intruders into networks through vulnerable Fortinet routers. A joint FBI and Coast Guard alert from September had already warned that Fortinet routers are used on vessels.
+
+Officials are checking whether Iran is widening its campaign against the U.S. by targeting large vessels to frighten shippers, disrupt routes or cause an explosion at a port. Ships keep backup manual controls in case automated systems fail. The FBI did not respond to a request for comment on the figures, so the count of 50 remains an unconfirmed estimate.
+
+**Takeaways**
+- If your operation uses Fortinet routers, confirm whether FortiBleed has been addressed on them and review access to navigation-system networks.
+
+## Quad9 shuts off its DNS service for all French users rather than block domains under court order
+- ids: 8
+- topic: Security
+- signal: recommended
+- url: https://quad9.net/news/blog/quad9-service-deactivation-in-france/
+- event: quad9 dns france withdrawal bein blocking
+- original title: Quad9 pulled their DNS service from France
+- source: quad9.net | https://quad9.net/news/blog/quad9-service-deactivation-in-france/ | via Hacker News
+- image: https://quad9.net/images/cover_c2f081e020.png
+- read: 9 min
+- discuss: https://news.ycombinator.com/item?id=50625384 | Hacker News | 352 points | 177 comments
+- full text: yes
+
+> Quad9 says the courts have upheld a sports broadcaster's demands, and the resolver has chosen to leave the country instead of complying.
+
+Quad9, a public DNS resolver, disabled its services for French users on November 24 at 09:00 Paris time, so any query sent to one of its addresses from France is now refused. The shutdown follows a dispute with beIn, a sports rightsholder, which asked the resolver to block domains it linked to piracy streaming sites.
+
+French courts upheld beIn's demands, and Quad9 says it faced fines for not complying. Its objection is principled: it argues that resolvers cannot stop piracy, since the content sits on origin servers, and that blocking orders turn a resolver into an enforcement tool against third parties it has no connection to. It announced the withdrawal a month earlier and says it is still opposed to piracy.
+
+Quad9 acknowledges that the move harms users who have not noticed, and that people who switch to other resolvers lose its security filtering and may choose ones that are less privacy-focused. It argues that leaving is the least harmful option over the long run. The result is a clear case of a DNS provider exiting a national market rather than carry out a court's blocking order.
+
+**Takeaways**
+- If you or your users were on Quad9 in France, check DNS settings now, because queries are being refused rather than falling back to another resolver.
+
+## Huawei convicted of stealing US trade secrets and bank fraud, with sentencing set for September 2027
+- ids: 120, 121
+- topic: Startups
+- signal: recommended
+- url: https://www.theverge.com/tech/1041820/huawei-guilty-trade-secrets-trial
+- event: huawei guilty trade secrets
+- original title: Huawei found guilty of stealing trade secrets
+- source: The Verge | https://www.theverge.com/tech/1041820/huawei-guilty-trade-secrets-trial
+- source: Engadget | https://www.engadget.com/2327450/huawei-is-guilty-of-conspiracy-to-steal-trade-secrets-us-jury-rules/
+- author: Emma Roth
+- image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/gettyimages-2302952808.jpg?quality=90&strip=all&crop=0%2C10.736249198466%2C100%2C78.527501603069&w=1200
+- read: 2 min
+- full text: yes
+
+> The jury convicted on 10 of 12 criminal counts, and Huawei says it will appeal the verdict.
+
+A federal jury in New York found Huawei guilty of stealing US trade secrets, ending a long legal fight. The case accused the company of taking source code and proprietary technology from firms including T-Mobile, Cisco and Motorola. The jury also found it guilty of bank fraud.
+
+Jurors convicted Huawei on 10 of 12 criminal counts. Those cover money laundering, sanctions violations, bank and wire fraud, and a conspiracy to defraud the United States. It was acquitted of racketeering conspiracy and obstruction. Sentencing is set for September 14, 2027, and the Justice Department says the company may owe fines, forfeiture and restitution.
+
+The case traces back to a 2018 indictment that came to light after the arrest of Huawei's chief financial officer, Wanzhou Meng. The fraud charges against Meng were later dismissed, but she admitted misleading banks about Huawei's operations in Iran under a deferred prosecution agreement. Huawei calls the charges without legal or factual merit and plans to appeal, so the verdict is not the end of the matter.
+
+**Takeaways**
+- Companies that share source code with partners or vendors should review who can access it, since this case turned on source code taken from other companies' systems.
+
+## Confluent's engineers discarded three months of AI-agent work porting Kafka's Java client to Rust
+- ids: 161
+- topic: Dev Tools
+- signal: recommended
+- url: https://thenewstack.io/confluent-kafka-rust-agents/
+- event: confluent kafka java client rust rewrite
+- original title: Confluent spent 3 months rewriting Kafka’s Java client in Rust with AI — and had to start over
+- source: The New Stack | https://thenewstack.io/confluent-kafka-rust-agents/
+- author: Amanda Caswell
+- full text: no
+
+> The restart is a useful data point for teams weighing large AI-driven code translations, though the reasons for the failure are not in the material available here.
+
+Confluent put nearly three months of effort from AI coding agents into translating Apache Kafka's Java client into Rust, and then threw the result away and began again.
+
+The standfirst does not say why the first attempt was abandoned or how much of the translated code was kept, so the cause of the failure cannot be determined from what was available. The full article could not be fetched, and the details in this story come only from the headline and standfirst.
+
+Porting a client library is harder than it looks, because the many systems that depend on it expect exact behaviour, not just code that compiles. A restart suggests the agent output did not meet that bar on the first attempt.
+
+**Takeaways**
+- If you plan an AI-assisted port, write a compatibility test suite against the original library before the first translation run.
+
+## An experiment turned 600,000 lines of IBM i code into Java using 49 Claude Code sessions
+- ids: 81
+- topic: Languages
+- signal: recommended
+- url: https://tomassetti.me/legacy-modernization-llms-large-translation-consistency
+- event: ibm i rpg java migration
+- original title: Legacy Modernization with LLMs: Is a Large Translation Consistent with Itself?
+- source: tomassetti.me | https://tomassetti.me/legacy-modernization-llms-large-translation-consistency | via TLDR Dev (Web Dev)
+- author: Federico Tomassetti
+- image: https://tomassetti.me/wp-content/uploads/2026/11/llm-generators-illustration.png
+- read: 24 min
+- full text: yes
+
+> The author asks whether 49 separate sessions that never see each other's choices can produce Java code that still hangs together as one application.
+
+The experiment translated 600,000 lines of RPG, DDS and CL from an IBM i system into more than one million lines of Java. The application was too large for a single agent session, so the work was split into 49 phases ordered by dependencies, and each session could only see the files written by the phases before it.
+
+The author's concern is design drift. An earlier part of the series found that three independent translations of the same code made different design decisions, so 49 sessions that never talk to each other could repeat that drift across one codebase. The author measured the codebase after each phase to check for it, and the first look suggests the answer is yes. The measurements behind that impression are what the piece is really about.
+
+The work ran headless, with an instruction to organise the project as the agent saw fit, and there was no running IBM i to test against. Claims that the Java matches the RPG therefore rest on reading the source rather than running the original, which the author says plainly.
+
+**Takeaways**
+- Before scaling an LLM-driven migration, check that phases produced by separate sessions use the same naming, error handling and data-access patterns.
+
+## Netflix's Commerce team retrofitted its development process for coding agents, starting with 45 decision records
+- ids: 107
+- topic: Engineering
+- signal: recommended
+- url: https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/
+- event: netflix commerce coding agents
+- original title: Netflix at QConSF 2026: Retrofitting the SDLC for AI Coding Agents
+- source: InfoQ | https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/
+- author: Andrew Hoblitzell
+- image: https://res.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/en/headerimage/netflix-header-1200x630-1795359626158.jpg
+- read: 4 min
+- full text: yes
+
+> The team found its agents were held back less by the models than by inconsistent tests and documentation that were hard to find.
+
+At QCon San Francisco, Netflix's Mark Khuzam described how the Commerce team reworked its software development lifecycle so AI coding agents and engineers could ship together. The first experiment was having an agent migrate tests. It took four attempts, as the team kept adding instructions, the APIs to use and how to mock data.
+
+The documentation was the bottleneck. The agent's context window ran out before it reached the right page, and tests were written in different styles across the codebase. The team wrote 45 architecture decision records, pitched at people and agents alike. Every record states the situation, the choice made, an example to follow, a counterexample to avoid and guidance for agents. An AGENTS.md file acts as the index agents read first, which the team compares to robots.txt for search engines.
+
+The delivery pipeline stayed deterministic, with builds, tests, screenshot diffing, merge queues and canaries. What changed is that review agents now check each pull request against the records and flag anti-patterns. The talk also reported a Net Promoter Score of -3 for the internal framework, a blunt measure of how developers felt about the tooling.
+
+**Takeaways**
+- Before pointing agents at a large test suite, write its conventions in one short index file that the agent reads first.
+
+## Postgres 19 can enable logical replication without a restart, and a test found no failed queries
+- ids: 125
+- topic: Infra
+- signal: recommended
+- url: https://dev.to/alexgeorgiev17/turning-on-postgres-logical-replication-without-a-restart-4b35
+- event: postgresql 19 logical replication without restart
+- original title: Turning on Postgres logical replication without a restart
+- source: Dev.to | https://dev.to/alexgeorgiev17/turning-on-postgres-logical-replication-without-a-restart-4b35
+- author: Alex Georgiev
+- image: https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2Fbcza9wwu7lthgsxhwppv.png
+- read: 6 min
+- full text: yes
+
+> The change depends on wal_level already being set to replica, and the server switches to logical only when a slot needs it.
+
+PostgreSQL 19, released on November 19, lets a logical replication slot be created while wal_level is still replica, so enabling logical replication no longer requires a restart. The author checked this on the GA image. The command that fails on 18.7 succeeds on 19.0 with the same configuration.
+
+The mechanism is a new setting, effective_wal_level. SHOW wal_level still reports replica because the value on disk has not changed, but effective_wal_level reports logical once something needs it. Everything else sees replica.
+
+To measure the cost, the author ran the traditional method on 18.7, which requires a restart, with a probe sending queries every 50 milliseconds. That restart produced a roughly 0.33 to 0.36 second outage. On 19.0, with a second logical slot created in the middle of the probe run, the author logged zero failed queries. The test covered one pair of versions on one host, so treat the numbers as a single careful measurement rather than a benchmark.
+
+**Takeaways**
+- If you may need logical replication later, confirm wal_level is already replica on Postgres 19 so the no-restart path is available.
+- Rehearse slot creation on a staging copy under your real write load, since the test used light query traffic.
+
+## Lean checks of Clojure's core find 17 unreported bugs in its hash map and vector code
+- ids: 44
+- topic: Languages
+- signal: recommended
+- url: https://s.conao3.com/blog/2026/e4f733
+- event: clojure lean bugs hamt
+- original title: I checked Clojure's core with Lean and found 17 unreported bugs
+- source: s.conao3.com | https://s.conao3.com/blog/2026/e4f733 | via Lobsters
+- author: Naoya Yamashita
+- image: https://s.conao3.com/og/blog/2026/e4f733.png
+- read: 8 min
+- full text: yes
+
+> The bugs sit at the edges of the persistent data structures and where equality and hashing meet, while the core tree code showed no mismatches in testing.
+
+The author checked the Java portion of Clojure's core with Lean 4 and differential testing, and found 17 bugs they could not find in Clojure's issue tracker or on its community Q&A site. The tests used Clojure 1.12.7, released November 18, and JDK 21.
+
+The bugs include a reduce problem on vector-of, a hash collision node in the HAMT, and calls to functional interfaces that lack a type hint. For integer and bit arithmetic, Java's long and int were modelled as 64-bit and 32-bit vectors, so wraparound and rounding could be checked across all inputs. When Lean found a counterexample, the author reproduced it in Clojure, then proved the fixed version.
+
+Lean can only check small functions that reduce to arithmetic, so the data structures were tested differentially against java.util collections instead. The HAMT showed no mismatch over three million operations, and the vector showed none around its boundaries. The bugs that did appear sat outside the trees, where two mechanisms meet, such as equality and hashing.
+
+**Takeaways**
+- If your Java code calls Clojure functional interfaces, add explicit type hints until fixes for these reports ship.
+
+## Patched prompt injections can return after a model upgrade, so teams need regression tests rather than yearly reviews
+- ids: 173
+- topic: Security
+- signal: notable
+- url: https://stackoverflow.blog/2026/11/24/prompt-injection-fixes-need-regression-tests/
+- event: prompt injection regression tests
+- original title: Prompt Injection Fixes Need Regression Tests
+- source: Stack Overflow Blog | https://stackoverflow.blog/2026/11/24/prompt-injection-fixes-need-regression-tests/
+- author: Saqib Jan
+- read: 7 min
+- full text: yes
+
+> Yearly adversarial reviews miss the changes that reopen gaps in agent stacks between one review and the next.
+
+A patched injection can come back without anyone touching the code. Routine changes such as swapping in a newer model, editing a prompt or wiring up a new data source can quietly reopen a hole that was sealed months earlier. The article argues that this is a regression problem, the kind test suites exist to catch.
+
+The argument is about cadence. Many teams keep prompt injection with security specialists who run adversarial reviews once or twice a year and patch what they find. Agent systems shift far faster than that, so a scheduled review checks one moment while a regression suite can run on every change to the stack.
+
+The article also points at how agent systems are wired. In these pipelines, each model's answer becomes the next model's input, and the handoff itself applies no scrutiny. A DevOps vice president quoted in the piece warns that a malicious instruction in one model can spread to the others it talks to.
+
+**Takeaways**
+- Turn each past injection finding into a test that runs in CI, and rerun the suite after every model version change.
+- Treat one agent's output as data, not instructions, when it feeds the next agent.
+
+## Simon Willison traces three LLM inflection points in twelve months, starting with Opus 4.5's reliability
+- ids: 27
+- topic: AI
+- signal: notable
+- url: https://simonwillison.net/2026/Nov/24/llm-inflection-points/
+- event: llm inflection points willison
+- original title: Three LLM inflection points in twelve months
+- source: Simon Willison's Blog | https://simonwillison.net/2026/Nov/24/llm-inflection-points/
+- author: Simon Willison
+- image: https://img.youtube.com/vi/9RKrSF9d2SE/maxresdefault.jpg
+- read: 6 min
+- full text: yes
+
+> Willison's first point is that coding agents became reliable enough to be the default tool for daily work, not an occasional accelerant.
+
+Willison gave a keynote at the AI Engineer Code Summit built on the idea that LLMs and coding agents have passed three significant inflection points in the past twelve months. This post expands on the first, which he anchors to the anniversary of Claude Opus 4.5 on November 24.
+
+Willison says Opus 4.5 was the first model he used with Claude Code where the default result was usually right, so he stopped correcting it constantly. OpenAI's GPT-5.1 Codex models had a similar effect on its coding agent. Over the December holidays he and many other developers experimented with the tools, and by January they were using them for real work.
+
+The second point concerns what the post calls Fable-class models, which the excerpt places in June and July, after Anthropic announced Mythos in April and said it was too dangerous to release because of its cybersecurity abilities. The excerpt available here stops before the third point.
+
+**Takeaways**
+- Re-test your coding-agent workflows against the newest models before assuming an old correction habit is still needed.
+
+## Google's DeepCrossAttention changes transformer residual connections to reach the same quality up to 3x faster
+- ids: 72
+- topic: AI
+- signal: notable
+- url: https://research.google/blog/supercharging-transformer-residual-connections/
+- event: google deepcrossattention transformer residual connections
+- original title: Supercharging transformer residual connections
+- source: research.google | https://research.google/blog/supercharging-transformer-residual-connections/ | via TLDR AI
+- image: https://storage.googleapis.com/gweb-research2023-media/images/HO_previewImage1.width-800.format-jpeg.jpg
+- read: 6 min
+- full text: yes
+
+> The architecture lets each layer choose which earlier layers to draw from, and the authors say the parameter cost is negligible.
+
+Google Research's DeepCrossAttention (DCA) replaces the simple residual connections that let deep transformers train. Instead of adding a layer's input to its output with equal weight, each layer learns to weight and route features from the layers before it. The authors report that models reach the same quality about three times faster, and that the added parameters are negligible.
+
+The problem they target is information dilution. A standard residual connection averages earlier features into later layers, so specific detail from early in the network can be distorted by the time it is needed, and the network sometimes has to recompute it. DCA makes that routing learnable, so a layer can pull a particular feature from any earlier point.
+
+The paper was presented at ICML 2025, so this is a research write-up of a result that is already known rather than a new release. The excerpt does not include benchmark tables, model sizes or the datasets behind the three-times figure, so treat the speed-up as the authors' claim until independent teams reproduce it.
+
+**Takeaways**
+- If you train deep models, check whether the speed-up holds at your model size before changing the residual path.
+
+## Imprint's small-change lane lets lighter reviews cover eligible pull requests as review times climb
+- ids: 77
+- topic: Engineering
+- signal: recommended
+- url: https://lethain.com/small-changes/
+- event: imprint small-change code review pull requests
+- original title: Speeding Up Code Review with small-change
+- source: lethain.com | https://lethain.com/small-changes/ | via TLDR Dev (Web Dev)
+- image: https://lethain.com/static/author.png
+- read: 7 min
+- full text: yes
+
+> The company reports incidents down 42 percent half over half while merges rose sharply, and it is trying to keep the review queue from growing with them.
+
+Imprint's average engineer now merges about four times as many pull requests as two years ago, and two teams have roughly tenfold increases. The median pull request review, meanwhile, has grown from about 33 minutes to about 77 minutes, and the author ties that increase to the rise in merges.
+
+The company's response is what it calls a small-change path. A CI check decides whether a pull request is eligible for a lighter review, using signals such as the size of the diff and the author's history in the affected services. The author is clear that the problem is not solved and that the path is an experiment.
+
+The author argues that review serves four purposes, including knowledge sharing and error prevention. They argue that automated checks and verification tools prevent more errors than review does, and that knowledge transfer will have to move toward clusters of pull requests. They also note that even careful review generally misses competent malicious changes. Incident figures are offered as evidence that the faster pace has not cost quality, with critical incidents down 78 percent half over half.
+
+**Takeaways**
+- Measure median review time against pull request size before adding a fast lane, so you know what the lane is actually changing.
+- Limit any lighter-review path to small, low-risk diffs, and keep a sample of them under full review to test the rule.
+
+## Maple raises $5.3M for an AI assistant designed so that even the company cannot read user data
+- ids: 145
+- topic: Startups
+- signal: notable
+- url: https://techcrunch.com/2026/11/24/maple-raises-5-3m-to-build-ai-products-that-protect-your-data-even-from-itself/
+- event: maple raises ai privacy trusted execution
+- original title: Maple raises $5.3M to build AI products that protect your data, even from itself
+- source: TechCrunch | https://techcrunch.com/2026/11/24/maple-raises-5-3m-to-build-ai-products-that-protect-your-data-even-from-itself/
+- author: Sarah Perez
+- image: https://techcrunch.com/wp-content/uploads/2026/11/01-maple-hero-chargebacks-photo-16x9-1.png?resize=1200,675
+- read: 5 min
+- full text: yes
+
+> The next product is a cloud agent that keeps working when the user's computer is off, which would put Maple up against Meta's Muse.
+
+Maple, a startup co-founded by a former Apple engineer, closed a $5.3 million seed round. EPIC Ventures led it, and Draper Associates, Planetary VC and Epoch VC also joined. Its pitch is that user data stays private even from Maple itself, because the system is designed so the company cannot access that data in the first place.
+
+The approach combines encryption with trusted execution environments, which the company says users can inspect. Maple publishes its code as open source, and its CEO argues that people can audit what runs on the servers instead of taking the company's word for it. The company already offers a chat app and a desktop agent called Maple Work that can control a computer, files and a browser.
+
+The seed round follows a pre-seed of under a million dollars, and Maple plans a Series A in the first half of 2027. The privacy claim is the part to test. A verified execution environment is a stronger promise than a privacy policy, and a company at this stage will need outside audits to show that the design works as described.
+
+**Takeaways**
+- If you use an AI app that claims strong privacy, look for published source code and an independent attestation of its execution environment, not just a policy page.
+
+## Torvalds rebukes a 41,000-line ext4 "fixes" pull request that is largely AI-generated
+- ids: 153
+- topic: Open Source
+- signal: notable
+- url: https://www.phoronix.com/news/Linus-Torvalds-EXT4-AI-Big
+- event: torvalds ext4 pull request
+- original title: Linus Torvalds: "Tell Your AI Companion To Get Its Act Together"
+- source: Phoronix | https://www.phoronix.com/news/Linus-Torvalds-EXT4-AI-Big
+- author: Michael Larabel
+- full text: no
+
+> The batch was aimed at the Linux 7.4-rc5 kernel, where a large volume of new code labelled as fixes is hard to review.
+
+Linus Torvalds has publicly criticised an ext4 pull request meant for the Linux 7.4-rc5 kernel. The batch adds more than 41,000 lines and is labelled as fixes, which is a problem late in a release cycle when changes are supposed to be small and narrow.
+
+Much of the new code is KUnit test coverage intended to make it safer to validate AI-generated patches, and many of the filesystem changes themselves are AI-generated. The sharp headline reflects Torvalds' reaction to that mix.
+
+This story is based only on the headline and standfirst, because the full article could not be fetched. Torvalds' exact wording and the maintainers' response are not covered here.
+
+**Takeaways**
+- If you send patches upstream, label AI-generated changes and keep them out of fixes-only pull requests.
