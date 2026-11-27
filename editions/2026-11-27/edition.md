@@ -1,0 +1,434 @@
+---
+date: 2026-11-27
+edition: 66
+schema_version: 1
+generated_at: 2026-11-27T01:37:25+00:00
+sources_ok: 43
+sources_total: 47
+fetched: 399
+candidates: 204
+full_text: 17
+---
+
+# The Brief
+
+- OpenAI and Anthropic are both publishing AI-generated results, from matrix multiplication bounds to a leaked Opus 5.6 test, and most of it is still the labs' own word.
+- Platform control tightened this week: Google will route agents through its Workspace MCP servers, OpenAI is merging ChatGPT usage meters, and Nvidia has paused shipments to four Southeast Asian countries.
+- Infrastructure teams are shedding moving parts. Autumn removed Redis from its billing path, Anthropic moved its Messages API to Rust, and Google open-sourced ABFS to speed up huge builds.
+- Security kept pressing on patch speed and fraud: Ubuntu's kernel fixes are lagging, and an AI voice clone helped steal $260,000 in crypto.
+
+# Stories
+
+## OpenAI claims the matrix multiplication exponent is exactly 9/4, with a lower bound that meets its October upper bound
+- ids: 1, 2
+- topic: AI
+- signal: must-read
+- url: https://scottaaronson.blog/?p=10379
+- event: openai matrix multiplication exponent lower bound
+- original title: Holy shit holy shit holy shit holy shit: The magnitude of what’s now happening
+- source: scottaaronson.blog | https://scottaaronson.blog/?p=10379 | via Hacker News
+- image: https://s0.wp.com/_si/?t=eyJpbWciOiJodHRwczpcL1wvc2NvdHRhYXJvbnNvbi5ibG9nXC93cC1jb250ZW50XC91cGxvYWRzXC8yMDIxXC8xMFwvY3JvcHBlZC1KYWNrZXQuZ2lmIiwidHh0IjoiU2h0ZXRsLU9wdGltaXplZCIsInRlbXBsYXRlIjoiZWRnZSIsImZvbnQiOiIiLCJibG9nX2lkIjoxMjk1MjA1ODB9.siOtN7gHw4tefA_rZickBw4GfI6tPxGgOQ1AXr2ZoOQMQ
+- read: 8 min
+- discuss: https://news.ycombinator.com/item?id=50646108 | Hacker News | 1985 points | 1813 comments
+- full text: yes
+
+> A second claim gives a matching lower bound for the Fourier transform's linear-gate cost, which the author calls the bigger shock.
+
+OpenAI says it has shown that ω, the exponent that sets how fast matrices can be multiplied, equals exactly 9/4. Since Volker Strassen's work in the late 1960s, the known bounds have squeezed ω below 3, and the author says this result pins the exponent from both sides: the October 6 release gave the upper bound and this claim supplies a lower bound of 9/4 that meets it.
+
+The author treats the lower bound as the real surprise. Many researchers had long assumed ω = 2 without a strong argument, and the author says he always doubted that, though he had no argument for ω > 2 either. He had not expected a proof of any lower bound above 2 to be much easier than separating P from NP, so an AI system producing one is what stands out to him.
+
+The same post relays a second OpenAI result on the number of linear gates needed to compute the Fourier transform. The claimed bound is N(log N)^(1/2+o(1)), which beats the N log N cost of the fast Fourier transform that has stood since the 1960s and improves on the earlier October bound, and it comes with a matching lower bound. The post also mentions an arXiv preprint claiming QIP(2) = PSPACE. These are claims from the labs and individual authors, and the post shows no independent check of the proofs.
+
+**Takeaways**
+- Read the preprints before repeating the 9/4 figure, since the post relays the claims secondhand.
+- Watch for expert write-ups that check the lower-bound argument itself, which the post does not reproduce.
+
+## From February 2027, AI agents must reach Workspace through Google's MCP servers, and the Gmail one cannot send
+- ids: 10
+- topic: AI
+- signal: must-read
+- url: https://techstackups.com/articles/google-workspace-ai-agents-mcp/
+- event: google workspace mcp servers agents mandate
+- original title: Google Will Make AI Agents Use Its MCP Servers. The Gmail One Can't Send Email
+- source: techstackups.com | https://techstackups.com/articles/google-workspace-ai-agents-mcp/ | via Hacker News
+- author: Authors et al.
+- image: https://techstackups.com/img/articles/google-workspace-agent-api/cover.jpg
+- read: 7 min
+- discuss: https://news.ycombinator.com/item?id=50653477 | Hacker News | 237 points | 202 comments
+- full text: yes
+
+> The same addendum lets Google cap retention of derived data such as embeddings and memory indexes at 30 days.
+
+Google put its eight Workspace MCP servers into general availability on 24 November and attached a new clause to its API terms. The clause takes effect on 1 February 2027 and covers any tool that an agent, harness or model runs or powers: those tools must reach Gmail, Drive and Calendar through the MCP servers, not through direct REST calls.
+
+The catch is in the Gmail server's tool list. It can search mail, read threads, create drafts and apply labels, but it cannot send, reply, forward, or edit a draft after creating it. Google's quota page says those send tools need partner access and are not generally available. Agents that keep calling REST directly will fall to Standard-tier quotas whatever the project has paid for. Ordinary non-AI jobs, such as a nightly backup or a deterministic CRM sync on their own OAuth client, are exempt.
+
+The data terms bite on memory features. Workspace data can be used only for work the user has authorized, and it has to be wiped once a user disconnects. Using it to train or evaluate models, or to build a rival Workspace product, is out. The retention cap applies to what Google calls technical information, a category broad enough to take in embeddings, memory indexes and profiles that an app derives from a user's Workspace content. An assistant that keeps a long index of a user's inbox would have to rebuild it every month or drop it.
+
+**Takeaways**
+- Check whether any agent you run sends Gmail or edits drafts, since those actions have no generally available path under the new terms.
+- Move AI-driven Workspace integrations off direct REST calls before 1 February 2027, or accept the Standard-tier quotas.
+- Map where Workspace-derived embeddings and memory indexes are stored, and set a deletion or rebuild schedule that fits the 30-day cap.
+
+## Anthropic moved its Messages API from Python to Rust by using production traffic as the test oracle
+- ids: 66
+- topic: Infra
+- signal: must-read
+- url: https://www.anthropic.com/research/migrating-api-to-rust
+- event: anthropic messages api rust migration parity
+- original title: Migrating our Messages API to Rust
+- source: anthropic.com | https://www.anthropic.com/research/migrating-api-to-rust | via TLDR Dev (Web Dev)
+- image: https://assets.claude.com/faac348155bf01d5c59ab38cbd05294eb2fa8197.jpg
+- read: 18 min
+- full text: yes
+
+> The rewrite cut CPU per request by about 70 percent and median time to first token by about 20 percent, without taking the service offline.
+
+Anthropic's Messages API is the main route customers and its own apps, including Claude Code, use to reach Claude. Traffic grew roughly 1,800 times between early 2024 and fall 2026, and the Python service was costing too much CPU per request. Claude wrote a first Rust version of the core request path in about a week. Proving that Rust matched production was the harder part.
+
+Three problems made parity hard. The Python API kept changing during the migration, so the target moved. Claude can answer the same request differently each time, so a difference between two outputs did not automatically mean a bug. And Anthropic could not read customer requests, which made it hard to see where the two versions diverged. The team's answer was to treat the live production API as the verifier. It replayed the same model output through both implementations, which separated real differences from sampling noise.
+
+Once differences were found, agents were dispatched automatically to fix them, so feature work could continue while the rewrite ran. The outcome is an API on Rust that uses about 70 percent less CPU per request. The lesson the team draws is about verification rather than the language: when a test suite cannot define what correct means for a live system, the system itself can serve as the reference.
+
+**Takeaways**
+- In a live migration, run both implementations on shadow traffic and classify each difference before trusting the rewrite.
+- When comparing model outputs across two versions, allow for nondeterminism before calling a difference a bug.
+
+## Ubuntu still had no kernel fix nine days after a remote TCP flaw was disclosed, a researcher says
+- ids: 76
+- topic: Security
+- signal: must-read
+- url: https://www.openwall.com/lists/oss-security/2026/11/25/9
+- event: ubuntu slow kernel security fixes
+- original title: Slow Ubuntu security response times
+- source: openwall.com | https://www.openwall.com/lists/oss-security/2026/11/25/9 | via Lobsters
+- read: 2 min
+- full text: yes
+
+> The researcher argues that backporting kernel fixes onto old kernel versions is a poor basis for security compared with following upstream longterm releases.
+
+Hanno Böck, an independent security researcher, wrote to the oss-security list on 25 November to complain that Ubuntu is slow on severe kernel bugs. He points to NoisyTCP, CVE-2026-99288, a remote memory corruption in the Linux TCP stack published on 16 November. Nine days later he found no Ubuntu fix, while other distributions had patches ready when the details went public.
+
+He cites two more cases. A KVM host escape affecting AMD virtualization, CVE-2026-99312, was published on 18 November and still had no fix. A separate remote TCP corruption, CVE-2026-98432, took several weeks to fix on Ubuntu. He links a recent intrusion campaign against Check Point security management servers and suggests the TCP flaw could already be exploited in the wild.
+
+The larger complaint is about how kernels get shipped. Böck reads the Ubuntu LTS kernel version 7.0.0-44 as evidence that Ubuntu backports patches onto an older base, while the Debian stable kernel 6.12.118 tracks a recent longterm kernel. He argues backporting is hardly viable for the kernel, and that distributions should build on longterm releases the kernel developers maintain. The post is a single mailing-list message, so Ubuntu's response is not on record in this report.
+
+**Takeaways**
+- If you run Ubuntu servers, check the Ubuntu security page for CVE-2026-99288, CVE-2026-99312 and CVE-2026-98432 and apply fixes as soon as they land.
+- On AMD virtualization hosts running untrusted workloads, treat the KVM escape as a priority until Ubuntu ships a fix.
+
+## One GPT-6.2 Astra agent outperformed all human-designed software on open MILP problems, per the author
+- ids: 57
+- topic: AI
+- signal: must-read
+- url: https://rybindmitry.github.io/blogs/gpt-6-2-astra-is-superhuman-in-mathematical-optimization.html
+- event: gpt astra milp open problems
+- original title: GPT 6.2 Astra is superhuman in mathematical optimization
+- source: rybindmitry.github.io | https://rybindmitry.github.io/blogs/gpt-6-2-astra-is-superhuman-in-mathematical-optimization.html | via TLDR AI
+- author: Dmitry Rybin and AutoKernel
+- read: 3 min
+- full text: yes
+
+> The same setup covered quadratic, nonlinear and semidefinite problems, and a neural network case generalized poorly.
+
+The author picked ten open mixed-integer linear programming problems from the MIPLIB library, where nine years of commercial solver work and human-designed algorithms had not found or proven optimal solutions. He reports that a single GPT-6.2 Astra agent, given each problem file and a prompt to design its own specialized algorithm, found and proved better bounds within 30 to 60 minutes on average, outperforming all human-designed software in that test. The model was allowed to search the internet.
+
+The same method covered quadratic programming, using ten open QPLIB problems, and nonlinear problems from MINLPLIB, where the agent proved stronger lower bounds. It also fully solved ten open semidefinite problems from SDPLIB. The author says the agents did not struggle when problems grew to millions of variables.
+
+A less flattering result came from a five-layer convolutional network with 4.6 million parameters on CIFAR-10. The agent treated training as an optimization problem, without a GPU or SGD, and reached 100 percent training accuracy. Test accuracy stayed poor, around 70 percent against an 85 percent baseline, and switching to L1 regularization did not help. Solving an objective well does not guarantee a model that generalizes.
+
+**Takeaways**
+- Treat the results as the author's claims and check the cited problem files and bounds with an independent solver before relying on them.
+- If you use Astra for optimization, confirm that each returned solution is feasible before acting on it.
+
+## Autumn removed Redis from its credit-balance path after a provider crash, and its API is now about 4x faster
+- ids: 65
+- topic: Infra
+- signal: must-read
+- url: https://useautumn.com/blog/moving-credit-deductions-off-redis-and-onto-kafka
+- event: autumn redis removal balance workers
+- original title: We got rid of Redis and made our API 4x faster
+- source: useautumn.com | https://useautumn.com/blog/moving-credit-deductions-off-redis-and-onto-kafka | via TLDR Dev (Web Dev)
+- author: Autumn and Owen
+- image: https://useautumn.com/images/blog/moving-credit-deductions-off-redis-and-onto-kafka/og.png
+- read: 5 min
+- full text: yes
+
+> The trigger was a provider upgrade that wiped 40 GB of cached balances, but the deeper problem was having two sources of truth.
+
+Autumn handles roughly 430 million API requests a day, and most of them checked credit balances in Redis before deductions were flushed to Postgres later. That write-behind design made writes fast but left race conditions. A customer who spent 30 credits just before a grant could lose that usage when the cache rebuilt from Postgres. The team fixed that case in September, but says it shipped around 50 Redis-related fixes in four months.
+
+The breaking point arrived on Sunday 26 July. The Redis host pushed an upgrade meant to fix high CPU use, and that release had a bug that brought down both the primary and its replica. Autumn lost 40 GB of cached balances and most requests failed. Engineers spent the rest of the day rebuilding the cache from Postgres, since restoring a backup would have undone too many balance changes.
+
+The replacement, which the team calls balance workers, funnels each customer's changes through one writer in an ordered log, and Postgres is brought up to date in batches. Engineers picked it after load testing several alternatives. The 4x figure is the company's own measurement.
+
+**Takeaways**
+- Before adding a second store for mutable state, decide which one is authoritative and write that down.
+- Test how long your cache rebuild takes from the database under load, since a rebuild can take most of a working day.
+
+## Cloudflare's Search for Agents toggle builds a search index for any site and exposes it on the site's own domain
+- ids: 68, 136
+- topic: Infra
+- signal: recommended
+- url: https://blog.cloudflare.com/search-for-agents
+- event: cloudflare search for agents
+- original title: Introducing Search for Agents
+- source: blog.cloudflare.com | https://blog.cloudflare.com/search-for-agents | via TLDR Dev (Web Dev)
+- source: The New Stack | https://thenewstack.io/cloudflare-agent-search-endpoint/
+- image: https://blog.cloudflare.com/_emdash/api/media/file/01M87EHBMCJY691A3ADBXCMG6A.png
+- read: 7 min
+- full text: yes
+
+> Site owners pay the query costs, and the index starts with default settings that can be tuned later.
+
+Cloudflare has added Search for Agents, which puts the setup of an AI Search instance behind a single dashboard toggle. Until now a site owner had to create and configure the index by hand, then wire up the search endpoints on their own domain and make sure agents could discover them.
+
+When the toggle is on, Cloudflare creates the instance, crawls and indexes the zone, and exposes a search endpoint that agents can find on the domain. The feature is open to all customers, including Free with limits. Reranking and cache settings can be changed later, and access still passes through the site's bot management, AI Crawl Control and WAF rules. The design follows Markdown for Agents, which converts HTML to Markdown for agents at the network level.
+
+The trade-off is cost. The site owner, not the searcher, pays for the queries, so a popular site could see its bill grow as agents adopt the endpoint. Cloudflare's announcement does not give usage pricing in the text available here.
+
+**Takeaways**
+- Before enabling it on a content or documentation site, set your bot and WAF rules so you control which agents can query the index.
+- After turning it on, watch your AI Search query usage, since you pay for those queries.
+
+## Microsoft's .NET MAUI 11 makes CoreCLR the default runtime on all platforms, replacing Mono
+- ids: 33
+- topic: Dev Tools
+- signal: recommended
+- url: https://www.infoq.com/news/2026/11/dotnet-maui-11-coreclr-hotreload/
+- event: dotnet maui 11 coreclr default
+- original title: .NET MAUI 11 Makes CoreCLR the Default Runtime and Adds Incremental XAML Hot Reload
+- source: InfoQ | https://www.infoq.com/news/2026/11/dotnet-maui-11-coreclr-hotreload/
+- author: Edin Kapić
+- image: https://res.infoq.com/news/2026/11/dotnet-maui-11-coreclr-hotreload/en/headerimage/header-1795560880894.jpg
+- read: 3 min
+- full text: yes
+
+> Apple platforms cannot JIT, so code that is not precompiled runs in the CoreCLR interpreter there, and incremental XAML hot reload is still in preview.
+
+Microsoft shipped .NET 11 on 10 November, and its MAUI update changes the default runtime from Mono to CoreCLR on Android, iOS, Mac Catalyst and Windows. Microsoft says this puts mobile and desktop apps on the same runtime as the rest of .NET. Release builds use composite partial ReadyToRun by default. Native AOT remains an opt-in publishing choice, and its Android support is still experimental.
+
+Because Apple platforms disallow JIT compilation, code that is not precompiled runs in the CoreCLR interpreter there. Microsoft advises checking that app libraries work before settling on a deployment model. XAML also gets incremental hot reload, still in preview, which updates running pages in place rather than rebuilding them. It is on in Debug builds by default and can be switched off with the EnableMauiIncrementalHotReload property.
+
+Handler migration continues. Windows uses the new CollectionView2 handler by default, Android Shell is handler-based, and iOS and Mac Catalyst use handlers for navigation, tabbed and flyout pages. One change will break code: on iOS, Appearing now fires before a page is pushed. Code that depends on the old timing should move to NavigatedTo.
+
+**Takeaways**
+- Test your iOS app's third-party libraries under the CoreCLR interpreter before upgrading.
+- If your iOS pages rely on Appearing for timing, switch that logic to NavigatedTo.
+
+## Google open-sources ABFS, a filesystem and build cache that cut Android checkouts to under 8 seconds
+- ids: 43
+- topic: Dev Tools
+- signal: recommended
+- url: https://developers.googleblog.com/accelerating-development-for-massive-git-repositories/
+- event: google abfs open source git
+- original title: Accelerating development for massive Git repositories
+- source: Google Developers Blog | https://developers.googleblog.com/accelerating-development-for-massive-git-repositories/
+- author: The Android ABFS Team
+- image: https://storage.googleapis.com/gweb-developer-goog-blog-assets/images/ABFS-Header-Meta.2e16d0ba.fill-1200x600.png
+- read: 6 min
+- full text: yes
+
+> The same content-addressed design lets parallel agent workspaces run without each one paying for a full build.
+
+Android's open source release spans 1,084 Git repositories and 1.62 million files, and a built workspace takes 300 GB. Fetching the source used to take over 30 minutes and building it more than an hour, which slowed down human developers and coding agents alike. Google has now open-sourced ABFS, Another Build File Service, on GitHub.
+
+ABFS is built from three pieces: a kernel filesystem module, user-space daemons, and server-side services. Content addressing runs through all of them, so source trees, workspaces and build outputs can be loaded lazily and cached once. Because the cache is shared, CI runs and developer machines can reuse each other's build work, and Google says that reuse can reach every build action in its measurements. Google reports checkouts dropping from about 36 minutes to under 8 seconds, and full builds from about 80 minutes to just over 2.
+
+The team says ABFS already powers parallel workflows for developers and agents inside Android, and that it is built to scale to other large Git projects. The figures are Google's own and come from Android's tree. The post does not spell out what another project would need to adopt the stack.
+
+**Takeaways**
+- If your checkouts or builds take more than a few minutes, read the ABFS repository and test lazy-loading in one workspace before planning anything bigger.
+- Estimate the cache hit rate you would get in your own CI, since the 100 percent figure is for Android's build graph.
+
+## UK regulator says Meta declined joint testing of its Muse personal agent before the UK rollout
+- ids: 169
+- topic: AI
+- signal: recommended
+- url: https://www.wired.com/story/meta-refused-to-share-muse-for-testing-uk-financial-watchdog-complains/
+- event: meta muse fca testing
+- original title: Meta Refused to Share Muse for Testing, UK Financial Watchdog Complains
+- source: Wired | https://www.wired.com/story/meta-refused-to-share-muse-for-testing-uk-financial-watchdog-complains/
+- author: Isabella Ward
+- image: https://media.wired.com/photos/6b07201067745997b8ffd8ed/191:100/w_1280,c_limit/Meta-Refused-to-Share-Muse-for-Testing-Business-2300550254.jpg
+- read: 3 min
+- full text: yes
+
+> The FCA is most worried about agents that transact for users, and it wants to know how payments would be made.
+
+The UK Financial Conduct Authority suggested that Meta jointly test Muse in the regulator's sandbox, and Meta declined, according to the FCA's head of innovation, Colin Payne. Payne says Meta only told the FCA of its plans the month before, leaving too little time for the weeks or months of planning such tests normally need. Meta told Wired it has engaged constructively with regulators and will keep doing so.
+
+Payne's central concern is autonomy. He says that if an agent acts on its own, the regulator wants to be sure it serves the consumer. He is also worried about unintended consequences when users do not understand how a product works, and he wants to see how agents will make payments. Several UK retailers, including Sainsbury's, Marks & Spencer, Ocado, Debenhams Group and Currys, said they have worked with Meta to smooth Muse's access to their sites.
+
+Muse has more than 10 million users in North America since its September launch. UK competition and data regulators have also warned Meta that its AI products must comply with UK consumer protection law. The FCA says it will watch the UK rollout closely, since many Britons already use Meta's apps.
+
+**Takeaways**
+- If you build an agent that makes purchases for users, make agent-initiated payments visible and approvable by the user.
+- Document how your agent's prompts behave for users who do not understand the product, because that is the risk the FCA named.
+
+## OpenAI starts testing Private Inference with a small group of customers
+- ids: 55
+- topic: Security
+- signal: notable
+- url: https://x.com/sama/status/2125638790593274259
+- event: openai private inference testing
+- original title: OpenAI Begins Testing Private Inference
+- source: x.com | https://x.com/sama/status/2125638790593274259 | via TLDR AI
+- image: https://pbs.twimg.com/profile_images/2046764873200394240/r7BxVezs_400x400.jpg
+- read: 1 min
+- full text: yes
+
+> OpenAI is testing the offering with a few customers and says zero data retention keeps its staff away from the content.
+
+OpenAI has started testing Private Inference, part of its Private Intelligence offering, with a small group of customers. The company argues that stronger privacy protections are what will let frontier AI take on more business work. Alongside it, OpenAI says zero data retention combined with Private Safety Processing lets automated safety reviews run without its staff seeing the underlying content. The post does not say what the protections technically cover, how the offering is priced, or when it reaches beyond the test group.
+
+**Takeaways**
+- If your organization must keep prompts away from provider staff, ask OpenAI whether Private Inference or zero data retention is available on your account.
+
+## Outputs circulating on X suggest Anthropic is A/B testing Claude Opus 5.6, which Anthropic has not announced
+- ids: 56
+- topic: AI
+- signal: notable
+- url: https://www.testingcatalog.com/testers-share-early-results-possible-claude-opus-5-6/
+- event: claude opus 5.6 ab test
+- original title: Early outputs: Anthropic is A/B testing Claude Opus 5.6
+- source: testingcatalog.com | https://www.testingcatalog.com/testers-share-early-results-possible-claude-opus-5-6/ | via TLDR AI
+- author: Dwaybe Cubbins
+- image: https://storage.ghost.io/c/2a/1b/2a1b1782-8506-4d7d-bf53-ad3fb52e2a0f/content/images/size/w1200/2026/11/claude-opus-text-official-hero.webp
+- read: 2 min
+- full text: yes
+
+> The strongest evidence is side-by-side outputs posted by individual testers, and none of it can be checked independently.
+
+Testers have posted outputs they attribute to Claude Opus 5.6, and they describe them as a clear step up from Opus 5.5. The most persuasive comparison came from a user who ran the same prompt, a hand-drawn-style short about a small fox, on both models. The Opus 5.6 version told the story clearly, while the Opus 5.5 version broke down into glitchy shapes. Other posts included a Three.js scene and a fan-made animation.
+
+The attribution is shaky. One tipster said the run was routed from an Opus 5.5 Extra setting and attached a Claude Code screenshot, while another tester's "Opus-next" label was based on comparisons with Fable 5.2 and an alleged Fable 5.5. Fable 5.5 never formally launched, and Anthropic instead released Fable 5.2 and Mythos 5.2 on 9 November. The post found no official confirmation of Opus 5.6.
+
+The context is a busy release month. OpenAI launched GPT-6.2 Astra and Sol on 17 November, and Google shipped Gemini 4 Neon a day later. If the tests are real, the question is whether users in Claude Code and Chat see a consistent change on their own work, and the cherry-picked examples cannot answer that.
+
+**Takeaways**
+- If you use Opus 5.5 Extra in Claude Code, rerun a task you know well before judging any change.
+
+## ChatGPT is merging Chat and Work under one usage meter, and heavy users may hit limits sooner
+- ids: 179
+- topic: AI
+- signal: notable
+- url: https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/
+- event: chatgpt chat work usage meter
+- original title: OpenAI says heavy ChatGPT users may hit limits sooner as it merges Chat and Work
+- source: TechCrunch | https://techcrunch.com/2026/11/25/openai-says-heavy-chatgpt-users-may-hit-limits-sooner-as-it-merges-chat-and-work/
+- author: Jagmeet Singh
+- image: https://techcrunch.com/wp-content/uploads/2026/11/openai-chatgpt.jpg?resize=1200,800
+- read: 2 min
+- full text: yes
+
+> Instant conversations stay unlimited and do not count toward the shared allowance, and OpenAI expects most users to see no change.
+
+A merged Chat-and-Work mode is now reaching a handful of Pro subscribers, and OpenAI plans wider availability in December. Under it, both modes draw from one usage meter, so heavy work in one reduces what is left for the other. Conversations on the Instant model are exempt and can continue after limits are reached.
+
+According to an OpenAI spokesperson, the typical user should see no change in reset timing, while the most intensive users could run out sooner. Subscribers have voiced concern on social media and the community forum that the merged meter could cut their access to advanced reasoning models while the price stays the same. OpenAI says it will keep improving efficiency so subscribers get more from their plans.
+
+The move follows Anthropic's September decision to bring Claude and Cowork into one interface. Both changes come as AI companies face rising infrastructure costs and growing demand for larger models.
+
+**Takeaways**
+- If you are a heavy ChatGPT user, track how quickly your usage resets after the December rollout.
+- Route quick questions to Instant, which sits outside the shared allowance.
+
+## Florida man gets 47 months for using an AI voice clone of streamer N3on to take $260,000 in crypto
+- ids: 148
+- topic: Security
+- signal: notable
+- url: https://www.engadget.com/2329150/man-sentenced-to-47-month-prison-sentence-after-using-ai-impersonate-streamer/
+- event: ai voice clone crypto sentencing
+- original title: Man sentenced to 47 months in prison after using AI to impersonate streamer N3on
+- source: Engadget | https://www.engadget.com/2329150/man-sentenced-to-47-month-prison-sentence-after-using-ai-impersonate-streamer/
+- author: Kris Holt
+- image: https://www.engadget.com/img/gallery/man-sentenced-to-47-months-in-prison-after-using-ai-to-impersonate-streamer-n3on/l-intro-1795707863.jpg
+- read: 2 min
+- full text: yes
+
+> The targets were a memecoin project's organizers rather than retail buyers, so the lesson is about verifying who you are dealing with before moving money.
+
+David Anthony Sanchez pleaded guilty to money laundering and aggravated identity theft, and was sentenced to 47 months in prison and ordered to pay restitution. Federal prosecutors in the Southern District of Florida say he cloned the voice of streamer N3on and posed as both the streamer and his representative while talking to the project's organizers.
+
+The organizers believed N3on had agreed to endorse and join their scheme, and they transferred about $260,000 worth of cryptocurrency to accounts Sanchez controlled. He converted some of it into US dollars for personal use. The streamer has dealt with AI clones of himself before, including a deepfake meant to keep his stream running around the clock.
+
+**Takeaways**
+- Before sending funds on the word of a public figure, confirm the endorsement through a channel you already verified.
+- Agree on a callback rule for any voice-only request that involves a payment.
+
+## Mock Service Worker 3.0 ships ESM-only, cuts its tarball by 44 percent and adds GraphQL subscriptions
+- ids: 34
+- topic: Dev Tools
+- signal: notable
+- url: https://www.infoq.com/news/2026/11/mock-service-worker-v3/
+- event: mock service worker 3.0
+- original title: Mock Service Worker Releases v3.0 with ESM-Only Build, Socket-Based Interception and GraphQL Subs
+- source: InfoQ | https://www.infoq.com/news/2026/11/mock-service-worker-v3/
+- author: Daniel Curtis
+- image: https://res.infoq.com/news/2026/11/mock-service-worker-v3/en/headerimage/generatedHeaderImage-1795626212829.jpg
+- read: 3 min
+- full text: yes
+
+> The new socket-level interception sits at Node's TCP and TLS wraps, so it can cover protocols beyond HTTP, such as SMTP.
+
+MSW 3.0 is the first major release since the Fetch-based 2.0 rewrite nearly three years ago. It is distributed only as ECMAScript modules, drops support for Node 18 and 20 in favor of 22, 24 and 26, and requires TypeScript 5.9 or later. Several transitive dependencies are gone, and the type definitions shrink from 190KB to 90KB. The package tarball falls from 416KB to 234KB.
+
+The single msw import is replaced by per-protocol entrypoints: msw/http, msw/graphql, msw/sse and msw/ws. GraphQL subscription handlers can now be defined with graphql.link() and publish events on demand. An experimental defineNetwork API separates traffic sources from handlers, which makes it possible to replay HAR files or hand request timing to a test runner. The first package to expose it is @msw/cloudflare.
+
+The most technical change is in Node interception. The maintainer says that after seven attempts, the library now intercepts at the TCP and TLS wraps, the JavaScript bindings over Node's C-level networking. Going any lower would require recompiling Node itself. The new architecture supports arbitrary socket protocols, and SMTP is cited as an early example.
+
+**Takeaways**
+- Before upgrading, confirm your test setup runs on Node 22 or later and TypeScript 5.9 or later.
+- Update imports from the single msw path to msw/http, msw/graphql, msw/sse or msw/ws as each test needs.
+
+## Data center demand is pulling US power toward natural gas, and gas is nearly half of PJM's new queue
+- ids: 98
+- topic: Infra
+- signal: notable
+- url: https://www.technologyreview.com/2026/11/25/1149836/data-centers-gas-power-plants/
+- event: data centers natural gas pjm
+- original title: How data centers are driving a US natural-gas boom
+- source: MIT Technology Review | https://www.technologyreview.com/2026/11/25/1149836/data-centers-gas-power-plants/
+- author: Casey Crownhart
+- image: https://wp.technologyreview.com/wp-content/uploads/2026/11/261124_RichlandParishDataCenter.jpg?resize=1200,600
+- read: 4 min
+- full text: yes
+
+> If every project in PJM's queue were built, the fossil share of its grid would rise from 61 percent to 67 percent, one modeler estimates.
+
+PJM, the largest US grid operator, accepted proposals for 715 projects totalling more than 200 gigawatts in August, and nearly half that capacity is natural gas. Purdue's Kevin Kircher estimates that building the whole queue would lift the fossil share of PJM's grid from 61 percent to 67 percent. Natural gas is already the largest US electricity source and has become the default answer to rising demand.
+
+The author points to the Meta data center in Louisiana as a clear case. The local utility went from three planned gas plants to 10 as the facility's power needs grew, and developers are now planning off-grid gas plants of their own. Meta's 2026 Sustainability Report says its emissions are up 45 percent over last year.
+
+Renewables with batteries could in principle meet the rising demand, the author concedes, but in practice the data center boom is pushing the grid toward gas.
+
+**Takeaways**
+- When choosing a cloud region or colocation site, ask the operator which grid and generation mix will supply it.
+
+## Moat sells a $5-a-month membership that pools usage to resell AI model tokens at discounted member prices
+- ids: 11
+- topic: Startups
+- signal: notable
+- url: https://commandcode.ai/moat
+- event: moat openrouter replacement membership
+- original title: Moat: OpenRouter replacement
+- source: commandcode.ai | https://commandcode.ai/moat | via Hacker News
+- author: Command Code
+- image: https://commandcode.ai/moat/og.png
+- read: 2 min
+- discuss: https://news.ycombinator.com/item?id=50652184 | Hacker News | 247 points | 141 comments
+- full text: yes
+
+> The site's own example shows about 62 percent off on a $200 monthly spend, but those figures are the company's own.
+
+Moat offers members access to AI models at what it calls wholesale prices. Its pitch is that a large member base pools usage into hundreds of trillions of tokens, and the site lists a $5 monthly moat tier and a $10 goat tier. It says every model is offered at full weights and benchmarked by Moat itself.
+
+The pricing is the pitch. The sample list shows DeepSeek V4.1 Flash at 60 percent off list, GLM-5.3 at 65 percent off, and Kimi K3 at 40 percent off. For its example mix of $200 a month in tokens, the site says members would pay roughly $912 a year against $2,400 at list price, after the membership fee.
+
+The post is a product page, so the only evidence is the company's own claims. It says "no limits", but nothing on the page explains how a pooled reseller keeps access to the underlying providers, which is the part that decides whether the savings last.
+
+**Takeaways**
+- Before routing production traffic through a pooled reseller, read its terms on what happens to your access if a provider cuts it off.
+- Compare member prices with your own per-token bill for the models you use most, using list prices.
