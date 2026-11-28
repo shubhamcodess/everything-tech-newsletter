@@ -1,8 +1,15 @@
 {
- "count": 66,
- "latest": "2026-11-27",
+ "count": 67,
+ "latest": "2026-11-28",
  "archive_days": 120,
  "editions": [
+  {
+   "date": "2026-11-28",
+   "edition": 67,
+   "stories": 21,
+   "must_read": 4,
+   "lead": "A card skimmer hidden in a marketing pixel ran on five retail sites before Black Friday"
+  },
   {
    "date": "2026-11-27",
    "edition": 66,
